@@ -8,8 +8,21 @@ import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
 import { Label } from '../components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'
-import { Calendar, TrendingUp, FileText, Upload, BarChart3, Settings, PieChart, Target } from 'lucide-react'
-import { toast } from 'sonner'
+import { Calendar, TrendingUp, FileText, Upload, BarChart3, Settings, PieChart, Target, AlertTriangle } from 'lucide-react'
+
+// Componente de notificación simple
+const Toast = ({ message, type = 'info', onClose }) => (
+  <div className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+    type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'
+  } text-white`}>
+    <div className="flex items-center justify-between">
+      <span>{message}</span>
+      <Button variant="ghost" size="sm" onClick={onClose} className="text-white hover:bg-white/20">
+        ×
+      </Button>
+    </div>
+  </div>
+)
 
 const TradingCalendar = ({ trades = [] }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -72,7 +85,6 @@ const TradingCalendar = ({ trades = [] }) => {
       <div
         key={day}
         className={`min-h-[60px] p-2 rounded-lg ${bgColor} cursor-pointer transition-colors ${textColor}`}
-        onClick={() => dayData && toast(`${dayData.trades.length} trades, P&L: $${dayData.totalPnl.toFixed(2)}`)}
       >
         <div className="font-medium text-sm">{day}</div>
         {dayData && (
@@ -182,7 +194,7 @@ const TradingStats = ({ trades = [] }) => {
   )
 }
 
-const HTMLUploader = ({ onParsedData }) => {
+const HTMLUploader = ({ onParsedData, showToast }) => {
   const [isUploading, setIsUploading] = useState(false)
 
   const handleFileUpload = async (event) => {
@@ -194,15 +206,12 @@ const HTMLUploader = ({ onParsedData }) => {
       const text = await file.text()
       const parsedData = parseHTMLReport(text)
       
-      toast.success(`Reporte procesado: ${parsedData.trades.length} operaciones encontradas`)
+      showToast(`Reporte procesado: ${parsedData.trades.length} operaciones encontradas`, 'success')
       onParsedData(parsedData)
-      
-      // Guardar trades en Supabase (simulado por ahora)
-      console.log('Datos parseados:', parsedData)
       
     } catch (error) {
       console.error('Error al procesar archivo:', error)
-      toast.error('Error al procesar el archivo HTML')
+      showToast('Error al procesar el archivo HTML', 'error')
     }
     setIsUploading(false)
   }
@@ -242,13 +251,73 @@ const HTMLUploader = ({ onParsedData }) => {
   )
 }
 
+const ConfigurationAlert = ({ showToast }) => {
+  const [showDetails, setShowDetails] = useState(false)
+
+  return (
+    <Card className="bg-yellow-900/20 border-yellow-600">
+      <CardHeader>
+        <CardTitle className="text-yellow-400 flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5" />
+          Configuración de Supabase Requerida
+        </CardTitle>
+        <CardDescription className="text-yellow-200">
+          Para usar todas las funcionalidades, necesitas configurar Supabase.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <Button 
+            variant="outline" 
+            onClick={() => setShowDetails(!showDetails)}
+            className="text-yellow-400 border-yellow-600 hover:bg-yellow-900/30"
+          >
+            {showDetails ? 'Ocultar' : 'Ver'} Instrucciones
+          </Button>
+          
+          {showDetails && (
+            <div className="bg-gray-800 p-4 rounded-lg text-sm text-gray-300 space-y-2">
+              <h4 className="text-white font-medium">Pasos para configurar Supabase:</h4>
+              <ol className="list-decimal list-inside space-y-1">
+                <li>Ve a <a href="https://supabase.com" target="_blank" className="text-cyan-400 hover:underline">supabase.com</a> y crea un proyecto</li>
+                <li>Ve a Settings → API en tu panel de Supabase</li>
+                <li>Copia la Project URL y Anon Key</li>
+                <li>Agrega estas URLs a Authentication → URL Configuration:
+                  <ul className="list-disc list-inside ml-4 mt-1">
+                    <li>https://tradestats-5.preview.emergentagent.com/**</li>
+                    <li>https://tradestats-5.preview.emergentagent.com/auth/callback</li>
+                  </ul>
+                </li>
+                <li>Actualiza el archivo .env con tus credenciales</li>
+                <li>Reinicia la aplicación</li>
+              </ol>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
 export default function TraderfyApp() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [trades, setTrades] = useState([])
   const [parsedData, setParsedData] = useState(null)
+  const [toast, setToast] = useState(null)
+
+  const showToast = (message, type = 'info') => {
+    setToast({ message, type })
+    setTimeout(() => setToast(null), 5000)
+  }
 
   useEffect(() => {
+    // Verificar si Supabase está configurado
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
+
     // Verificar autenticación
     const checkAuth = async () => {
       try {
@@ -319,96 +388,112 @@ export default function TraderfyApp() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex">
-      <Sidebar />
-      
-      <div className="flex-1 p-6">
-        <div className="max-w-7xl mx-auto space-y-6">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-white">Dashboard de Trading</h1>
-              <p className="text-gray-400">Analiza tu rendimiento y métricas de trading</p>
-            </div>
-            {user && (
-              <div className="text-sm text-gray-400">
-                Bienvenido, {user.email}
+    <>
+      <div className="min-h-screen bg-gray-900 flex">
+        <Sidebar />
+        
+        <div className="flex-1 p-6">
+          <div className="max-w-7xl mx-auto space-y-6">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-white">Dashboard de Trading</h1>
+                <p className="text-gray-400">Analiza tu rendimiento y métricas de trading</p>
               </div>
+              {user && (
+                <div className="text-sm text-gray-400">
+                  Bienvenido, {user.email}
+                </div>
+              )}
+            </div>
+
+            {/* Configuration Alert */}
+            {!supabase && (
+              <ConfigurationAlert showToast={showToast} />
             )}
-          </div>
 
-          {/* Stats Cards */}
-          <TradingStats trades={trades} />
+            {/* Stats Cards */}
+            <TradingStats trades={trades} />
 
-          {/* Main Content */}
-          <Tabs defaultValue="calendar" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 bg-gray-800">
-              <TabsTrigger value="calendar" className="text-white data-[state=active]:bg-purple-500">
-                Calendario
-              </TabsTrigger>
-              <TabsTrigger value="upload" className="text-white data-[state=active]:bg-purple-500">
-                Subir Reporte
-              </TabsTrigger>
-              <TabsTrigger value="analysis" className="text-white data-[state=active]:bg-purple-500">
-                Análisis
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="calendar" className="mt-6">
-              <TradingCalendar trades={trades} />
-            </TabsContent>
-            
-            <TabsContent value="upload" className="mt-6">
-              <HTMLUploader onParsedData={handleParsedData} />
+            {/* Main Content */}
+            <Tabs defaultValue="calendar" className="w-full">
+              <TabsList className="grid w-full grid-cols-3 bg-gray-800">
+                <TabsTrigger value="calendar" className="text-white data-[state=active]:bg-purple-500">
+                  Calendario
+                </TabsTrigger>
+                <TabsTrigger value="upload" className="text-white data-[state=active]:bg-purple-500">
+                  Subir Reporte
+                </TabsTrigger>
+                <TabsTrigger value="analysis" className="text-white data-[state=active]:bg-purple-500">
+                  Análisis
+                </TabsTrigger>
+              </TabsList>
               
-              {parsedData && (
-                <Card className="bg-gray-800 border-gray-700 mt-6">
+              <TabsContent value="calendar" className="mt-6">
+                <TradingCalendar trades={trades} />
+              </TabsContent>
+              
+              <TabsContent value="upload" className="mt-6">
+                <HTMLUploader onParsedData={handleParsedData} showToast={showToast} />
+                
+                {parsedData && (
+                  <Card className="bg-gray-800 border-gray-700 mt-6">
+                    <CardHeader>
+                      <CardTitle className="text-white">Resumen del Reporte</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                          <div className="text-sm text-gray-400">Cuenta</div>
+                          <div className="text-white font-medium">
+                            {parsedData.accountInfo.accountNumber || 'N/A'}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm text-gray-400">Total Operaciones</div>
+                          <div className="text-white font-medium">
+                            {parsedData.totalTrades}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm text-gray-400">P&L Total</div>
+                          <div className={`font-medium ${
+                            parsedData.summary.totalPnl >= 0 ? 'text-green-400' : 'text-red-400'
+                          }`}>
+                            ${parsedData.summary.totalPnl?.toFixed(2) || '0.00'}
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+              
+              <TabsContent value="analysis" className="mt-6">
+                <Card className="bg-gray-800 border-gray-700">
                   <CardHeader>
-                    <CardTitle className="text-white">Resumen del Reporte</CardTitle>
+                    <CardTitle className="text-white">Análisis de Rendimiento</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <div className="text-sm text-gray-400">Cuenta</div>
-                        <div className="text-white font-medium">
-                          {parsedData.accountInfo.accountNumber || 'N/A'}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-sm text-gray-400">Total Operaciones</div>
-                        <div className="text-white font-medium">
-                          {parsedData.totalTrades}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-sm text-gray-400">P&L Total</div>
-                        <div className={`font-medium ${
-                          parsedData.summary.totalPnl >= 0 ? 'text-green-400' : 'text-red-400'
-                        }`}>
-                          ${parsedData.summary.totalPnl?.toFixed(2) || '0.00'}
-                        </div>
-                      </div>
+                    <div className="text-gray-400">
+                      Aquí se mostrarán gráficos y análisis detallados una vez que tengas datos de trading.
                     </div>
                   </CardContent>
                 </Card>
-              )}
-            </TabsContent>
-            
-            <TabsContent value="analysis" className="mt-6">
-              <Card className="bg-gray-800 border-gray-700">
-                <CardHeader>
-                  <CardTitle className="text-white">Análisis de Rendimiento</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-gray-400">
-                    Aquí se mostrarán gráficos y análisis detallados una vez que tengas datos de trading.
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Toast Notifications */}
+      {toast && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast(null)} 
+        />
+      )}
+    </>
   )
 }
