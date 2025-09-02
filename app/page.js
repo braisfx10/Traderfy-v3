@@ -1743,6 +1743,7 @@ export default function TraderfyApp() {
           setCurrentView={setCurrentView}
           onLogout={handleLogout}
           user={user}
+          demoMode={demoMode}
         />
         
         <div className="flex-1 gradient-sidebar overflow-auto">
