@@ -38,7 +38,8 @@ import {
   Clock,
   TrendingDown,
   Trophy,
-  XCircle
+  XCircle,
+  Users
 } from 'lucide-react'
 
 // Estado global de la aplicación
