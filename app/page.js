@@ -975,6 +975,101 @@ export default function TraderfyApp() {
               trades={trades.filter(t => t.account_id === selectedAccount.id)} 
               title={`Resumen de ${selectedAccount.name}`} 
             />
+            
+            {/* Mostrar datos de resumen de cuenta si están disponibles */}
+            {(() => {
+              const accountTrades = trades.filter(t => t.account_id === selectedAccount.id);
+              if (accountTrades.length > 0 && accountTrades[0].summary) {
+                const summary = accountTrades[0].summary;
+                return (
+                  <Card className="bg-gray-800 border-gray-700">
+                    <CardHeader>
+                      <CardTitle className="text-white">Resumen de Cuenta - MetaTrader</CardTitle>
+                      <CardDescription className="text-gray-400">
+                        Datos extraídos del reporte oficial
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        {summary.deposit && (
+                          <div className="bg-gray-700 p-4 rounded-lg">
+                            <div className="text-sm text-gray-400">Depósito Inicial</div>
+                            <div className="text-xl font-bold text-blue-400">
+                              ${summary.deposit.toLocaleString()}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {summary.realizedPnl && (
+                          <div className="bg-gray-700 p-4 rounded-lg">
+                            <div className="text-sm text-gray-400">P&L Devengadas</div>
+                            <div className={`text-xl font-bold ${summary.realizedPnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                              ${summary.realizedPnl.toLocaleString()}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {summary.withdrawal && (
+                          <div className="bg-gray-700 p-4 rounded-lg">
+                            <div className="text-sm text-gray-400">Retirada</div>
+                            <div className="text-xl font-bold text-red-400">
+                              -${summary.withdrawal.toLocaleString()}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {summary.netTotal && (
+                          <div className="bg-gray-700 p-4 rounded-lg">
+                            <div className="text-sm text-gray-400">Total Neto</div>
+                            <div className={`text-xl font-bold ${summary.netTotal >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                              ${summary.netTotal.toLocaleString()}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {summary.balance && (
+                          <div className="bg-gray-700 p-4 rounded-lg">
+                            <div className="text-sm text-gray-400">Saldo Final</div>
+                            <div className="text-xl font-bold text-cyan-400">
+                              ${summary.balance.toLocaleString()}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {summary.capital && (
+                          <div className="bg-gray-700 p-4 rounded-lg">
+                            <div className="text-sm text-gray-400">Capital</div>
+                            <div className="text-xl font-bold text-purple-400">
+                              ${summary.capital.toLocaleString()}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {summary.freeMargin && (
+                          <div className="bg-gray-700 p-4 rounded-lg">
+                            <div className="text-sm text-gray-400">Margen Libre</div>
+                            <div className="text-xl font-bold text-cyan-400">
+                              ${summary.freeMargin.toLocaleString()}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {summary.profitFactor && (
+                          <div className="bg-gray-700 p-4 rounded-lg">
+                            <div className="text-sm text-gray-400">Profit Factor</div>
+                            <div className="text-xl font-bold text-purple-400">
+                              {summary.profitFactor}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              }
+              return null;
+            })()}
+            
             <HTMLUploader 
               selectedAccount={selectedAccount}
               onSuccess={handleUploadSuccess}
