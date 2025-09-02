@@ -482,6 +482,45 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
     setIsUploading(true)
     try {
       const text = await file.text()
+      
+      // Intentar usar el API endpoint primero
+      try {
+        const response = await fetch('/api/parse-html', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            htmlContent: text,
+            accountId: selectedAccount.id
+          })
+        })
+
+        if (response.ok) {
+          const apiResult = await response.json()
+          if (apiResult.trades && apiResult.trades.length > 0) {
+            // Asignar account_id si no está presente
+            const tradesWithAccountId = apiResult.trades.map(trade => ({
+              ...trade,
+              account_id: selectedAccount.id,
+              user_id: 'demo'
+            }))
+
+            const processedData = {
+              ...apiResult,
+              trades: tradesWithAccountId
+            }
+
+            showToast(`Reporte procesado vía API: ${apiResult.trades.length} operaciones encontradas`, 'success')
+            onSuccess(processedData)
+            return
+          }
+        }
+      } catch (apiError) {
+        console.log('API no disponible, procesando localmente:', apiError.message)
+      }
+
+      // Fallback: procesar localmente
       const parsedData = parseHTMLReport(text)
       
       if (parsedData.trades.length === 0) {
@@ -502,12 +541,12 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
         trades: tradesWithAccountId
       }
 
-      showToast(`Reporte procesado: ${parsedData.trades.length} operaciones encontradas`, 'success')
+      showToast(`Reporte procesado localmente: ${parsedData.trades.length} operaciones encontradas`, 'success')
       onSuccess(processedData)
       
     } catch (error) {
       console.error('Error al procesar archivo:', error)
-      showToast('Error al procesar el archivo HTML', 'error')
+      showToast('Error al procesar el archivo HTML: ' + error.message, 'error')
     }
     setIsUploading(false)
   }
