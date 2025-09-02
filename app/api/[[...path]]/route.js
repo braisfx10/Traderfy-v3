@@ -326,7 +326,6 @@ async function handleRoute(request, { params }) {
 
     // POST /api/parse-html - Endpoint para procesar reportes HTML
     if (route === '/parse-html' && method === 'POST') {
-      const user = await requireAuth(supabase)
       const body = await request.json()
       const { htmlContent, accountId } = body
 
@@ -342,35 +341,46 @@ async function handleRoute(request, { params }) {
         const { parseHTMLReport } = await import('../../../lib/htmlParser')
         const parsedData = parseHTMLReport(htmlContent)
 
-        // Guardar las operaciones en la base de datos
-        const tradesWithUserId = parsedData.trades.map(trade => ({
-          ...trade,
-          user_id: user.id,
-          account_id: accountId || null
-        }))
+        // Si Supabase está configurado, guardar en la base de datos
+        if (supabase) {
+          const user = await requireAuth(supabase)
+          
+          // Guardar las operaciones en la base de datos
+          const tradesWithUserId = parsedData.trades.map(trade => ({
+            ...trade,
+            user_id: user.id,
+            account_id: accountId || null
+          }))
 
-        const { data: insertedTrades, error: insertError } = await supabase
-          .from('trades')
-          .insert(tradesWithUserId)
-          .select()
+          const { data: insertedTrades, error: insertError } = await supabase
+            .from('trades')
+            .insert(tradesWithUserId)
+            .select()
 
-        if (insertError) {
-          console.error('Error inserting trades:', insertError)
-          return handleCORS(NextResponse.json(
-            { error: "Error guardando operaciones" },
-            { status: 500 }
-          ))
+          if (insertError) {
+            console.error('Error inserting trades:', insertError)
+            return handleCORS(NextResponse.json(
+              { error: "Error guardando operaciones" },
+              { status: 500 }
+            ))
+          }
+
+          return handleCORS(NextResponse.json({
+            ...parsedData,
+            insertedTrades: insertedTrades.length
+          }))
+        } else {
+          // Sin Supabase, devolver solo los datos parseados
+          return handleCORS(NextResponse.json({
+            ...parsedData,
+            message: "Datos procesados correctamente (modo demo)"
+          }))
         }
-
-        return handleCORS(NextResponse.json({
-          ...parsedData,
-          insertedTrades: insertedTrades.length
-        }))
 
       } catch (error) {
         console.error('Error parsing HTML:', error)
         return handleCORS(NextResponse.json(
-          { error: "Error procesando el reporte HTML" },
+          { error: "Error procesando el reporte HTML: " + error.message },
           { status: 500 }
         ))
       }
