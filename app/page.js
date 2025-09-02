@@ -482,7 +482,7 @@ const Sidebar = ({
         )}
 
         {/* Sección Alumnos - Solo para Mentores y Admins */}
-        {(user?.role === 'Mentor' || user?.role === 'Admin') && (
+        {(user?.role === 'Mentor' || user?.role === 'Admin' || (!user && demoMode)) && (
           <Button
             variant="ghost"
             className={`w-full justify-start gap-2 sidebar-item transition-all duration-300 ${
@@ -490,7 +490,7 @@ const Sidebar = ({
                 ? 'bg-gradient-to-r from-purple-500/20 to-cyan-400/20 text-white border-l-2 border-purple-500 glow-purple' 
                 : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-cyan-400/10'
             }`}
-            onClick={() => handleViewChange('students')}
+            onClick={() => setCurrentView('students')}
           >
             <Users className="w-4 h-4" />
             {!isCollapsed && <span>Alumnos</span>}
@@ -498,7 +498,7 @@ const Sidebar = ({
         )}
 
         {/* Selector de Mentor - Solo para Alumnos */}
-        {user?.role === 'Alumno' && (
+        {(user?.role === 'Alumno' || (!user && demoMode)) && (
           <Button
             variant="ghost"
             className={`w-full justify-start gap-2 sidebar-item transition-all duration-300 ${
@@ -506,7 +506,7 @@ const Sidebar = ({
                 ? 'bg-gradient-to-r from-purple-500/20 to-cyan-400/20 text-white border-l-2 border-purple-500 glow-purple' 
                 : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-cyan-400/10'
             }`}
-            onClick={() => handleViewChange('mentor-selection')}
+            onClick={() => setCurrentView('mentor-selection')}
           >
             <Target className="w-4 h-4" />
             {!isCollapsed && <span>Mi Mentor</span>}
