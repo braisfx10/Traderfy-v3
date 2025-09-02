@@ -640,9 +640,9 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
 
       {/* Modal emergente de detalles del día */}
       {selectedDay && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setSelectedDay(null)}>
-          <Card className="bg-gray-800 border-gray-700 max-w-4xl w-full mx-4 max-h-[80vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
-            <CardHeader>
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => setSelectedDay(null)}>
+          <Card className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border-purple-500/30 shadow-2xl max-w-4xl w-full mx-4 max-h-[80vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <CardHeader className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-b border-purple-500/20">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-white flex items-center gap-2">
                   <Calendar className="w-5 h-5 text-purple-400" />
@@ -653,7 +653,7 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
                     day: 'numeric' 
                   })}
                 </CardTitle>
-                <Button variant="ghost" size="sm" onClick={() => setSelectedDay(null)} className="text-white hover:bg-gray-700">
+                <Button variant="ghost" size="sm" onClick={() => setSelectedDay(null)} className="text-white hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-cyan-400/20">
                   <X className="w-4 h-4" />
                 </Button>
               </div>
@@ -662,21 +662,21 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
               <div className="space-y-6">
                 {/* Resumen del día */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                  <div className="bg-gray-700 p-4 rounded-lg">
+                  <div className="bg-gradient-to-br from-purple-500/20 to-indigo-600/10 p-4 rounded-lg border border-purple-500/30">
                     <div className="text-2xl font-bold text-white">{selectedDay.trades.length}</div>
-                    <div className="text-sm text-gray-400">Total Trades</div>
+                    <div className="text-sm text-purple-200/70">Total Trades</div>
                   </div>
-                  <div className="bg-gray-700 p-4 rounded-lg">
-                    <div className={`text-2xl font-bold ${selectedDay.totalPnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  <div className="bg-gradient-to-br from-cyan-500/20 to-blue-600/10 p-4 rounded-lg border border-cyan-500/30">
+                    <div className={`text-2xl font-bold ${selectedDay.totalPnl >= 0 ? 'text-green-400 glow-text-cyan' : 'text-red-400 glow-text-purple'}`}>
                       ${selectedDay.totalPnl.toFixed(2)}
                     </div>
-                    <div className="text-sm text-gray-400">P&L Total</div>
+                    <div className="text-sm text-cyan-200/70">P&L Total</div>
                   </div>
-                  <div className="bg-gray-700 p-4 rounded-lg">
+                  <div className="bg-gradient-to-br from-indigo-500/20 to-purple-600/10 p-4 rounded-lg border border-indigo-500/30">
                     <div className="text-2xl font-bold text-purple-400">
                       {selectedDay.trades.length > 0 ? ((selectedDay.trades.filter(t => t.pnl > 0).length / selectedDay.trades.length) * 100).toFixed(1) : 0}%
                     </div>
-                    <div className="text-sm text-gray-400">Win Rate</div>
+                    <div className="text-sm text-indigo-200/70">Win Rate</div>
                   </div>
                   <div className="bg-gray-700 p-4 rounded-lg">
                     <div className="text-2xl font-bold text-cyan-400">
