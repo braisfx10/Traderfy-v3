@@ -397,14 +397,29 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
   )
 }
 
-// Componente de métricas
+// Componente de métricas expandidas
 const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
+  const winningTrades = trades.filter(t => t.pnl > 0)
+  const losingTrades = trades.filter(t => t.pnl < 0)
+  
   const stats = {
     totalTrades: trades.length,
-    winningTrades: trades.filter(t => t.pnl > 0).length,
-    losingTrades: trades.filter(t => t.pnl < 0).length,
+    winningTrades: winningTrades.length,
+    losingTrades: losingTrades.length,
     totalPnl: trades.reduce((sum, t) => sum + t.pnl, 0),
-    winRate: trades.length > 0 ? ((trades.filter(t => t.pnl > 0).length / trades.length) * 100).toFixed(1) : 0,
+    winRate: trades.length > 0 ? ((winningTrades.length / trades.length) * 100).toFixed(1) : 0,
+    avgWin: winningTrades.length > 0 ? (winningTrades.reduce((sum, t) => sum + t.pnl, 0) / winningTrades.length).toFixed(2) : 0,
+    avgLoss: losingTrades.length > 0 ? Math.abs(losingTrades.reduce((sum, t) => sum + t.pnl, 0) / losingTrades.length).toFixed(2) : 0,
+    largestWin: winningTrades.length > 0 ? Math.max(...winningTrades.map(t => t.pnl)).toFixed(2) : 0,
+    largestLoss: losingTrades.length > 0 ? Math.abs(Math.min(...losingTrades.map(t => t.pnl))).toFixed(2) : 0,
+    profitFactor: losingTrades.length > 0 && winningTrades.length > 0 ? 
+      (winningTrades.reduce((sum, t) => sum + t.pnl, 0) / Math.abs(losingTrades.reduce((sum, t) => sum + t.pnl, 0))).toFixed(2) : 
+      winningTrades.length > 0 ? 'Infinito' : 0,
+    riskRewardRatio: winningTrades.length > 0 && losingTrades.length > 0 ?
+      ((winningTrades.reduce((sum, t) => sum + t.pnl, 0) / winningTrades.length) / 
+       Math.abs(losingTrades.reduce((sum, t) => sum + t.pnl, 0) / losingTrades.length)).toFixed(2) : 0,
+    totalLots: trades.reduce((sum, t) => sum + (t.lots || 0), 0).toFixed(2),
+    avgTradeSize: trades.length > 0 ? (trades.reduce((sum, t) => sum + (t.lots || 0), 0) / trades.length).toFixed(2) : 0
   }
 
   return (
@@ -420,6 +435,7 @@ const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{stats.totalTrades}</div>
+            <div className="text-xs text-gray-400">Total de operaciones</div>
           </CardContent>
         </Card>
         
@@ -432,6 +448,7 @@ const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-purple-400">{stats.winRate}%</div>
+            <div className="text-xs text-gray-400">{stats.winningTrades}W / {stats.losingTrades}L</div>
           </CardContent>
         </Card>
         
@@ -446,6 +463,7 @@ const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
             <div className={`text-2xl font-bold ${stats.totalPnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
               ${stats.totalPnl.toFixed(2)}
             </div>
+            <div className="text-xs text-gray-400">Beneficio neto total</div>
           </CardContent>
         </Card>
         
@@ -453,12 +471,55 @@ const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-gray-400 flex items-center gap-2">
               <TrendingUp className="w-4 h-4" />
-              Trades Ganadores
+              Profit Factor
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-400">{stats.winningTrades}</div>
-            <div className="text-sm text-gray-400">vs {stats.losingTrades} perdedores</div>
+            <div className="text-2xl font-bold text-cyan-400">{stats.profitFactor}</div>
+            <div className="text-xs text-gray-400">Beneficios / Pérdidas</div>
+          </CardContent>
+        </Card>
+      </div>
+      
+      {/* Segunda fila de métricas */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="bg-gray-800 border-gray-700">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-400">Ganancia Media</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold text-green-400">${stats.avgWin}</div>
+            <div className="text-xs text-gray-400">Por trade ganador</div>
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-gray-800 border-gray-700">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-400">Pérdida Media</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold text-red-400">${stats.avgLoss}</div>
+            <div className="text-xs text-gray-400">Por trade perdedor</div>
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-gray-800 border-gray-700">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-400">Mejor Trade</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold text-green-400">${stats.largestWin}</div>
+            <div className="text-xs text-gray-400">Mayor ganancia</div>
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-gray-800 border-gray-700">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-400">Peor Trade</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-xl font-bold text-red-400">${stats.largestLoss}</div>
+            <div className="text-xs text-gray-400">Mayor pérdida</div>
           </CardContent>
         </Card>
       </div>
