@@ -1706,4 +1706,3 @@ export default function TraderfyApp() {
     </>
   )
 }
-}
