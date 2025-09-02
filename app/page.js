@@ -379,11 +379,9 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
           ))}
         </div>
         <div className="grid grid-cols-7 gap-1">
-          {/* Días vacíos al inicio del mes */}
           {Array.from({ length: startingDayOfWeek }, (_, i) => (
-            <div key={`empty-${i}`} className="min-h-[60px]" />
+            <div key={`empty-${i}`} className="min-h-[80px]" />
           ))}
-          {/* Días del mes */}
           {Array.from({ length: daysInMonth }, (_, i) => renderCalendarDay(i + 1))}
         </div>
       </CardContent>
