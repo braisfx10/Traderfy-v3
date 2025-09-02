@@ -1144,16 +1144,303 @@ export default function TraderfyApp() {
           <div className="space-y-6">
             <MetricsCards 
               trades={trades.filter(t => selectedAccount ? t.account_id === selectedAccount.id : true)} 
-              title={selectedAccount ? `Análisis de ${selectedAccount.name}` : "Análisis General"} 
+              title={selectedAccount ? `Análisis Completo de ${selectedAccount.name}` : "Análisis General"} 
             />
+            
+            {/* Análisis por símbolo */}
             <Card className="bg-gray-800 border-gray-700">
               <CardHeader>
-                <CardTitle className="text-white">Gráficos y Análisis Avanzado</CardTitle>
+                <CardTitle className="text-white">Rendimiento por Símbolo</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-gray-400">
-                  Gráficos de rendimiento (por implementar)
-                </div>
+                {(() => {
+                  const accountTrades = selectedAccount 
+                    ? trades.filter(t => t.account_id === selectedAccount.id)
+                    : trades
+                  
+                  if (accountTrades.length === 0) {
+                    return <div className="text-gray-400">No hay datos disponibles para análisis</div>
+                  }
+
+                  // Agrupar por símbolo
+                  const symbolStats = accountTrades.reduce((acc, trade) => {
+                    if (!acc[trade.symbol]) {
+                      acc[trade.symbol] = {
+                        symbol: trade.symbol,
+                        trades: []
+                      }
+                    }
+                    acc[trade.symbol].trades.push(trade)
+                    return acc
+                  }, {})
+
+                  return (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {Object.values(symbolStats).map(({ symbol, trades: symbolTrades }) => {
+                        const winningTrades = symbolTrades.filter(t => t.pnl > 0)
+                        const totalPnl = symbolTrades.reduce((sum, t) => sum + parseFloat(t.pnl), 0)
+                        const winRate = symbolTrades.length > 0 ? ((winningTrades.length / symbolTrades.length) * 100).toFixed(1) : 0
+                        const avgTrade = symbolTrades.length > 0 ? (totalPnl / symbolTrades.length).toFixed(2) : 0
+
+                        return (
+                          <Card key={symbol} className="bg-gray-700 border-gray-600">
+                            <CardHeader className="pb-2">
+                              <CardTitle className="text-white text-lg">{symbol}</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-2">
+                              <div className="flex justify-between">
+                                <span className="text-gray-400">Trades:</span>
+                                <span className="text-white">{symbolTrades.length}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-400">Win Rate:</span>
+                                <span className="text-purple-400">{winRate}%</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-400">P&L Total:</span>
+                                <span className={totalPnl >= 0 ? 'text-green-400' : 'text-red-400'}>
+                                  ${totalPnl.toFixed(2)}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-400">P&L Promedio:</span>
+                                <span className={avgTrade >= 0 ? 'text-green-400' : 'text-red-400'}>
+                                  ${avgTrade}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-400">Total Lotes:</span>
+                                <span className="text-cyan-400">
+                                  {symbolTrades.reduce((sum, t) => sum + (parseFloat(t.lots) || 0), 0).toFixed(2)}
+                                </span>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        )
+                      })}
+                    </div>
+                  )
+                })()}
+              </CardContent>
+            </Card>
+
+            {/* Análisis temporal */}
+            <Card className="bg-gray-800 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white">Análisis Temporal</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {(() => {
+                  const accountTrades = selectedAccount 
+                    ? trades.filter(t => t.account_id === selectedAccount.id)
+                    : trades
+                  
+                  if (accountTrades.length === 0) {
+                    return <div className="text-gray-400">No hay datos disponibles</div>
+                  }
+
+                  // Análisis por hora
+                  const hourlyStats = accountTrades.reduce((acc, trade) => {
+                    const hour = new Date(trade.close_time).getHours()
+                    if (!acc[hour]) {
+                      acc[hour] = { trades: [], totalPnl: 0 }
+                    }
+                    acc[hour].trades.push(trade)
+                    acc[hour].totalPnl += parseFloat(trade.pnl)
+                    return acc
+                  }, {})
+
+                  // Análisis por día de la semana
+                  const weekdayStats = accountTrades.reduce((acc, trade) => {
+                    const weekday = new Date(trade.close_time).getDay()
+                    const weekdayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+                    const dayName = weekdayNames[weekday]
+                    if (!acc[dayName]) {
+                      acc[dayName] = { trades: [], totalPnl: 0 }
+                    }
+                    acc[dayName].trades.push(trade)
+                    acc[dayName].totalPnl += parseFloat(trade.pnl)
+                    return acc
+                  }, {})
+
+                  return (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      {/* Análisis por día de la semana */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-white mb-4">Rendimiento por Día de la Semana</h3>
+                        <div className="space-y-2">
+                          {Object.entries(weekdayStats).map(([day, stats]) => (
+                            <div key={day} className="flex items-center justify-between p-3 bg-gray-700 rounded">
+                              <div>
+                                <span className="text-white font-medium">{day}</span>
+                                <div className="text-xs text-gray-400">{stats.trades.length} trades</div>
+                              </div>
+                              <div className="text-right">
+                                <div className={`font-bold ${stats.totalPnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                  ${stats.totalPnl.toFixed(2)}
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                  {stats.trades.length > 0 ? 
+                                    `${((stats.trades.filter(t => t.pnl > 0).length / stats.trades.length) * 100).toFixed(1)}% WR` : 
+                                    '0% WR'
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Mejores horas de trading */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-white mb-4">Mejores Horas de Trading</h3>
+                        <div className="space-y-2">
+                          {Object.entries(hourlyStats)
+                            .sort(([,a], [,b]) => b.totalPnl - a.totalPnl)
+                            .slice(0, 8)
+                            .map(([hour, stats]) => (
+                              <div key={hour} className="flex items-center justify-between p-3 bg-gray-700 rounded">
+                                <div>
+                                  <span className="text-white font-medium">{hour}:00 - {parseInt(hour) + 1}:00</span>
+                                  <div className="text-xs text-gray-400">{stats.trades.length} trades</div>
+                                </div>
+                                <div className="text-right">
+                                  <div className={`font-bold ${stats.totalPnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                    ${stats.totalPnl.toFixed(2)}
+                                  </div>
+                                  <div className="text-xs text-gray-400">
+                                    {stats.trades.length > 0 ? 
+                                      `${((stats.trades.filter(t => t.pnl > 0).length / stats.trades.length) * 100).toFixed(1)}% WR` : 
+                                      '0% WR'
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })()}
+              </CardContent>
+            </Card>
+
+            {/* Métricas de riesgo */}
+            <Card className="bg-gray-800 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white">Análisis de Riesgo</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {(() => {
+                  const accountTrades = selectedAccount 
+                    ? trades.filter(t => t.account_id === selectedAccount.id)
+                    : trades
+                  
+                  if (accountTrades.length === 0) {
+                    return <div className="text-gray-400">No hay datos disponibles</div>
+                  }
+
+                  const sortedPnl = accountTrades.map(t => parseFloat(t.pnl)).sort((a, b) => a - b)
+                  const winningTrades = accountTrades.filter(t => t.pnl > 0)
+                  const losingTrades = accountTrades.filter(t => t.pnl < 0)
+
+                  // Calcular métricas de riesgo
+                  const maxDrawdown = Math.min(...sortedPnl)
+                  const maxProfit = Math.max(...sortedPnl)
+                  const consecutiveWins = calculateConsecutiveStreaks(accountTrades, true)
+                  const consecutiveLosses = calculateConsecutiveStreaks(accountTrades, false)
+
+                  function calculateConsecutiveStreaks(trades, forWins) {
+                    let maxStreak = 0
+                    let currentStreak = 0
+                    
+                    trades.forEach(trade => {
+                      if ((forWins && trade.pnl > 0) || (!forWins && trade.pnl < 0)) {
+                        currentStreak++
+                        maxStreak = Math.max(maxStreak, currentStreak)
+                      } else {
+                        currentStreak = 0
+                      }
+                    })
+                    
+                    return maxStreak
+                  }
+
+                  return (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <Card className="bg-gray-700 border-gray-600">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm text-gray-400">Máximo Drawdown</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-xl font-bold text-red-400">${maxDrawdown.toFixed(2)}</div>
+                          <div className="text-xs text-gray-400">Mayor pérdida individual</div>
+                        </CardContent>
+                      </Card>
+
+                      <Card className="bg-gray-700 border-gray-600">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm text-gray-400">Máximo Beneficio</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-xl font-bold text-green-400">${maxProfit.toFixed(2)}</div>
+                          <div className="text-xs text-gray-400">Mayor ganancia individual</div>
+                        </CardContent>
+                      </Card>
+
+                      <Card className="bg-gray-700 border-gray-600">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm text-gray-400">Risk-Reward Ratio</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-xl font-bold text-purple-400">
+                            {winningTrades.length > 0 && losingTrades.length > 0 ? 
+                              ((winningTrades.reduce((sum, t) => sum + t.pnl, 0) / winningTrades.length) / 
+                               Math.abs(losingTrades.reduce((sum, t) => sum + t.pnl, 0) / losingTrades.length)).toFixed(2) : 
+                              'N/A'
+                            }
+                          </div>
+                          <div className="text-xs text-gray-400">Relación beneficio/riesgo</div>
+                        </CardContent>
+                      </Card>
+
+                      <Card className="bg-gray-700 border-gray-600">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm text-gray-400">Rachas Ganadoras</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-xl font-bold text-green-400">{consecutiveWins}</div>
+                          <div className="text-xs text-gray-400">Máxima racha de victorias</div>
+                        </CardContent>
+                      </Card>
+
+                      <Card className="bg-gray-700 border-gray-600">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm text-gray-400">Rachas Perdedoras</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-xl font-bold text-red-400">{consecutiveLosses}</div>
+                          <div className="text-xs text-gray-400">Máxima racha de pérdidas</div>
+                        </CardContent>
+                      </Card>
+
+                      <Card className="bg-gray-700 border-gray-600">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm text-gray-400">Expectativa</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-xl font-bold text-cyan-400">
+                            ${accountTrades.length > 0 ? 
+                              (accountTrades.reduce((sum, t) => sum + parseFloat(t.pnl), 0) / accountTrades.length).toFixed(2) : 
+                              '0.00'
+                            }
+                          </div>
+                          <div className="text-xs text-gray-400">P&L esperado por trade</div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )
+                })()}
               </CardContent>
             </Card>
           </div>
