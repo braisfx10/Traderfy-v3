@@ -694,11 +694,12 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
         return
       }
 
-      // Asignar account_id a todos los trades
+      // Asignar account_id a todos los trades Y agregar el resumen
       const tradesWithAccountId = parsedData.trades.map(trade => ({
         ...trade,
         account_id: selectedAccount.id,
-        user_id: 'demo' // Para modo demo
+        user_id: 'demo', // Para modo demo
+        summary: parsedData.summary // Agregar datos de resumen a cada trade para fácil acceso
       }))
 
       // Crear el objeto de datos procesados
