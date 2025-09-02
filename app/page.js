@@ -1614,37 +1614,46 @@ export default function TraderfyApp() {
 
                       <Card className="bg-gradient-to-br from-purple-900/30 to-indigo-800/20 border-purple-500/30 hover:from-purple-800/40 hover:to-indigo-700/30 transition-all duration-300">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm text-gray-400">Risk-Reward Ratio</CardTitle>
+                          <CardTitle className="text-sm text-purple-300 flex items-center gap-2">
+                            <BarChart3 className="w-4 h-4" />
+                            Risk-Reward Ratio
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="text-xl font-bold text-purple-400">
+                          <div className="text-xl font-bold text-purple-400 glow-text-cyan">
                             {winningTrades.length > 0 && losingTrades.length > 0 ? 
                               ((winningTrades.reduce((sum, t) => sum + t.pnl, 0) / winningTrades.length) / 
                                Math.abs(losingTrades.reduce((sum, t) => sum + t.pnl, 0) / losingTrades.length)).toFixed(2) : 
                               'N/A'
                             }
                           </div>
-                          <div className="text-xs text-gray-400">Relación beneficio/riesgo</div>
+                          <div className="text-xs text-purple-200/70">Relación beneficio/riesgo</div>
                         </CardContent>
                       </Card>
 
-                      <Card className="bg-gray-700 border-gray-600">
+                      <Card className="bg-gradient-to-br from-emerald-900/30 to-green-800/20 border-emerald-500/30 hover:from-emerald-800/40 hover:to-green-700/30 transition-all duration-300">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm text-gray-400">Rachas Ganadoras</CardTitle>
+                          <CardTitle className="text-sm text-emerald-300 flex items-center gap-2">
+                            <Trophy className="w-4 h-4" />
+                            Rachas Ganadoras
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="text-xl font-bold text-green-400">{consecutiveWins}</div>
-                          <div className="text-xs text-gray-400">Máxima racha de victorias</div>
+                          <div className="text-xl font-bold text-green-400 glow-text-cyan">{consecutiveWins}</div>
+                          <div className="text-xs text-emerald-200/70">Máxima racha de victorias</div>
                         </CardContent>
                       </Card>
 
-                      <Card className="bg-gray-700 border-gray-600">
+                      <Card className="bg-gradient-to-br from-red-900/30 to-rose-800/20 border-red-500/30 hover:from-red-800/40 hover:to-rose-700/30 transition-all duration-300">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm text-gray-400">Rachas Perdedoras</CardTitle>
+                          <CardTitle className="text-sm text-red-300 flex items-center gap-2">
+                            <XCircle className="w-4 h-4" />
+                            Rachas Perdedoras
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="text-xl font-bold text-red-400">{consecutiveLosses}</div>
-                          <div className="text-xs text-gray-400">Máxima racha de pérdidas</div>
+                          <div className="text-xl font-bold text-red-400 glow-text-purple">{consecutiveLosses}</div>
+                          <div className="text-xs text-red-200/70">Máxima racha de pérdidas</div>
                         </CardContent>
                       </Card>
 
