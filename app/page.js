@@ -1102,7 +1102,7 @@ export default function TraderfyApp() {
                   <Download className="w-4 h-4 mr-2" />
                   Exportar
                 </Button>
-                <Button variant="outline" size="sm" onClick={loadUserData}>
+                <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
                   <Activity className="w-4 h-4 mr-2" />
                   Actualizar
                 </Button>
