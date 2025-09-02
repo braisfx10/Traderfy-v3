@@ -389,55 +389,71 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
   )
 }
 
-const TradingStats = ({ trades = [] }) => {
+// Componente de métricas
+const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
   const stats = {
     totalTrades: trades.length,
     winningTrades: trades.filter(t => t.pnl > 0).length,
     losingTrades: trades.filter(t => t.pnl < 0).length,
     totalPnl: trades.reduce((sum, t) => sum + t.pnl, 0),
-    winRate: trades.length > 0 ? ((trades.filter(t => t.pnl > 0).length / trades.length) * 100).toFixed(1) : 0
+    winRate: trades.length > 0 ? ((trades.filter(t => t.pnl > 0).length / trades.length) * 100).toFixed(1) : 0,
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <Card className="bg-gray-800 border-gray-700">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-gray-400">Total Trades</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-white">{stats.totalTrades}</div>
-        </CardContent>
-      </Card>
-      
-      <Card className="bg-gray-800 border-gray-700">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-gray-400">Win Rate</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-purple-400">{stats.winRate}%</div>
-        </CardContent>
-      </Card>
-      
-      <Card className="bg-gray-800 border-gray-700">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-gray-400">Total P&L</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className={`text-2xl font-bold ${stats.totalPnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-            ${stats.totalPnl.toFixed(2)}
-          </div>
-        </CardContent>
-      </Card>
-      
-      <Card className="bg-gray-800 border-gray-700">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-gray-400">Trades Ganadores</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-green-400">{stats.winningTrades}</div>
-          <div className="text-sm text-gray-400">vs {stats.losingTrades} perdedores</div>
-        </CardContent>
-      </Card>
+    <div className="space-y-4">
+      <h2 className="text-xl font-bold text-white">{title}</h2>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="bg-gray-800 border-gray-700">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-400 flex items-center gap-2">
+              <Activity className="w-4 h-4" />
+              Total Trades
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-white">{stats.totalTrades}</div>
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-gray-800 border-gray-700">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-400 flex items-center gap-2">
+              <Target className="w-4 h-4" />
+              Win Rate
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-purple-400">{stats.winRate}%</div>
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-gray-800 border-gray-700">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-400 flex items-center gap-2">
+              <DollarSign className="w-4 h-4" />
+              Total P&L
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className={`text-2xl font-bold ${stats.totalPnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              ${stats.totalPnl.toFixed(2)}
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-gray-800 border-gray-700">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm text-gray-400 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4" />
+              Trades Ganadores
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-green-400">{stats.winningTrades}</div>
+            <div className="text-sm text-gray-400">vs {stats.losingTrades} perdedores</div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
