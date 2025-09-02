@@ -693,101 +693,140 @@ export default function TraderfyApp() {
     )
   }
 
+  // Renderizar contenido según la vista actual
+  const renderContent = () => {
+    switch (currentView) {
+      case 'accounts-summary':
+        return (
+          <div className="space-y-6">
+            <MetricsCards trades={trades} title="Resumen Total de Todas las Cuentas" />
+            {!supabase && (
+              <Card className="bg-yellow-900/20 border-yellow-600">
+                <CardHeader>
+                  <CardTitle className="text-yellow-400 flex items-center gap-2">
+                    <AlertTriangle className="w-5 h-5" />
+                    Configuración de Supabase Requerida
+                  </CardTitle>
+                  <CardDescription className="text-yellow-200">
+                    Para usar todas las funcionalidades, sigue las instrucciones en CONFIGURACION_SUPABASE.md
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            )}
+          </div>
+        )
+      
+      case 'accounts-add':
+        return (
+          <Card className="bg-gray-800 border-gray-700">
+            <CardHeader>
+              <CardTitle className="text-white">Agregar Nueva Cuenta</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-gray-400">
+                Formulario para agregar cuenta (por implementar)
+              </div>
+            </CardContent>
+          </Card>
+        )
+      
+      case 'panel-summary':
+        return selectedAccount ? (
+          <div className="space-y-6">
+            <MetricsCards 
+              trades={trades.filter(t => t.account_id === selectedAccount.id)} 
+              title={`Resumen de ${selectedAccount.name}`} 
+            />
+            <HTMLUploader 
+              selectedAccount={selectedAccount}
+              onSuccess={handleUploadSuccess}
+              showToast={showToast}
+            />
+          </div>
+        ) : null
+      
+      case 'panel-calendar':
+        return (
+          <TradingCalendar 
+            trades={trades} 
+            selectedAccount={selectedAccount} 
+          />
+        )
+      
+      case 'panel-trades':
+        return (
+          <Card className="bg-gray-800 border-gray-700">
+            <CardHeader>
+              <CardTitle className="text-white">Historial de Operaciones</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-gray-400">
+                Tabla de operaciones (por implementar)
+              </div>
+            </CardContent>
+          </Card>
+        )
+      
+      case 'panel-analysis':
+        return (
+          <div className="space-y-6">
+            <MetricsCards 
+              trades={trades.filter(t => selectedAccount ? t.account_id === selectedAccount.id : true)} 
+              title={selectedAccount ? `Análisis de ${selectedAccount.name}` : "Análisis General"} 
+            />
+            <Card className="bg-gray-800 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white">Gráficos y Análisis Avanzado</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-gray-400">
+                  Gráficos de rendimiento (por implementar)
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )
+      
+      case 'settings':
+        return (
+          <Card className="bg-gray-800 border-gray-700">
+            <CardHeader>
+              <CardTitle className="text-white">Configuración</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-gray-400">
+                Configuración de perfil y preferencias (por implementar)
+              </div>
+            </CardContent>
+          </Card>
+        )
+      
+      default:
+        return (
+          <div className="text-gray-400">
+            Vista no encontrada
+          </div>
+        )
+    }
+  }
+
   return (
     <>
       <div className="min-h-screen bg-gray-900 flex">
-        <Sidebar />
+        <Sidebar
+          isCollapsed={isCollapsed}
+          setIsCollapsed={setIsCollapsed}
+          accounts={accounts}
+          selectedAccount={selectedAccount}
+          setSelectedAccount={setSelectedAccount}
+          currentView={currentView}
+          setCurrentView={setCurrentView}
+          onLogout={handleLogout}
+        />
         
-        <div className="flex-1 p-6">
-          <div className="max-w-7xl mx-auto space-y-6">
-            {/* Header */}
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-white">Dashboard de Trading</h1>
-                <p className="text-gray-400">Analiza tu rendimiento y métricas de trading</p>
-              </div>
-              {user && (
-                <div className="text-sm text-gray-400">
-                  Bienvenido, {user.email}
-                </div>
-              )}
-            </div>
-
-            {/* Configuration Alert */}
-            {!supabase && (
-              <ConfigurationAlert showToast={showToast} />
-            )}
-
-            {/* Stats Cards */}
-            <TradingStats trades={trades} />
-
-            {/* Main Content */}
-            <Tabs defaultValue="calendar" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 bg-gray-800">
-                <TabsTrigger value="calendar" className="text-white data-[state=active]:bg-purple-500">
-                  Calendario
-                </TabsTrigger>
-                <TabsTrigger value="upload" className="text-white data-[state=active]:bg-purple-500">
-                  Subir Reporte
-                </TabsTrigger>
-                <TabsTrigger value="analysis" className="text-white data-[state=active]:bg-purple-500">
-                  Análisis
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="calendar" className="mt-6">
-                <TradingCalendar trades={trades} />
-              </TabsContent>
-              
-              <TabsContent value="upload" className="mt-6">
-                <HTMLUploader onParsedData={handleParsedData} showToast={showToast} />
-                
-                {parsedData && (
-                  <Card className="bg-gray-800 border-gray-700 mt-6">
-                    <CardHeader>
-                      <CardTitle className="text-white">Resumen del Reporte</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                          <div className="text-sm text-gray-400">Cuenta</div>
-                          <div className="text-white font-medium">
-                            {parsedData.accountInfo.accountNumber || 'N/A'}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-400">Total Operaciones</div>
-                          <div className="text-white font-medium">
-                            {parsedData.totalTrades}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-400">P&L Total</div>
-                          <div className={`font-medium ${
-                            parsedData.summary.totalPnl >= 0 ? 'text-green-400' : 'text-red-400'
-                          }`}>
-                            ${parsedData.summary.totalPnl?.toFixed(2) || '0.00'}
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </TabsContent>
-              
-              <TabsContent value="analysis" className="mt-6">
-                <Card className="bg-gray-800 border-gray-700">
-                  <CardHeader>
-                    <CardTitle className="text-white">Análisis de Rendimiento</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-gray-400">
-                      Aquí se mostrarán gráficos y análisis detallados una vez que tengas datos de trading.
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+        <div className="flex-1 p-6 overflow-auto">
+          <div className="max-w-7xl mx-auto">
+            {renderContent()}
           </div>
         </div>
       </div>
