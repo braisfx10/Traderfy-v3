@@ -1657,18 +1657,21 @@ export default function TraderfyApp() {
                         </CardContent>
                       </Card>
 
-                      <Card className="bg-gray-700 border-gray-600">
+                      <Card className="bg-gradient-to-br from-cyan-900/30 to-blue-800/20 border-cyan-500/30 hover:from-cyan-800/40 hover:to-blue-700/30 transition-all duration-300">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm text-gray-400">Expectativa</CardTitle>
+                          <CardTitle className="text-sm text-cyan-300 flex items-center gap-2">
+                            <Target className="w-4 h-4" />
+                            Expectativa
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="text-xl font-bold text-cyan-400">
+                          <div className="text-xl font-bold text-cyan-400 glow-text-cyan">
                             ${accountTrades.length > 0 ? 
                               (accountTrades.reduce((sum, t) => sum + parseFloat(t.pnl), 0) / accountTrades.length).toFixed(2) : 
                               '0.00'
                             }
                           </div>
-                          <div className="text-xs text-gray-400">P&L esperado por trade</div>
+                          <div className="text-xs text-cyan-200/70">P&L esperado por trade</div>
                         </CardContent>
                       </Card>
                     </div>
