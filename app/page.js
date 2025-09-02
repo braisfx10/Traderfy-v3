@@ -1087,8 +1087,11 @@ export default function TraderfyApp() {
 
   // Effect to initialize authentication state
   useEffect(() => {
-    if (!authLoading && !user && !demoMode && !showAuthModal) {
-      setShowAuthModal(true)
+    if (!authLoading) {
+      if (!user && !demoMode && !showAuthModal) {
+        setShowAuthModal(true)
+      }
+      setLoading(false) // Always set loading to false when auth loading is complete
     }
   }, [authLoading, user, demoMode, showAuthModal])
 
