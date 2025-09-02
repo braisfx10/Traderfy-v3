@@ -1085,6 +1085,13 @@ export default function TraderfyApp() {
     setTimeout(() => setToast(null), 5000)
   }
 
+  // Effect to initialize authentication state
+  useEffect(() => {
+    if (!authLoading && !user && !demoMode && !showAuthModal) {
+      setShowAuthModal(true)
+    }
+  }, [authLoading, user, demoMode, showAuthModal])
+
   useEffect(() => {
     // Verificar si Supabase está configurado
     if (!supabase) {
