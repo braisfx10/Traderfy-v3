@@ -259,11 +259,11 @@ const Sidebar = ({
       <div className="p-4 border-t border-gray-700">
         <Button
           variant="ghost"
-          className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-gray-800"
+          className="w-full justify-start gap-2 text-red-400 hover:text-red-300 hover:bg-gradient-to-r hover:from-red-500/10 hover:to-red-400/10 transition-all duration-300"
           onClick={onLogout}
         >
           <LogOut className="w-4 h-4" />
-          {!isCollapsed && <span className="ml-2">Cerrar Sesión</span>}
+          {!isCollapsed && <span>Cerrar Sesión</span>}
         </Button>
       </div>
     </div>
