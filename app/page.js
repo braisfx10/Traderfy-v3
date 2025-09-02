@@ -318,7 +318,8 @@ const Sidebar = ({
   currentView,
   setCurrentView,
   onLogout,
-  user
+  user,
+  demoMode
 }) => {
   const [accountsExpanded, setAccountsExpanded] = useState(true)
   const [panelExpanded, setPanelExpanded] = useState(false)
