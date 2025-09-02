@@ -594,12 +594,23 @@ const ConfigurationAlert = ({ showToast }) => {
   )
 }
 
+// Componente principal
 export default function TraderfyApp() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [trades, setTrades] = useState([])
-  const [parsedData, setParsedData] = useState(null)
   const [toast, setToast] = useState(null)
+  const [isCollapsed, setIsCollapsed] = useState(false)
+  
+  const {
+    selectedAccount,
+    setSelectedAccount,
+    accounts,
+    setAccounts,
+    trades,
+    setTrades,
+    currentView,
+    setCurrentView
+  } = useAppState()
 
   const showToast = (message, type = 'info') => {
     setToast({ message, type })
@@ -609,11 +620,16 @@ export default function TraderfyApp() {
   useEffect(() => {
     // Verificar si Supabase está configurado
     if (!supabase) {
+      // Agregar cuentas de demo para testing sin Supabase
+      setAccounts([
+        { id: '1', name: 'FTT Funded 15K', tag: 'Funded', user_id: 'demo' },
+        { id: '2', name: 'FTMO Challenge 100K', tag: 'Demo', user_id: 'demo' },
+        { id: '3', name: 'Prop Firm Live', tag: 'Live', user_id: 'demo' }
+      ])
       setLoading(false)
       return
     }
 
-    // Verificar autenticación
     const checkAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession()
@@ -626,7 +642,6 @@ export default function TraderfyApp() {
 
     checkAuth()
 
-    // Escuchar cambios de autenticación
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setUser(session?.user || null)
@@ -634,50 +649,46 @@ export default function TraderfyApp() {
     )
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [setAccounts])
 
-  const handleParsedData = (data) => {
-    setParsedData(data)
-    setTrades(data.trades)
+  const handleLogout = async () => {
+    if (supabase) {
+      await supabase.auth.signOut()
+    }
+    setUser(null)
+    setSelectedAccount(null)
+    setTrades([])
+    setCurrentView('accounts-summary')
   }
 
-  const Sidebar = () => (
-    <div className="w-64 bg-gray-900 border-r border-gray-700 p-4">
-      <div className="flex items-center gap-2 mb-8">
-        <TrendingUp className="w-8 h-8 text-purple-400" />
-        <h1 className="text-xl font-bold text-white">Traderfy</h1>
-      </div>
-      
-      <nav className="space-y-2">
-        {[
-          { icon: BarChart3, label: 'Panel', active: true },
-          { icon: Calendar, label: 'Calendario' },
-          { icon: FileText, label: 'Operaciones' },
-          { icon: PieChart, label: 'Análisis' },
-          { icon: Target, label: 'Reglas' },
-          { icon: Settings, label: 'Configuración' },
-        ].map(({ icon: Icon, label, active }) => (
-          <Button
-            key={label}
-            variant={active ? "secondary" : "ghost"}
-            className={`w-full justify-start gap-2 ${
-              active 
-                ? 'bg-purple-500 text-white hover:bg-purple-600' 
-                : 'text-gray-300 hover:text-white hover:bg-gray-800'
-            }`}
-          >
-            <Icon className="w-4 h-4" />
-            {label}
-          </Button>
-        ))}
-      </nav>
-    </div>
-  )
+  const handleUploadSuccess = (data) => {
+    setTrades(data.trades) // Actualizar trades con los datos parseados
+    if (currentView !== 'panel-calendar') {
+      setCurrentView('panel-calendar') // Navegar al calendario para ver los nuevos datos
+    }
+  }
+
+  // Responsive handling
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsCollapsed(true)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    handleResize()
+    
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white">Cargando...</div>
+        <div className="text-white flex items-center gap-2">
+          <Activity className="w-5 h-5 animate-spin" />
+          Cargando...
+        </div>
       </div>
     )
   }
