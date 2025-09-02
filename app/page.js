@@ -273,7 +273,10 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
   const accountTrades = selectedAccount 
     ? trades.filter(t => t.account_id === selectedAccount.id)
     : trades
-    const date = new Date(trade.closeTime).toDateString()
+  
+  // Agrupar trades por día
+  const tradesByDay = accountTrades.reduce((acc, trade) => {
+    const date = new Date(trade.close_time).toDateString()
     if (!acc[date]) {
       acc[date] = { trades: [], totalPnl: 0 }
     }
