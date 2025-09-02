@@ -1125,6 +1125,7 @@ export default function TraderfyApp() {
       setSelectedAccount(null)
       setTrades([])
       setCurrentView('accounts-summary')
+      setDemoMode(false)  // Reset demo mode on logout
       showToast('Sesión cerrada exitosamente', 'success')
     } catch (error) {
       console.error('Error during logout:', error)
