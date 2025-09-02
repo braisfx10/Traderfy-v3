@@ -458,20 +458,31 @@ const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
   )
 }
 
-const HTMLUploader = ({ onParsedData, showToast }) => {
+// Componente para subir archivos HTML
+const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
   const [isUploading, setIsUploading] = useState(false)
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0]
     if (!file) return
 
+    if (!selectedAccount) {
+      showToast('Selecciona una cuenta antes de subir el reporte', 'error')
+      return
+    }
+
     setIsUploading(true)
     try {
       const text = await file.text()
       const parsedData = parseHTMLReport(text)
       
+      if (parsedData.trades.length === 0) {
+        showToast('No se encontraron operaciones en el archivo', 'error')
+        return
+      }
+
       showToast(`Reporte procesado: ${parsedData.trades.length} operaciones encontradas`, 'success')
-      onParsedData(parsedData)
+      onSuccess(parsedData)
       
     } catch (error) {
       console.error('Error al procesar archivo:', error)
@@ -486,6 +497,9 @@ const HTMLUploader = ({ onParsedData, showToast }) => {
         <CardTitle className="text-white flex items-center gap-2">
           <Upload className="w-5 h-5 text-cyan-400" />
           Subir Reporte HTML
+          {selectedAccount && (
+            <span className="text-sm font-normal text-gray-400">- {selectedAccount.name}</span>
+          )}
         </CardTitle>
         <CardDescription className="text-gray-400">
           Sube tu reporte de MetaTrader 4/5 o cTrader para procesarlo automáticamente
@@ -493,21 +507,38 @@ const HTMLUploader = ({ onParsedData, showToast }) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div>
-            <Label htmlFor="html-file" className="text-white">
-              Seleccionar archivo HTML
-            </Label>
-            <Input
-              id="html-file"
-              type="file"
-              accept=".html,.htm"
-              onChange={handleFileUpload}
-              disabled={isUploading}
-              className="bg-gray-700 border-gray-600 text-white file:bg-purple-500 file:text-white file:border-0 file:rounded"
-            />
-          </div>
-          {isUploading && (
-            <div className="text-cyan-400 text-sm">Procesando archivo...</div>
+          {!selectedAccount ? (
+            <div className="p-4 bg-yellow-900/20 border border-yellow-600 rounded-lg">
+              <div className="flex items-center gap-2 text-yellow-400">
+                <AlertTriangle className="w-4 h-4" />
+                <span className="font-medium">Selecciona una cuenta</span>
+              </div>
+              <p className="text-yellow-200 text-sm mt-1">
+                Debes seleccionar una cuenta antes de subir un reporte
+              </p>
+            </div>
+          ) : (
+            <>
+              <div>
+                <Label htmlFor="html-file" className="text-white">
+                  Seleccionar archivo HTML
+                </Label>
+                <Input
+                  id="html-file"
+                  type="file"
+                  accept=".html,.htm"
+                  onChange={handleFileUpload}
+                  disabled={isUploading}
+                  className="bg-gray-700 border-gray-600 text-white file:bg-purple-500 file:text-white file:border-0 file:rounded"
+                />
+              </div>
+              {isUploading && (
+                <div className="text-cyan-400 text-sm flex items-center gap-2">
+                  <Activity className="w-4 h-4 animate-spin" />
+                  Procesando archivo...
+                </div>
+              )}
+            </>
           )}
         </div>
       </CardContent>
