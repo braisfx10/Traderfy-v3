@@ -1098,53 +1098,10 @@ export default function TraderfyApp() {
         )
       
       case 'panel-trades':
-        return (
-          <div className="space-y-6">
-            {(() => {
-              const [symbolFilter, setSymbolFilter] = useState('')
-              const [directionFilter, setDirectionFilter] = useState('')
-              const [dateFromFilter, setDateFromFilter] = useState('')
-              const [dateToFilter, setDateToFilter] = useState('')
-              const [currentPage, setCurrentPage] = useState(0)
-              const tradesPerPage = 10
-
-              const accountTrades = selectedAccount 
-                ? trades.filter(t => t.account_id === selectedAccount.id)
-                : trades
-
-              // Aplicar filtros
-              let filteredTrades = accountTrades
-
-              if (symbolFilter) {
-                filteredTrades = filteredTrades.filter(t => 
-                  t.symbol.toLowerCase().includes(symbolFilter.toLowerCase())
-                )
-              }
-
-              if (directionFilter) {
-                filteredTrades = filteredTrades.filter(t => t.direction === directionFilter)
-              }
-
-              if (dateFromFilter) {
-                filteredTrades = filteredTrades.filter(t => 
-                  new Date(t.close_time) >= new Date(dateFromFilter)
-                )
-              }
-
-              if (dateToFilter) {
-                filteredTrades = filteredTrades.filter(t => 
-                  new Date(t.close_time) <= new Date(dateToFilter)
-                )
-              }
-
-              const paginatedTrades = filteredTrades.slice(
-                currentPage * tradesPerPage,
-                (currentPage + 1) * tradesPerPage
-              )
-
-              const totalPages = Math.ceil(filteredTrades.length / tradesPerPage)
-
-              return (
+        return <OperationsPanel 
+          trades={trades} 
+          selectedAccount={selectedAccount} 
+        />
                 <>
                   <div className="flex items-center justify-between">
                     <h2 className="text-xl font-bold text-white">
