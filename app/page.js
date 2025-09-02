@@ -164,18 +164,19 @@ const Sidebar = ({
                 <Button
                   key={account.id}
                   variant="ghost"
-                  className={`w-full justify-start text-sm ${
+                  className={`w-full justify-start gap-2 sidebar-item transition-all duration-300 ${
                     selectedAccount?.id === account.id 
-                      ? 'bg-cyan-500 text-white hover:bg-cyan-600' 
-                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                      ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border-l-2 border-cyan-400 glow-cyan' 
+                      : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/10 hover:to-purple-500/10'
                   }`}
                   onClick={() => handleAccountSelect(account)}
                 >
                   <div className="flex items-center justify-between w-full">
-                    <span>{account.name}</span>
-                    <span className={`text-xs px-2 py-1 rounded ${
-                      account.tag === 'Live' ? 'bg-green-600' :
-                      account.tag === 'Demo' ? 'bg-blue-600' : 'bg-orange-600'
+                    <span className="font-medium">{account.name}</span>
+                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                      account.tag === 'Live' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                      account.tag === 'Demo' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 
+                      'bg-orange-500/20 text-orange-400 border border-orange-500/30'
                     }`}>
                       {account.tag}
                     </span>
