@@ -1711,6 +1711,12 @@ export default function TraderfyApp() {
           </div>
         )
       
+      case 'students':
+        return <StudentsManager user={user || { id: 'demo', role: 'Mentor' }} />
+      
+      case 'mentor-selection':
+        return <MentorSelector user={user || { id: 'demo', role: 'Alumno' }} />
+      
       case 'settings':
         return (
           <Card className="bg-gray-800 border-gray-700">
