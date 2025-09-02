@@ -998,7 +998,7 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
                   accept=".html,.htm"
                   onChange={handleFileUpload}
                   disabled={isUploading}
-                  className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-purple-500/30 text-white file:bg-gradient-to-r file:from-purple-600 file:to-cyan-500 file:text-white file:border-0 file:rounded file:px-4 file:py-2 file:mr-4 hover:border-purple-400 focus:border-purple-400 focus:ring-purple-400/20"
+                  className="bg-gradient-to-r from-slate-800 to-slate-700 border-purple-500/50 text-white file:bg-gradient-to-r file:from-purple-600 file:to-cyan-500 file:text-white file:border-0 file:rounded-lg file:px-6 file:py-3 file:mr-4 file:font-medium file:shadow-lg file:hover:from-purple-700 file:hover:to-cyan-600 file:transition-all file:duration-300 hover:border-purple-400 focus:border-purple-400 focus:ring-purple-400/20 cursor-pointer"
                 />
               </div>
               {isUploading && (
