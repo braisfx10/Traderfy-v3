@@ -7,8 +7,52 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
 import { Label } from '../components/ui/label'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'
-import { Calendar, TrendingUp, FileText, Upload, BarChart3, Settings, PieChart, Target, AlertTriangle } from 'lucide-react'
+import { 
+  Calendar, 
+  TrendingUp, 
+  FileText, 
+  Upload, 
+  BarChart3, 
+  Settings, 
+  PieChart, 
+  Target,
+  AlertTriangle,
+  Menu,
+  X,
+  ChevronDown,
+  ChevronRight,
+  Plus,
+  LogOut,
+  Wallet,
+  Activity,
+  DollarSign,
+  Filter,
+  Download,
+  Edit,
+  Trash2
+} from 'lucide-react'
+
+// Estado global de la aplicación
+const useAppState = () => {
+  const [selectedAccount, setSelectedAccount] = useState(null)
+  const [accounts, setAccounts] = useState([])
+  const [trades, setTrades] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [currentView, setCurrentView] = useState('accounts-summary')
+  
+  return {
+    selectedAccount,
+    setSelectedAccount,
+    accounts,
+    setAccounts,
+    trades,
+    setTrades,
+    loading,
+    setLoading,
+    currentView,
+    setCurrentView
+  }
+}
 
 // Componente de notificación simple
 const Toast = ({ message, type = 'info', onClose }) => (
