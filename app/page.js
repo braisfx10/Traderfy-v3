@@ -1476,16 +1476,19 @@ export default function TraderfyApp() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       {/* Análisis por día de la semana */}
                       <div>
-                        <h3 className="text-lg font-semibold text-white mb-4">Rendimiento por Día de la Semana</h3>
+                        <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                          <Calendar className="w-5 h-5 text-purple-400" />
+                          Rendimiento por Día de la Semana
+                        </h3>
                         <div className="space-y-2">
                           {Object.entries(weekdayStats).map(([day, stats]) => (
-                            <div key={day} className="flex items-center justify-between p-3 bg-gray-700 rounded">
+                            <div key={day} className="flex items-center justify-between p-3 bg-gradient-to-r from-slate-700/60 to-slate-600/40 rounded-lg border border-purple-500/20 hover:from-slate-600/70 hover:to-slate-500/50 transition-all duration-300">
                               <div>
                                 <span className="text-white font-medium">{day}</span>
-                                <div className="text-xs text-gray-400">{stats.trades.length} trades</div>
+                                <div className="text-xs text-purple-200/70">{stats.trades.length} trades</div>
                               </div>
                               <div className="text-right">
-                                <div className={`font-bold ${stats.totalPnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                <div className={`font-bold ${stats.totalPnl >= 0 ? 'text-green-400 glow-text-cyan' : 'text-red-400 glow-text-purple'}`}>
                                   ${stats.totalPnl.toFixed(2)}
                                 </div>
                                 <div className="text-xs text-gray-400">
