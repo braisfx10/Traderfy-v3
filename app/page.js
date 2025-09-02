@@ -999,7 +999,7 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
                 />
               </div>
               {isUploading && (
-                <div className="text-cyan-400 text-sm flex items-center gap-2">
+                <div className="text-purple-400 text-sm flex items-center gap-2">
                   <Activity className="w-4 h-4 animate-spin" />
                   Procesando archivo...
                 </div>
