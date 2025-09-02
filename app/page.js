@@ -1119,13 +1119,16 @@ export default function TraderfyApp() {
   }, [setAccounts])
 
   const handleLogout = async () => {
-    if (supabase) {
-      await supabase.auth.signOut()
+    try {
+      await signOut()
+      setSelectedAccount(null)
+      setTrades([])
+      setCurrentView('accounts-summary')
+      showToast('Sesión cerrada exitosamente', 'success')
+    } catch (error) {
+      console.error('Error during logout:', error)
+      showToast('Error al cerrar sesión', 'error')
     }
-    setUser(null)
-    setSelectedAccount(null)
-    setTrades([])
-    setCurrentView('accounts-summary')
   }
 
   const handleUploadSuccess = (data) => {
