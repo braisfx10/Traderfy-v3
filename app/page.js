@@ -201,11 +201,11 @@ const Sidebar = ({
           <div>
             <Button
               variant="ghost"
-              className="w-full justify-between text-gray-300 hover:text-white hover:bg-gray-800"
+              className="w-full justify-between text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-cyan-400/10 transition-all duration-300"
               onClick={() => setPanelExpanded(!panelExpanded)}
             >
               <div className="flex items-center gap-2">
-                <BarChart3 className="w-4 h-4" />
+                <BarChart3 className="w-4 h-4 text-cyan-400" />
                 {!isCollapsed && <span>Panel de Cuenta</span>}
               </div>
               {!isCollapsed && (
@@ -224,14 +224,14 @@ const Sidebar = ({
                   <Button
                     key={key}
                     variant="ghost"
-                    className={`w-full justify-start text-sm ${
+                    className={`w-full justify-start gap-2 sidebar-item transition-all duration-300 ${
                       currentView === key 
-                        ? 'bg-cyan-500 text-white hover:bg-cyan-600' 
-                        : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                        ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border-l-2 border-cyan-400 glow-cyan' 
+                        : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/10 hover:to-purple-500/10'
                     }`}
                     onClick={() => handleViewChange(key)}
                   >
-                    <Icon className="w-4 h-4 mr-2" />
+                    <Icon className="w-4 h-4" />
                     {label}
                   </Button>
                 ))}
