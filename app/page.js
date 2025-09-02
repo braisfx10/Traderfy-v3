@@ -329,15 +329,15 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
     const dateKey = date.toDateString()
     const dayData = tradesByDay[dateKey]
     
-    let bgColor = 'bg-gray-800 hover:bg-gray-700'
-    let textColor = 'text-gray-300'
+    let bgColor = 'bg-gradient-to-br from-slate-800/30 to-slate-700/20 border-slate-600/30 hover:from-slate-700/40 hover:to-slate-600/30'
+    let textColor = 'text-slate-300'
     
     if (dayData) {
       if (dayData.totalPnl > 0) {
-        bgColor = 'bg-green-900/50 hover:bg-green-800/50 border border-green-500'
+        bgColor = 'bg-gradient-to-br from-green-900/50 to-emerald-800/40 border border-green-500/50 hover:from-green-800/60 hover:to-emerald-700/50'
         textColor = 'text-green-100'
       } else if (dayData.totalPnl < 0) {
-        bgColor = 'bg-red-900/50 hover:bg-red-800/50 border border-red-500'
+        bgColor = 'bg-gradient-to-br from-red-900/50 to-rose-800/40 border border-red-500/50 hover:from-red-800/60 hover:to-rose-700/50'
         textColor = 'text-red-100'
       }
     }
@@ -345,7 +345,7 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
     return (
       <div
         key={day}
-        className={`min-h-[80px] p-2 rounded-lg trading-calendar-day cursor-pointer transition-all duration-300 ${bgColor} ${textColor} hover:scale-105`}
+        className={`min-h-[80px] p-2 rounded-lg trading-calendar-day cursor-pointer transition-all duration-300 ${bgColor} ${textColor} hover:scale-105 border`}
         onClick={() => dayData && setSelectedDay({ date: dateKey, ...dayData })}
       >
         <div className="font-medium text-sm relative z-10">{day}</div>
