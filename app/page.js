@@ -538,7 +538,7 @@ const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-white">{title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-purple-900/30 to-purple-800/20 border-purple-500/30 metric-card transition-all duration-300 hover:scale-105 hover:from-purple-800/40 hover:to-purple-700/30">
+        <Card className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-purple-500/30 hover:from-purple-500/20 hover:to-cyan-400/20 transition-all duration-300 hover:scale-105 hover:border-purple-400/50">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-purple-300 flex items-center gap-2">
               <Activity className="w-4 h-4 text-purple-400" />
@@ -551,7 +551,7 @@ const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-cyan-900/30 to-cyan-800/20 border-cyan-500/30 metric-card transition-all duration-300 hover:scale-105 hover:from-cyan-800/40 hover:to-cyan-700/30">
+        <Card className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-cyan-500/30 hover:from-purple-500/20 hover:to-cyan-400/20 transition-all duration-300 hover:scale-105 hover:border-cyan-400/50">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-cyan-300 flex items-center gap-2">
               <Target className="w-4 h-4 text-cyan-400" />
@@ -564,7 +564,7 @@ const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-purple-900/30 via-indigo-900/20 to-cyan-900/30 border-gradient-to-r border-purple-500/30 metric-card transition-all duration-300 hover:scale-105">
+        <Card className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-indigo-500/30 hover:from-purple-500/20 hover:to-cyan-400/20 transition-all duration-300 hover:scale-105 hover:border-indigo-400/50">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-indigo-300 flex items-center gap-2">
               <DollarSign className="w-4 h-4 text-indigo-400" />
@@ -579,16 +579,16 @@ const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-cyan-900/30 to-purple-900/30 border-cyan-500/30 metric-card transition-all duration-300 hover:scale-105 hover:from-cyan-800/40 hover:to-purple-800/40">
+        <Card className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-purple-500/30 hover:from-purple-500/20 hover:to-cyan-400/20 transition-all duration-300 hover:scale-105 hover:border-cyan-400/50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-cyan-300 flex items-center gap-2">
+            <CardTitle className="text-sm text-purple-300 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-cyan-400" />
               Profit Factor
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold gradient-traderfy-text">{stats.profitFactor}</div>
-            <div className="text-xs text-cyan-200/70">Beneficios / Pérdidas</div>
+            <div className="text-xs text-purple-200/70">Beneficios / Pérdidas</div>
           </CardContent>
         </Card>
       </div>
