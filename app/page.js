@@ -1113,6 +1113,8 @@ export default function TraderfyApp() {
     if (!authLoading) {
       setLoading(false)
     }
+
+    if (!supabase) {
       return
     }
 
