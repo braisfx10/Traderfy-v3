@@ -1505,22 +1505,25 @@ export default function TraderfyApp() {
 
                       {/* Mejores horas de trading */}
                       <div>
-                        <h3 className="text-lg font-semibold text-white mb-4">Mejores Horas de Trading</h3>
+                        <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                          <Clock className="w-5 h-5 text-cyan-400" />
+                          Mejores Horas de Trading
+                        </h3>
                         <div className="space-y-2">
                           {Object.entries(hourlyStats)
                             .sort(([,a], [,b]) => b.totalPnl - a.totalPnl)
                             .slice(0, 8)
                             .map(([hour, stats]) => (
-                              <div key={hour} className="flex items-center justify-between p-3 bg-gray-700 rounded">
+                              <div key={hour} className="flex items-center justify-between p-3 bg-gradient-to-r from-slate-700/60 to-slate-600/40 rounded-lg border border-cyan-500/20 hover:from-slate-600/70 hover:to-slate-500/50 transition-all duration-300">
                                 <div>
                                   <span className="text-white font-medium">{hour}:00 - {parseInt(hour) + 1}:00</span>
-                                  <div className="text-xs text-gray-400">{stats.trades.length} trades</div>
+                                  <div className="text-xs text-cyan-200/70">{stats.trades.length} trades</div>
                                 </div>
                                 <div className="text-right">
-                                  <div className={`font-bold ${stats.totalPnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                  <div className={`font-bold ${stats.totalPnl >= 0 ? 'text-green-400 glow-text-cyan' : 'text-red-400 glow-text-purple'}`}>
                                     ${stats.totalPnl.toFixed(2)}
                                   </div>
-                                  <div className="text-xs text-gray-400">
+                                  <div className="text-xs text-cyan-200/70">
                                     {stats.trades.length > 0 ? 
                                       `${((stats.trades.filter(t => t.pnl > 0).length / stats.trades.length) * 100).toFixed(1)}% WR` : 
                                       '0% WR'
