@@ -1088,56 +1088,31 @@ export default function TraderfyApp() {
     setTimeout(() => setToast(null), 5000)
   }
 
-  // Effect to initialize authentication state
+  // Effect to initialize authentication state and demo data
   useEffect(() => {
-    if (!authLoading) {
-      if (!user && !demoMode && !showAuthModal) {
-        setShowAuthModal(true)
+    const initializeApp = async () => {
+      // Si no hay Supabase, configurar datos de demo
+      if (!supabase) {
+        setAccounts([
+          { id: '1', name: 'FTT Funded 15K', tag: 'Funded', user_id: 'demo' },
+          { id: '2', name: 'FTMO Challenge 100K', tag: 'Demo', user_id: 'demo' },
+          { id: '3', name: 'Prop Firm Live', tag: 'Live', user_id: 'demo' }
+        ])
+      }
+
+      // Esperar a que termine la carga de autenticación
+      if (!authLoading) {
+        // Si no hay usuario y no estamos en modo demo, mostrar modal
+        if (!user && !demoMode && !showAuthModal) {
+          setShowAuthModal(true)
+        }
+        // Siempre establecer loading a false cuando termine la carga de auth
+        setLoading(false)
       }
     }
-  }, [authLoading, user, demoMode, showAuthModal])
 
-  // Effect to load initial data and handle loading state
-  useEffect(() => {
-    // Verificar si Supabase está configurado
-    if (!supabase) {
-      // Agregar cuentas de demo para testing sin Supabase
-      setAccounts([
-        { id: '1', name: 'FTT Funded 15K', tag: 'Funded', user_id: 'demo' },
-        { id: '2', name: 'FTMO Challenge 100K', tag: 'Demo', user_id: 'demo' },
-        { id: '3', name: 'Prop Firm Live', tag: 'Live', user_id: 'demo' }
-      ])
-    }
-    
-    // Always set loading to false after auth loading is complete
-    if (!authLoading) {
-      setLoading(false)
-    }
-
-    if (!supabase) {
-      return
-    }
-
-    const checkAuth = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession()
-        setUser(session?.user || null)
-      } catch (error) {
-        console.error('Error checking auth:', error)
-      }
-      setLoading(false)
-    }
-
-    checkAuth()
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setUser(session?.user || null)
-      }
-    )
-
-    return () => subscription.unsubscribe()
-  }, [setAccounts, authLoading])
+    initializeApp()
+  }, [authLoading, user, demoMode, showAuthModal, supabase])
 
   const handleLogout = async () => {
     try {
