@@ -595,43 +595,43 @@ const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
       
       {/* Segunda fila de métricas */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-gradient-to-br from-green-900/30 to-emerald-800/20 border-green-500/30 metric-card transition-all duration-300 hover:scale-105 hover:from-green-800/40 hover:to-emerald-700/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-gray-400">Ganancia Media</CardTitle>
+            <CardTitle className="text-sm text-green-300">Ganancia Media</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xl font-bold text-green-400">${stats.avgWin}</div>
-            <div className="text-xs text-gray-400">Por trade ganador</div>
+            <div className="text-xl font-bold text-green-400 glow-text-cyan">${stats.avgWin}</div>
+            <div className="text-xs text-green-200/70">Por trade ganador</div>
           </CardContent>
         </Card>
         
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-gradient-to-br from-red-900/30 to-pink-800/20 border-red-500/30 metric-card transition-all duration-300 hover:scale-105 hover:from-red-800/40 hover:to-pink-700/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-gray-400">Pérdida Media</CardTitle>
+            <CardTitle className="text-sm text-red-300">Pérdida Media</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xl font-bold text-red-400">${stats.avgLoss}</div>
-            <div className="text-xs text-gray-400">Por trade perdedor</div>
+            <div className="text-xl font-bold text-red-400 glow-text-purple">${stats.avgLoss}</div>
+            <div className="text-xs text-red-200/70">Por trade perdedor</div>
           </CardContent>
         </Card>
         
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-gradient-to-br from-emerald-900/30 to-green-800/20 border-emerald-500/30 metric-card transition-all duration-300 hover:scale-105 hover:from-emerald-800/40 hover:to-green-700/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-gray-400">Mejor Trade</CardTitle>
+            <CardTitle className="text-sm text-emerald-300">Mejor Trade</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xl font-bold text-green-400">${stats.largestWin}</div>
-            <div className="text-xs text-gray-400">Mayor ganancia</div>
+            <div className="text-xl font-bold text-emerald-400 glow-text-cyan">${stats.largestWin}</div>
+            <div className="text-xs text-emerald-200/70">Mayor ganancia</div>
           </CardContent>
         </Card>
         
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-gradient-to-br from-rose-900/30 to-red-800/20 border-rose-500/30 metric-card transition-all duration-300 hover:scale-105 hover:from-rose-800/40 hover:to-red-700/30">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-gray-400">Peor Trade</CardTitle>
+            <CardTitle className="text-sm text-rose-300">Peor Trade</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-xl font-bold text-red-400">${stats.largestLoss}</div>
-            <div className="text-xs text-gray-400">Mayor pérdida</div>
+            <div className="text-xl font-bold text-rose-400 glow-text-purple">${stats.largestLoss}</div>
+            <div className="text-xs text-rose-200/70">Mayor pérdida</div>
           </CardContent>
         </Card>
       </div>
