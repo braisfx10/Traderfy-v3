@@ -24,11 +24,11 @@
 ## Paso 3: Configurar URLs de Autenticación
 
 1. Ve a **Authentication → URL Configuration** en tu panel de Supabase
-2. En **Site URL**, agrega: `https://tradestats-5.preview.emergentagent.com`
+2. En **Site URL**, agrega: `https://trade-metrics-12.preview.emergentagent.com`
 3. En **Redirect URLs**, agrega estas URLs (una por línea):
    ```
-   https://tradestats-5.preview.emergentagent.com/**
-   https://tradestats-5.preview.emergentagent.com/auth/callback
+   https://trade-metrics-12.preview.emergentagent.com/**
+   https://trade-metrics-12.preview.emergentagent.com/auth/callback
    http://localhost:3000/**
    http://localhost:3000/auth/callback
    ```
