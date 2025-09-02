@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../components/AuthProvider'
 import { AuthModal } from '../components/AuthModal'
+import AccountManager from '../components/AccountManager'
 import { supabase } from '../lib/supabase'
 import { parseHTMLReport } from '../lib/htmlParser'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
