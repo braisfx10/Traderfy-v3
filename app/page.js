@@ -958,23 +958,23 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
   }
 
   return (
-    <Card className="bg-gray-800 border-gray-700">
+    <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30 hover:from-purple-500/15 hover:to-cyan-400/15 transition-all duration-300">
       <CardHeader>
         <CardTitle className="text-white flex items-center gap-2">
-          <Upload className="w-5 h-5 text-cyan-400" />
+          <Upload className="w-5 h-5 text-purple-400" />
           Subir Reporte HTML
           {selectedAccount && (
-            <span className="text-sm font-normal text-gray-400">- {selectedAccount.name}</span>
+            <span className="text-sm font-normal text-purple-200/70">- {selectedAccount.name}</span>
           )}
         </CardTitle>
-        <CardDescription className="text-gray-400">
+        <CardDescription className="text-purple-200/70">
           Sube tu reporte de MetaTrader 4/5 o cTrader para procesarlo automáticamente
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {!selectedAccount ? (
-            <div className="p-4 bg-yellow-900/20 border border-yellow-600 rounded-lg">
+            <div className="p-4 bg-gradient-to-r from-yellow-900/30 to-orange-800/20 border border-yellow-500/50 rounded-lg">
               <div className="flex items-center gap-2 text-yellow-400">
                 <AlertTriangle className="w-4 h-4" />
                 <span className="font-medium">Selecciona una cuenta</span>
@@ -986,7 +986,7 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
           ) : (
             <>
               <div>
-                <Label htmlFor="html-file" className="text-white">
+                <Label htmlFor="html-file" className="text-purple-300">
                   Seleccionar archivo HTML
                 </Label>
                 <Input
@@ -995,7 +995,7 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
                   accept=".html,.htm"
                   onChange={handleFileUpload}
                   disabled={isUploading}
-                  className="bg-gray-700 border-gray-600 text-white file:bg-purple-500 file:text-white file:border-0 file:rounded"
+                  className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-purple-500/30 text-white file:bg-gradient-to-r file:from-purple-600 file:to-cyan-500 file:text-white file:border-0 file:rounded file:px-4 file:py-2 file:mr-4 hover:border-purple-400 focus:border-purple-400 focus:ring-purple-400/20"
                 />
               </div>
               {isUploading && (
