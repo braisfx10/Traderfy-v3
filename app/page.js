@@ -317,7 +317,8 @@ const Sidebar = ({
   setSelectedAccount,
   currentView,
   setCurrentView,
-  onLogout 
+  onLogout,
+  user
 }) => {
   const [accountsExpanded, setAccountsExpanded] = useState(true)
   const [panelExpanded, setPanelExpanded] = useState(false)
