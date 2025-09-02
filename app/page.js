@@ -54,7 +54,7 @@ const useAppState = () => {
   }
 }
 
-// Componente de notificación simple
+// Componente de notificación
 const Toast = ({ message, type = 'info', onClose }) => (
   <div className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
     type === 'success' ? 'bg-green-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'
@@ -62,7 +62,7 @@ const Toast = ({ message, type = 'info', onClose }) => (
     <div className="flex items-center justify-between">
       <span>{message}</span>
       <Button variant="ghost" size="sm" onClick={onClose} className="text-white hover:bg-white/20">
-        ×
+        <X className="w-4 h-4" />
       </Button>
     </div>
   </div>
