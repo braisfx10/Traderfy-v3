@@ -68,11 +68,211 @@ const Toast = ({ message, type = 'info', onClose }) => (
   </div>
 )
 
-const TradingCalendar = ({ trades = [] }) => {
+// Componente del Sidebar
+const Sidebar = ({ 
+  isCollapsed, 
+  setIsCollapsed, 
+  accounts, 
+  selectedAccount, 
+  setSelectedAccount,
+  currentView,
+  setCurrentView,
+  onLogout 
+}) => {
+  const [accountsExpanded, setAccountsExpanded] = useState(true)
+  const [panelExpanded, setPanelExpanded] = useState(false)
+
+  useEffect(() => {
+    if (selectedAccount) {
+      setPanelExpanded(true)
+      if (currentView.startsWith('accounts-')) {
+        setCurrentView('panel-summary')
+      }
+    }
+  }, [selectedAccount, setCurrentView])
+
+  const handleAccountSelect = (account) => {
+    setSelectedAccount(account)
+    setCurrentView('panel-summary')
+  }
+
+  const handleViewChange = (view) => {
+    setCurrentView(view)
+    if (window.innerWidth < 768) {
+      setIsCollapsed(true)
+    }
+  }
+
+  return (
+    <div className={`${isCollapsed ? 'w-16' : 'w-80'} bg-gray-900 border-r border-gray-700 transition-all duration-300 flex flex-col`}>
+      {/* Header */}
+      <div className="p-4 border-b border-gray-700">
+        <div className="flex items-center justify-between">
+          {!isCollapsed && (
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-8 h-8 text-purple-400" />
+              <h1 className="text-xl font-bold text-white">Traderfy</h1>
+            </div>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="text-gray-400 hover:text-white"
+          >
+            {isCollapsed ? <Menu className="w-5 h-5" /> : <X className="w-5 h-5" />}
+          </Button>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <div className="flex-1 p-4 space-y-2">
+        {/* Cuentas Section */}
+        <div>
+          <Button
+            variant="ghost"
+            className="w-full justify-between text-gray-300 hover:text-white hover:bg-gray-800"
+            onClick={() => setAccountsExpanded(!accountsExpanded)}
+          >
+            <div className="flex items-center gap-2">
+              <Wallet className="w-4 h-4" />
+              {!isCollapsed && <span>Cuentas</span>}
+            </div>
+            {!isCollapsed && (
+              accountsExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />
+            )}
+          </Button>
+          
+          {accountsExpanded && !isCollapsed && (
+            <div className="ml-6 space-y-1 mt-2">
+              <Button
+                variant="ghost"
+                className={`w-full justify-start text-sm ${
+                  currentView === 'accounts-summary' 
+                    ? 'bg-purple-500 text-white hover:bg-purple-600' 
+                    : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                }`}
+                onClick={() => handleViewChange('accounts-summary')}
+              >
+                Resumen Total
+              </Button>
+              
+              {accounts.map((account) => (
+                <Button
+                  key={account.id}
+                  variant="ghost"
+                  className={`w-full justify-start text-sm ${
+                    selectedAccount?.id === account.id 
+                      ? 'bg-cyan-500 text-white hover:bg-cyan-600' 
+                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                  }`}
+                  onClick={() => handleAccountSelect(account)}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span>{account.name}</span>
+                    <span className={`text-xs px-2 py-1 rounded ${
+                      account.tag === 'Live' ? 'bg-green-600' :
+                      account.tag === 'Demo' ? 'bg-blue-600' : 'bg-orange-600'
+                    }`}>
+                      {account.tag}
+                    </span>
+                  </div>
+                </Button>
+              ))}
+              
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-sm text-purple-400 hover:text-purple-300 hover:bg-gray-800"
+                onClick={() => handleViewChange('accounts-add')}
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Agregar Cuenta
+              </Button>
+            </div>
+          )}
+        </div>
+
+        {/* Panel de cuenta Section */}
+        {selectedAccount && (
+          <div>
+            <Button
+              variant="ghost"
+              className="w-full justify-between text-gray-300 hover:text-white hover:bg-gray-800"
+              onClick={() => setPanelExpanded(!panelExpanded)}
+            >
+              <div className="flex items-center gap-2">
+                <BarChart3 className="w-4 h-4" />
+                {!isCollapsed && <span>Panel de Cuenta</span>}
+              </div>
+              {!isCollapsed && (
+                panelExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />
+              )}
+            </Button>
+            
+            {panelExpanded && !isCollapsed && (
+              <div className="ml-6 space-y-1 mt-2">
+                {[
+                  { key: 'panel-summary', label: 'Resumen', icon: Activity },
+                  { key: 'panel-calendar', label: 'Calendario', icon: Calendar },
+                  { key: 'panel-trades', label: 'Operaciones', icon: FileText },
+                  { key: 'panel-analysis', label: 'Análisis', icon: PieChart }
+                ].map(({ key, label, icon: Icon }) => (
+                  <Button
+                    key={key}
+                    variant="ghost"
+                    className={`w-full justify-start text-sm ${
+                      currentView === key 
+                        ? 'bg-cyan-500 text-white hover:bg-cyan-600' 
+                        : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                    }`}
+                    onClick={() => handleViewChange(key)}
+                  >
+                    <Icon className="w-4 h-4 mr-2" />
+                    {label}
+                  </Button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Configuración */}
+        <Button
+          variant="ghost"
+          className={`w-full justify-start ${
+            currentView === 'settings' 
+              ? 'bg-purple-500 text-white hover:bg-purple-600' 
+              : 'text-gray-300 hover:text-white hover:bg-gray-800'
+          }`}
+          onClick={() => handleViewChange('settings')}
+        >
+          <Settings className="w-4 h-4" />
+          {!isCollapsed && <span className="ml-2">Configuración</span>}
+        </Button>
+      </div>
+
+      {/* Footer */}
+      <div className="p-4 border-t border-gray-700">
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-gray-800"
+          onClick={onLogout}
+        >
+          <LogOut className="w-4 h-4" />
+          {!isCollapsed && <span className="ml-2">Cerrar Sesión</span>}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+const TradingCalendar = ({ trades = [], selectedAccount }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
   
-  // Agrupar trades por día
-  const tradesByDay = trades.reduce((acc, trade) => {
+  // Filtrar trades por cuenta seleccionada
+  const accountTrades = selectedAccount 
+    ? trades.filter(t => t.account_id === selectedAccount.id)
+    : trades
     const date = new Date(trade.closeTime).toDateString()
     if (!acc[date]) {
       acc[date] = { trades: [], totalPnl: 0 }
