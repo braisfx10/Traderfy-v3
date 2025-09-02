@@ -320,10 +320,10 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
     
     if (dayData) {
       if (dayData.totalPnl > 0) {
-        bgColor = 'bg-green-900 hover:bg-green-800 border border-green-500'
+        bgColor = 'bg-green-900/50 hover:bg-green-800/50 border border-green-500'
         textColor = 'text-green-100'
       } else if (dayData.totalPnl < 0) {
-        bgColor = 'bg-red-900 hover:bg-red-800 border border-red-500'
+        bgColor = 'bg-red-900/50 hover:bg-red-800/50 border border-red-500'
         textColor = 'text-red-100'
       }
     }
@@ -331,7 +331,7 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
     return (
       <div
         key={day}
-        className={`min-h-[60px] p-2 rounded-lg ${bgColor} cursor-pointer transition-colors ${textColor}`}
+        className={`min-h-[80px] p-2 rounded-lg ${bgColor} cursor-pointer transition-colors ${textColor}`}
       >
         <div className="font-medium text-sm">{day}</div>
         {dayData && (
@@ -353,6 +353,9 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
           <CardTitle className="text-white flex items-center gap-2">
             <Calendar className="w-5 h-5 text-purple-400" />
             Calendario de Trading
+            {selectedAccount && (
+              <span className="text-sm font-normal text-gray-400">- {selectedAccount.name}</span>
+            )}
           </CardTitle>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={() => navigateMonth(-1)}>
