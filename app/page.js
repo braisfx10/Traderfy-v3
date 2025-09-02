@@ -1701,8 +1701,11 @@ export default function TraderfyApp() {
       )}
 
       {/* Auth Modal */}
-      {(showAuthModal || (!authLoading && !user)) && (
-        <AuthModal onClose={() => setShowAuthModal(false)} />
+      {(showAuthModal || (!authLoading && !user && !demoMode)) && (
+        <AuthModal onClose={() => {
+          setShowAuthModal(false)
+          setDemoMode(true)
+        }} />
       )}
     </>
   )
