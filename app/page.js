@@ -243,15 +243,15 @@ const Sidebar = ({
         {/* Configuración */}
         <Button
           variant="ghost"
-          className={`w-full justify-start ${
+          className={`w-full justify-start gap-2 sidebar-item transition-all duration-300 ${
             currentView === 'settings' 
-              ? 'bg-purple-500 text-white hover:bg-purple-600' 
-              : 'text-gray-300 hover:text-white hover:bg-gray-800'
+              ? 'bg-gradient-to-r from-purple-500/20 to-cyan-400/20 text-white border-l-2 border-purple-500 glow-purple' 
+              : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-cyan-400/10'
           }`}
           onClick={() => handleViewChange('settings')}
         >
           <Settings className="w-4 h-4" />
-          {!isCollapsed && <span className="ml-2">Configuración</span>}
+          {!isCollapsed && <span>Configuración</span>}
         </Button>
       </div>
 
