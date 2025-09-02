@@ -104,21 +104,24 @@ const Sidebar = ({
   }
 
   return (
-    <div className={`${isCollapsed ? 'w-16' : 'w-80'} bg-gray-900 border-r border-gray-700 transition-all duration-300 flex flex-col`}>
-      {/* Header */}
-      <div className="p-4 border-b border-gray-700">
+    <div className={`${isCollapsed ? 'w-16' : 'w-80'} gradient-sidebar border-r border-gray-700 transition-all duration-300 flex flex-col relative`}>
+      {/* Header con gradiente del logo */}
+      <div className="p-4 border-b border-gray-700 bg-gradient-to-r from-gray-900 to-gray-800">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-8 h-8 text-purple-400" />
-              <h1 className="text-xl font-bold text-white">Traderfy</h1>
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <TrendingUp className="w-8 h-8 gradient-traderfy-text" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-purple-500 to-cyan-400 rounded-full animate-pulse"></div>
+              </div>
+              <h1 className="text-2xl font-bold gradient-traderfy-text">Traderfy</h1>
             </div>
           )}
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="text-gray-400 hover:text-white"
+            className="text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-cyan-400/20 transition-all duration-300"
           >
             {isCollapsed ? <Menu className="w-5 h-5" /> : <X className="w-5 h-5" />}
           </Button>
