@@ -535,15 +535,15 @@ const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-white">{title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="gradient-card metric-card transition-all duration-300 hover:scale-105">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-gray-400 flex items-center gap-2">
-              <Activity className="w-4 h-4" />
+              <Activity className="w-4 h-4 text-purple-400" />
               Total Trades
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">{stats.totalTrades}</div>
+            <div className="text-2xl font-bold gradient-traderfy-text">{stats.totalTrades}</div>
             <div className="text-xs text-gray-400">Total de operaciones</div>
           </CardContent>
         </Card>
