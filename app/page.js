@@ -31,7 +31,11 @@ import {
   Filter,
   Download,
   Edit,
-  Trash2
+  Trash2,
+  Clock,
+  TrendingDown,
+  Trophy,
+  XCircle
 } from 'lucide-react'
 
 // Estado global de la aplicación
