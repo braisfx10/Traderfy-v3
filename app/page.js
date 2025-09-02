@@ -678,44 +678,47 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
                     </div>
                     <div className="text-sm text-indigo-200/70">Win Rate</div>
                   </div>
-                  <div className="bg-gray-700 p-4 rounded-lg">
+                  <div className="bg-gradient-to-br from-green-500/20 to-emerald-600/10 p-4 rounded-lg border border-green-500/30">
                     <div className="text-2xl font-bold text-cyan-400">
                       {selectedDay.trades.reduce((sum, t) => sum + (t.lots || 0), 0).toFixed(2)}
                     </div>
-                    <div className="text-sm text-gray-400">Total Lotes</div>
+                    <div className="text-sm text-green-200/70">Total Lotes</div>
                   </div>
                 </div>
 
                 {/* Lista detallada de trades */}
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-4">Operaciones del Día</h3>
+                  <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                    <Activity className="w-5 h-5 text-purple-400" />
+                    Operaciones del Día
+                  </h3>
                   <div className="space-y-3 max-h-80 overflow-y-auto">
                     {selectedDay.trades.map((trade, index) => (
-                      <div key={trade.id || index} className="bg-gray-700 p-4 rounded-lg">
+                      <div key={trade.id || index} className="bg-gradient-to-r from-slate-700/50 to-slate-600/30 p-4 rounded-lg border border-purple-500/20 hover:from-slate-600/60 hover:to-slate-500/40 transition-all duration-300">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-white text-lg">{trade.symbol}</span>
                               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                trade.direction === 'Buy' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+                                trade.direction === 'Buy' ? 'bg-gradient-to-r from-green-600 to-green-500 text-white' : 'bg-gradient-to-r from-red-600 to-red-500 text-white'
                               }`}>
                                 {trade.direction}
                               </span>
                             </div>
-                            <div className="text-gray-300">
+                            <div className="text-purple-200/70">
                               <div className="text-sm">
-                                <span className="text-gray-400">Entrada:</span> {trade.entry_price || 'N/A'}
+                                <span className="text-purple-300">Entrada:</span> {trade.entry_price || 'N/A'}
                               </div>
                               <div className="text-sm">
-                                <span className="text-gray-400">Cierre:</span> {trade.close_price || 'N/A'}
+                                <span className="text-purple-300">Cierre:</span> {trade.close_price || 'N/A'}
                               </div>
                             </div>
-                            <div className="text-gray-300">
+                            <div className="text-cyan-200/70">
                               <div className="text-sm">
-                                <span className="text-gray-400">Lotes:</span> {trade.lots || 'N/A'}
+                                <span className="text-cyan-300">Lotes:</span> {trade.lots || 'N/A'}
                               </div>
                               <div className="text-sm">
-                                <span className="text-gray-400">Hora:</span> {new Date(trade.close_time).toLocaleTimeString('es-ES')}
+                                <span className="text-cyan-300">Hora:</span> {new Date(trade.close_time).toLocaleTimeString('es-ES')}
                               </div>
                             </div>
                           </div>
