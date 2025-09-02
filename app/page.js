@@ -266,8 +266,10 @@ const Sidebar = ({
   )
 }
 
+// Componente del Calendario con modal emergente
 const TradingCalendar = ({ trades = [], selectedAccount }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [selectedDay, setSelectedDay] = useState(null)
   
   // Debug: Log para ver qué trades llegan
   console.log('TradingCalendar - trades received:', trades.length)
@@ -287,7 +289,7 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
       acc[date] = { trades: [], totalPnl: 0 }
     }
     acc[date].trades.push(trade)
-    acc[date].totalPnl += trade.pnl
+    acc[date].totalPnl += parseFloat(trade.pnl) || 0
     return acc
   }, {})
 
@@ -340,6 +342,7 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
       <div
         key={day}
         className={`min-h-[80px] p-2 rounded-lg ${bgColor} cursor-pointer transition-colors ${textColor}`}
+        onClick={() => dayData && setSelectedDay({ date: dateKey, ...dayData })}
       >
         <div className="font-medium text-sm">{day}</div>
         {dayData && (
@@ -355,45 +358,147 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
   }
 
   return (
-    <Card className="bg-gray-800 border-gray-700">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-white flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-purple-400" />
-            Calendario de Trading
-            {selectedAccount && (
-              <span className="text-sm font-normal text-gray-400">- {selectedAccount.name}</span>
-            )}
-          </CardTitle>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => navigateMonth(-1)}>
-              ←
-            </Button>
-            <span className="text-white font-medium px-4">
-              {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-            </span>
-            <Button variant="outline" size="sm" onClick={() => navigateMonth(1)}>
-              →
-            </Button>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-7 gap-1 mb-4">
-          {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(day => (
-            <div key={day} className="text-center text-gray-400 font-medium py-2 text-sm">
-              {day}
+    <div className="space-y-6">
+      <Card className="bg-gray-800 border-gray-700">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-white flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-purple-400" />
+              Calendario de Trading
+              {selectedAccount && (
+                <span className="text-sm font-normal text-gray-400">- {selectedAccount.name}</span>
+              )}
+            </CardTitle>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={() => navigateMonth(-1)}>
+                ←
+              </Button>
+              <span className="text-white font-medium px-4">
+                {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+              </span>
+              <Button variant="outline" size="sm" onClick={() => navigateMonth(1)}>
+                →
+              </Button>
             </div>
-          ))}
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-7 gap-1 mb-4">
+            {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(day => (
+              <div key={day} className="text-center text-gray-400 font-medium py-2 text-sm">
+                {day}
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-7 gap-1">
+            {Array.from({ length: startingDayOfWeek }, (_, i) => (
+              <div key={`empty-${i}`} className="min-h-[80px]" />
+            ))}
+            {Array.from({ length: daysInMonth }, (_, i) => renderCalendarDay(i + 1))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Modal emergente de detalles del día */}
+      {selectedDay && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setSelectedDay(null)}>
+          <Card className="bg-gray-800 border-gray-700 max-w-4xl w-full mx-4 max-h-[80vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-purple-400" />
+                  Detalles del {new Date(selectedDay.date).toLocaleDateString('es-ES', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
+                </CardTitle>
+                <Button variant="ghost" size="sm" onClick={() => setSelectedDay(null)} className="text-white hover:bg-gray-700">
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="overflow-y-auto max-h-[60vh]">
+              <div className="space-y-6">
+                {/* Resumen del día */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <div className="text-2xl font-bold text-white">{selectedDay.trades.length}</div>
+                    <div className="text-sm text-gray-400">Total Trades</div>
+                  </div>
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <div className={`text-2xl font-bold ${selectedDay.totalPnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      ${selectedDay.totalPnl.toFixed(2)}
+                    </div>
+                    <div className="text-sm text-gray-400">P&L Total</div>
+                  </div>
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <div className="text-2xl font-bold text-purple-400">
+                      {selectedDay.trades.length > 0 ? ((selectedDay.trades.filter(t => t.pnl > 0).length / selectedDay.trades.length) * 100).toFixed(1) : 0}%
+                    </div>
+                    <div className="text-sm text-gray-400">Win Rate</div>
+                  </div>
+                  <div className="bg-gray-700 p-4 rounded-lg">
+                    <div className="text-2xl font-bold text-cyan-400">
+                      {selectedDay.trades.reduce((sum, t) => sum + (t.lots || 0), 0).toFixed(2)}
+                    </div>
+                    <div className="text-sm text-gray-400">Total Lotes</div>
+                  </div>
+                </div>
+
+                {/* Lista detallada de trades */}
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-4">Operaciones del Día</h3>
+                  <div className="space-y-3 max-h-80 overflow-y-auto">
+                    {selectedDay.trades.map((trade, index) => (
+                      <div key={trade.id || index} className="bg-gray-700 p-4 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-white text-lg">{trade.symbol}</span>
+                              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                trade.direction === 'Buy' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+                              }`}>
+                                {trade.direction}
+                              </span>
+                            </div>
+                            <div className="text-gray-300">
+                              <div className="text-sm">
+                                <span className="text-gray-400">Entrada:</span> {trade.entry_price || 'N/A'}
+                              </div>
+                              <div className="text-sm">
+                                <span className="text-gray-400">Cierre:</span> {trade.close_price || 'N/A'}
+                              </div>
+                            </div>
+                            <div className="text-gray-300">
+                              <div className="text-sm">
+                                <span className="text-gray-400">Lotes:</span> {trade.lots || 'N/A'}
+                              </div>
+                              <div className="text-sm">
+                                <span className="text-gray-400">Hora:</span> {new Date(trade.close_time).toLocaleTimeString('es-ES')}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className={`text-xl font-bold ${trade.pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                              ${parseFloat(trade.pnl).toFixed(2)}
+                            </div>
+                            <div className="text-xs text-gray-400">
+                              {trade.pnl >= 0 ? 'Ganancia' : 'Pérdida'}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-        <div className="grid grid-cols-7 gap-1">
-          {Array.from({ length: startingDayOfWeek }, (_, i) => (
-            <div key={`empty-${i}`} className="min-h-[80px]" />
-          ))}
-          {Array.from({ length: daysInMonth }, (_, i) => renderCalendarDay(i + 1))}
-        </div>
-      </CardContent>
-    </Card>
+      )}
+    </div>
   )
 }
 
