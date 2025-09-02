@@ -207,5 +207,5 @@ test_plan:
   test_priority: "high_first"
 
 agent_communication:
-    - agent: "testing"
-    - message: "Starting comprehensive testing of HTML parser functionality for Traderfy trading platform. Focus on parseHTMLReport function, API endpoint, and data flow from upload to display."
+    - agent: "main"
+    - message: "MAJOR PROGRESS UPDATE: 1. FIXED symbol filter in Operaciones section by refactoring from IIFE to proper React component with useState hooks. Filter now works correctly for symbol, direction, and date filtering. 2. IMPLEMENTED complete authentication system with Supabase Auth including login/register modal, AuthProvider context, and demo mode fallback when Supabase is not configured. 3. Navigation between sections works correctly. 4. Ready to test backend HTML parsing functionality to resolve the core issue of data not appearing after HTML upload. Focus testing on HTML parser, API endpoint, and data flow from upload to display."
