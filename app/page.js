@@ -990,82 +990,85 @@ export default function TraderfyApp() {
               if (accountTrades.length > 0 && accountTrades[0].summary) {
                 const summary = accountTrades[0].summary;
                 return (
-                  <Card className="bg-gray-800 border-gray-700">
+                  <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
                     <CardHeader>
-                      <CardTitle className="text-white">Resumen de Cuenta - MetaTrader</CardTitle>
-                      <CardDescription className="text-gray-400">
+                      <CardTitle className="text-white flex items-center gap-2">
+                        <Activity className="w-5 h-5 text-purple-400" />
+                        Resumen de Cuenta - MetaTrader
+                      </CardTitle>
+                      <CardDescription className="text-purple-200/70">
                         Datos extraídos del reporte oficial
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         {summary.deposit && (
-                          <div className="bg-gray-700 p-4 rounded-lg">
-                            <div className="text-sm text-gray-400">Depósito Inicial</div>
-                            <div className="text-xl font-bold text-blue-400">
+                          <div className="bg-gradient-to-br from-blue-900/40 to-indigo-800/30 p-4 rounded-lg border border-blue-500/30 hover:from-blue-800/50 hover:to-indigo-700/40 transition-all duration-300">
+                            <div className="text-sm text-blue-300">Depósito Inicial</div>
+                            <div className="text-xl font-bold text-blue-400 glow-text-cyan">
                               ${summary.deposit.toLocaleString()}
                             </div>
                           </div>
                         )}
                         
                         {summary.realizedPnl && (
-                          <div className="bg-gray-700 p-4 rounded-lg">
-                            <div className="text-sm text-gray-400">P&L Devengadas</div>
-                            <div className={`text-xl font-bold ${summary.realizedPnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                          <div className="bg-gradient-to-br from-purple-900/40 to-pink-800/30 p-4 rounded-lg border border-purple-500/30 hover:from-purple-800/50 hover:to-pink-700/40 transition-all duration-300">
+                            <div className="text-sm text-purple-300">P&L Devengadas</div>
+                            <div className={`text-xl font-bold ${summary.realizedPnl >= 0 ? 'text-green-400 glow-text-cyan' : 'text-red-400 glow-text-purple'}`}>
                               ${summary.realizedPnl.toLocaleString()}
                             </div>
                           </div>
                         )}
                         
                         {summary.withdrawal && (
-                          <div className="bg-gray-700 p-4 rounded-lg">
-                            <div className="text-sm text-gray-400">Retirada</div>
-                            <div className="text-xl font-bold text-red-400">
+                          <div className="bg-gradient-to-br from-red-900/40 to-rose-800/30 p-4 rounded-lg border border-red-500/30 hover:from-red-800/50 hover:to-rose-700/40 transition-all duration-300">
+                            <div className="text-sm text-red-300">Retirada</div>
+                            <div className="text-xl font-bold text-red-400 glow-text-purple">
                               -${summary.withdrawal.toLocaleString()}
                             </div>
                           </div>
                         )}
                         
                         {summary.netTotal && (
-                          <div className="bg-gray-700 p-4 rounded-lg">
-                            <div className="text-sm text-gray-400">Total Neto</div>
-                            <div className={`text-xl font-bold ${summary.netTotal >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                          <div className="bg-gradient-to-br from-cyan-900/40 to-teal-800/30 p-4 rounded-lg border border-cyan-500/30 hover:from-cyan-800/50 hover:to-teal-700/40 transition-all duration-300">
+                            <div className="text-sm text-cyan-300">Total Neto</div>
+                            <div className={`text-xl font-bold ${summary.netTotal >= 0 ? 'text-green-400 glow-text-cyan' : 'text-red-400 glow-text-purple'}`}>
                               ${summary.netTotal.toLocaleString()}
                             </div>
                           </div>
                         )}
                         
                         {summary.balance && (
-                          <div className="bg-gray-700 p-4 rounded-lg">
-                            <div className="text-sm text-gray-400">Saldo Final</div>
-                            <div className="text-xl font-bold text-cyan-400">
+                          <div className="bg-gradient-to-br from-indigo-900/40 to-purple-800/30 p-4 rounded-lg border border-indigo-500/30 hover:from-indigo-800/50 hover:to-purple-700/40 transition-all duration-300">
+                            <div className="text-sm text-indigo-300">Saldo Final</div>
+                            <div className="text-xl font-bold text-indigo-400 glow-text-cyan">
                               ${summary.balance.toLocaleString()}
                             </div>
                           </div>
                         )}
                         
                         {summary.capital && (
-                          <div className="bg-gray-700 p-4 rounded-lg">
-                            <div className="text-sm text-gray-400">Capital</div>
-                            <div className="text-xl font-bold text-purple-400">
+                          <div className="bg-gradient-to-br from-violet-900/40 to-purple-800/30 p-4 rounded-lg border border-violet-500/30 hover:from-violet-800/50 hover:to-purple-700/40 transition-all duration-300">
+                            <div className="text-sm text-violet-300">Capital</div>
+                            <div className="text-xl font-bold text-violet-400 glow-text-purple">
                               ${summary.capital.toLocaleString()}
                             </div>
                           </div>
                         )}
                         
                         {summary.freeMargin && (
-                          <div className="bg-gray-700 p-4 rounded-lg">
-                            <div className="text-sm text-gray-400">Margen Libre</div>
-                            <div className="text-xl font-bold text-cyan-400">
+                          <div className="bg-gradient-to-br from-teal-900/40 to-cyan-800/30 p-4 rounded-lg border border-teal-500/30 hover:from-teal-800/50 hover:to-cyan-700/40 transition-all duration-300">
+                            <div className="text-sm text-teal-300">Margen Libre</div>
+                            <div className="text-xl font-bold text-teal-400 glow-text-cyan">
                               ${summary.freeMargin.toLocaleString()}
                             </div>
                           </div>
                         )}
                         
                         {summary.profitFactor && (
-                          <div className="bg-gray-700 p-4 rounded-lg">
-                            <div className="text-sm text-gray-400">Profit Factor</div>
-                            <div className="text-xl font-bold text-purple-400">
+                          <div className="bg-gradient-to-br from-purple-900/40 to-cyan-800/30 p-4 rounded-lg border border-purple-500/30 hover:from-purple-800/50 hover:to-cyan-700/40 transition-all duration-300">
+                            <div className="text-sm text-purple-300">Profit Factor</div>
+                            <div className="text-xl font-bold gradient-traderfy-text glow-text-cyan">
                               {summary.profitFactor}
                             </div>
                           </div>
