@@ -1586,27 +1586,33 @@ export default function TraderfyApp() {
 
                   return (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <Card className="bg-gray-700 border-gray-600">
+                      <Card className="bg-gradient-to-br from-red-900/30 to-red-800/20 border-red-500/30 hover:from-red-800/40 hover:to-red-700/30 transition-all duration-300">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm text-gray-400">Máximo Drawdown</CardTitle>
+                          <CardTitle className="text-sm text-red-300 flex items-center gap-2">
+                            <TrendingDown className="w-4 h-4" />
+                            Máximo Drawdown
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="text-xl font-bold text-red-400">${maxDrawdown.toFixed(2)}</div>
-                          <div className="text-xs text-gray-400">Mayor pérdida individual</div>
+                          <div className="text-xl font-bold text-red-400 glow-text-purple">${maxDrawdown.toFixed(2)}</div>
+                          <div className="text-xs text-red-200/70">Mayor pérdida individual</div>
                         </CardContent>
                       </Card>
 
-                      <Card className="bg-gray-700 border-gray-600">
+                      <Card className="bg-gradient-to-br from-green-900/30 to-emerald-800/20 border-green-500/30 hover:from-green-800/40 hover:to-emerald-700/30 transition-all duration-300">
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-sm text-gray-400">Máximo Beneficio</CardTitle>
+                          <CardTitle className="text-sm text-green-300 flex items-center gap-2">
+                            <TrendingUp className="w-4 h-4" />
+                            Máximo Beneficio
+                          </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="text-xl font-bold text-green-400">${maxProfit.toFixed(2)}</div>
-                          <div className="text-xs text-gray-400">Mayor ganancia individual</div>
+                          <div className="text-xl font-bold text-green-400 glow-text-cyan">${maxProfit.toFixed(2)}</div>
+                          <div className="text-xs text-green-200/70">Mayor ganancia individual</div>
                         </CardContent>
                       </Card>
 
-                      <Card className="bg-gray-700 border-gray-600">
+                      <Card className="bg-gradient-to-br from-purple-900/30 to-indigo-800/20 border-purple-500/30 hover:from-purple-800/40 hover:to-indigo-700/30 transition-all duration-300">
                         <CardHeader className="pb-2">
                           <CardTitle className="text-sm text-gray-400">Risk-Reward Ratio</CardTitle>
                         </CardHeader>
