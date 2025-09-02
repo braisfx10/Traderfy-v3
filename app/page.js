@@ -1443,9 +1443,12 @@ export default function TraderfyApp() {
             </Card>
 
             {/* Análisis temporal */}
-            <Card className="bg-gray-800 border-gray-700">
+            <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-cyan-500/30">
               <CardHeader>
-                <CardTitle className="text-white">Análisis Temporal</CardTitle>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-cyan-400" />
+                  Análisis Temporal
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 {(() => {
