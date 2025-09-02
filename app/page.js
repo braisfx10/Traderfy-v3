@@ -481,8 +481,21 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
         return
       }
 
+      // Asignar account_id a todos los trades
+      const tradesWithAccountId = parsedData.trades.map(trade => ({
+        ...trade,
+        account_id: selectedAccount.id,
+        user_id: 'demo' // Para modo demo
+      }))
+
+      // Crear el objeto de datos procesados
+      const processedData = {
+        ...parsedData,
+        trades: tradesWithAccountId
+      }
+
       showToast(`Reporte procesado: ${parsedData.trades.length} operaciones encontradas`, 'success')
-      onSuccess(parsedData)
+      onSuccess(processedData)
       
     } catch (error) {
       console.error('Error al procesar archivo:', error)
