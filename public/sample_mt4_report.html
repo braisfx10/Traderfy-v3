@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>MetaTrader 4 Statement</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 11px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 4px; text-align: left; }
+        th { background-color: #f0f0f0; }
+        .right { text-align: right; }
+        .center { text-align: center; }
+    </style>
+</head>
+<body>
+    <h2>Statement</h2>
+    <p><strong>Account:</strong> 12345678</p>
+    <p><strong>Name:</strong> Demo Trader</p>
+    <p><strong>Server:</strong> MetaQuotes-Demo</p>
+    <p><strong>Currency:</strong> USD</p>
+    <p><strong>Leverage:</strong> 1:100</p>
+    <p><strong>Report:</strong> 2023-01-01 00:00 - 2023-12-31 23:59</p>
+
+    <h3>Closed Transactions:</h3>
+    <table>
+        <tr>
+            <th>Ticket</th>
+            <th>Open Time</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Symbol</th>
+            <th>Open Price</th>
+            <th>S/L</th>
+            <th>T/P</th>
+            <th>Close Time</th>
+            <th>Close Price</th>
+            <th>Commission</th>
+            <th>Taxes</th>
+            <th>Swap</th>
+            <th>Profit</th>
+        </tr>
+        <tr>
+            <td>1001</td>
+            <td>2023-01-15 09:30:00</td>
+            <td>buy</td>
+            <td>0.10</td>
+            <td>EURUSD</td>
+            <td>1.0850</td>
+            <td>1.0800</td>
+            <td>1.0900</td>
+            <td>2023-01-15 15:45:00</td>
+            <td>1.0875</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>-0.50</td>
+            <td>24.50</td>
+        </tr>
+        <tr>
+            <td>1002</td>
+            <td>2023-01-16 10:15:00</td>
+            <td>sell</td>
+            <td>0.15</td>
+            <td>GBPUSD</td>
+            <td>1.2150</td>
+            <td>1.2200</td>
+            <td>1.2100</td>
+            <td>2023-01-16 16:30:00</td>
+            <td>1.2120</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>-0.75</td>
+            <td>44.25</td>
+        </tr>
+        <tr>
+            <td>1003</td>
+            <td>2023-01-17 08:45:00</td>
+            <td>buy</td>
+            <td>0.20</td>
+            <td>USDJPY</td>
+            <td>131.25</td>
+            <td>130.50</td>
+            <td>132.00</td>
+            <td>2023-01-17 14:20:00</td>
+            <td>131.80</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>-1.20</td>
+            <td>83.59</td>
+        </tr>
+        <tr>
+            <td>1004</td>
+            <td>2023-01-18 11:00:00</td>
+            <td>sell</td>
+            <td>0.12</td>
+            <td>AUDUSD</td>
+            <td>0.7250</td>
+            <td>0.7300</td>
+            <td>0.7200</td>
+            <td>2023-01-18 17:15:00</td>
+            <td>0.7280</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>-0.30</td>
+            <td>-36.30</td>
+        </tr>
+        <tr>
+            <td>1005</td>
+            <td>2023-01-19 09:20:00</td>
+            <td>buy</td>
+            <td>0.18</td>
+            <td>EURUSD</td>
+            <td>1.0880</td>
+            <td>1.0830</td>
+            <td>1.0930</td>
+            <td>2023-01-19 16:45:00</td>
+            <td>1.0920</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>-0.90</td>
+            <td>71.10</td>
+        </tr>
+        <tr>
+            <td>1006</td>
+            <td>2023-01-20 10:30:00</td>
+            <td>sell</td>
+            <td>0.25</td>
+            <td>GBPJPY</td>
+            <td>159.50</td>
+            <td>160.50</td>
+            <td>158.50</td>
+            <td>2023-01-20 15:10:00</td>
+            <td>158.80</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>-1.50</td>
+            <td>109.40</td>
+        </tr>
+        <tr>
+            <td>1007</td>
+            <td>2023-01-23 08:15:00</td>
+            <td>buy</td>
+            <td>0.14</td>
+            <td>USDCAD</td>
+            <td>1.3420</td>
+            <td>1.3370</td>
+            <td>1.3470</td>
+            <td>2023-01-23 13:45:00</td>
+            <td>1.3380</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>-0.42</td>
+            <td>-41.58</td>
+        </tr>
+        <tr>
+            <td>1008</td>
+            <td>2023-01-24 12:00:00</td>
+            <td>sell</td>
+            <td>0.16</td>
+            <td>EURJPY</td>
+            <td>142.80</td>
+            <td>143.80</td>
+            <td>141.80</td>
+            <td>2023-01-24 18:30:00</td>
+            <td>142.20</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>-0.48</td>
+            <td>67.39</td>
+        </tr>
+        <tr>
+            <td>1009</td>
+            <td>2023-01-25 09:45:00</td>
+            <td>buy</td>
+            <td>0.22</td>
+            <td>NZDUSD</td>
+            <td>0.6820</td>
+            <td>0.6770</td>
+            <td>0.6870</td>
+            <td>2023-01-25 14:20:00</td>
+            <td>0.6790</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>-0.66</td>
+            <td>-66.66</td>
+        </tr>
+        <tr>
+            <td>1010</td>
+            <td>2023-01-26 11:30:00</td>
+            <td>sell</td>
+            <td>0.19</td>
+            <td>CHFJPY</td>
+            <td>140.20</td>
+            <td>141.20</td>
+            <td>139.20</td>
+            <td>2023-01-26 16:15:00</td>
+            <td>139.60</td>
+            <td>0.00</td>
+            <td>0.00</td>
+            <td>-0.57</td>
+            <td>81.24</td>
+        </tr>
+    </table>
+
+    <h3>Working Orders:</h3>
+    <p>No working orders</p>
+
+    <h3>Summary:</h3>
+    <table>
+        <tr>
+            <th>Deposit/Withdrawal</th>
+            <td class="right">15000.00</td>
+        </tr>
+        <tr>
+            <th>Credit Facility</th>
+            <td class="right">0.00</td>
+        </tr>
+        <tr>
+            <th>Closed Trade P/L</th>
+            <td class="right">335.93</td>
+        </tr>
+        <tr>
+            <th>Floating P/L</th>
+            <td class="right">0.00</td>
+        </tr>
+        <tr>
+            <th>Margin</th>
+            <td class="right">0.00</td>
+        </tr>
+        <tr>
+            <th>Balance</th>
+            <td class="right">15335.93</td>
+        </tr>
+        <tr>
+            <th>Equity</th>
+            <td class="right">15335.93</td>
+        </tr>
+        <tr>
+            <th>Free Margin</th>
+            <td class="right">15335.93</td>
+        </tr>
+    </table>
+
+    <h3>Details:</h3>
+    <table>
+        <tr>
+            <th>Gross Profit:</th>
+            <td class="right">481.27</td>
+        </tr>
+        <tr>
+            <th>Gross Loss:</th>
+            <td class="right">-145.34</td>
+        </tr>
+        <tr>
+            <th>Total Net Profit:</th>
+            <td class="right">335.93</td>
+        </tr>
+        <tr>
+            <th>Profit Factor:</th>
+            <td class="right">3.31</td>
+        </tr>
+        <tr>
+            <th>Expected Payoff:</th>
+            <td class="right">33.59</td>
+        </tr>
+        <tr>
+            <th>Absolute Drawdown:</th>
+            <td class="right">0.00</td>
+        </tr>
+        <tr>
+            <th>Maximal Drawdown:</th>
+            <td class="right">66.66 (0.44%)</td>
+        </tr>
+        <tr>
+            <th>Relative Drawdown:</th>
+            <td class="right">0.44% (66.66)</td>
+        </tr>
+        <tr>
+            <th>Total Trades:</th>
+            <td class="right">10</td>
+        </tr>
+        <tr>
+            <th>Short Positions (won %):</th>
+            <td class="right">5 (80.00%)</td>
+        </tr>
+        <tr>
+            <th>Long Positions (won %):</th>
+            <td class="right">5 (60.00%)</td>
+        </tr>
+        <tr>
+            <th>Profit Trades (% of total):</th>
+            <td class="right">7 (70.00%)</td>
+        </tr>
+        <tr>
+            <th>Loss Trades (% of total):</th>
+            <td class="right">3 (30.00%)</td>
+        </tr>
+        <tr>
+            <th>Largest Profit Trade:</th>
+            <td class="right">109.40</td>
+        </tr>
+        <tr>
+            <th>Largest Loss Trade:</th>
+            <td class="right">-66.66</td>
+        </tr>
+        <tr>
+            <th>Average Profit Trade:</th>
+            <td class="right">68.75</td>
+        </tr>
+        <tr>
+            <th>Average Loss Trade:</th>
+            <td class="right">-48.45</td>
+        </tr>
+        <tr>
+            <th>Maximum Consecutive Wins (profit in money):</th>
+            <td class="right">4 (310.34)</td>
+        </tr>
+        <tr>
+            <th>Maximum Consecutive Losses (loss in money):</th>
+            <td class="right">2 (-103.96)</td>
+        </tr>
+        <tr>
+            <th>Maximal Consecutive Profit (count of wins):</th>
+            <td class="right">310.34 (4)</td>
+        </tr>
+        <tr>
+            <th>Maximal Consecutive Loss (count of losses):</th>
+            <td class="right">-103.96 (2)</td>
+        </tr>
+        <tr>
+            <th>Average Consecutive Wins:</th>
+            <td class="right">2</td>
+        </tr>
+        <tr>
+            <th>Average Consecutive Losses:</th>
+            <td class="right">1</td>
+        </tr>
+    </table>
+
+    <br>
+    <p><em>Report generated on: 2024-01-01 12:00:00</em></p>
+</body>
+</html>
