@@ -269,10 +269,16 @@ const Sidebar = ({
 const TradingCalendar = ({ trades = [], selectedAccount }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
   
+  // Debug: Log para ver qué trades llegan
+  console.log('TradingCalendar - trades received:', trades.length)
+  console.log('TradingCalendar - selectedAccount:', selectedAccount?.id)
+  
   // Filtrar trades por cuenta seleccionada
   const accountTrades = selectedAccount 
     ? trades.filter(t => t.account_id === selectedAccount.id)
     : trades
+    
+  console.log('TradingCalendar - accountTrades filtered:', accountTrades.length)
   
   // Agrupar trades por día
   const tradesByDay = accountTrades.reduce((acc, trade) => {
@@ -284,6 +290,8 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
     acc[date].totalPnl += trade.pnl
     return acc
   }, {})
+
+  console.log('TradingCalendar - tradesByDay:', Object.keys(tradesByDay).length, 'days with trades')
 
   const getDaysInMonth = (date) => {
     const year = date.getFullYear()
