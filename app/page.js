@@ -1094,7 +1094,6 @@ export default function TraderfyApp() {
       if (!user && !demoMode && !showAuthModal) {
         setShowAuthModal(true)
       }
-      setLoading(false) // Always set loading to false when auth loading is complete
     }
   }, [authLoading, user, demoMode, showAuthModal])
 
