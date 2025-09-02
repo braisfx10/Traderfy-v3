@@ -1204,18 +1204,7 @@ export default function TraderfyApp() {
         )
       
       case 'accounts-add':
-        return (
-          <Card className="bg-gray-800 border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-white">Agregar Nueva Cuenta</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-gray-400">
-                Formulario para agregar cuenta (por implementar)
-              </div>
-            </CardContent>
-          </Card>
-        )
+        return <AccountManager user={user || { id: 'demo' }} onAccountsChange={setAccounts} />
       
       case 'panel-summary':
         return selectedAccount ? (
