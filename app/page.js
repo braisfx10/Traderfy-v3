@@ -1698,6 +1698,36 @@ export default function TraderfyApp() {
           onClose={() => setToast(null)} 
         />
       )}
+
+      {/* Auth Modal */}
+      {(showAuthModal || (!authLoading && !user)) && (
+        <AuthModal onClose={() => setShowAuthModal(false)} />
+      )}
     </>
   )
+
+  // Mostrar loading screen mientras se verifica la autenticación
+  if (authLoading) {
+    return (
+      <div className="min-h-screen gradient-bg flex items-center justify-center">
+        <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
+          <CardContent className="p-8 text-center">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="relative">
+                <TrendingUp className="w-12 h-12 gradient-traderfy-text animate-pulse" />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-purple-500 to-cyan-400 rounded-full animate-ping"></div>
+              </div>
+              <h1 className="text-3xl font-bold gradient-traderfy-text">Traderfy</h1>
+            </div>
+            <div className="text-purple-200/70">Cargando plataforma...</div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  // Si no hay usuario autenticado, mostrar modal de login automáticamente
+  if (!user && !showAuthModal) {
+    setTimeout(() => setShowAuthModal(true), 100)
+  }
 }
