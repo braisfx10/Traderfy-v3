@@ -150,10 +150,10 @@ const Sidebar = ({
             <div className="ml-6 space-y-1 mt-2">
               <Button
                 variant="ghost"
-                className={`w-full justify-start text-sm ${
+                className={`w-full justify-start gap-2 sidebar-item transition-all duration-300 ${
                   currentView === 'accounts-summary' 
-                    ? 'bg-purple-500 text-white hover:bg-purple-600' 
-                    : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                    ? 'bg-gradient-to-r from-purple-500/20 to-cyan-400/20 text-white border-l-2 border-purple-500 glow-purple' 
+                    : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-cyan-400/10'
                 }`}
                 onClick={() => handleViewChange('accounts-summary')}
               >
