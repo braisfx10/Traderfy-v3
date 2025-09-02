@@ -675,10 +675,15 @@ export default function TraderfyApp() {
   }
 
   const handleUploadSuccess = (data) => {
-    setTrades(data.trades) // Actualizar trades con los datos parseados
+    // Agregar los nuevos trades al estado global
+    setTrades(prevTrades => [...prevTrades, ...data.trades])
+    
+    // Navegar al calendario para ver los nuevos datos
     if (currentView !== 'panel-calendar') {
-      setCurrentView('panel-calendar') // Navegar al calendario para ver los nuevos datos
+      setCurrentView('panel-calendar')
     }
+    
+    console.log('Trades actualizados:', data.trades)
   }
 
   // Responsive handling
