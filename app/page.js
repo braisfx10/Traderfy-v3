@@ -174,9 +174,9 @@ const Sidebar = ({
                   <div className="flex items-center justify-between w-full">
                     <span className="font-medium">{account.name}</span>
                     <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                      account.tag === 'Live' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
-                      account.tag === 'Demo' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 
-                      'bg-orange-500/20 text-orange-400 border border-orange-500/30'
+                      account.tag === 'Live' ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-500/30' :
+                      account.tag === 'Demo' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' : 
+                      'bg-purple-500/20 text-purple-400 border border-purple-500/30'
                     }`}>
                       {account.tag}
                     </span>
