@@ -1398,9 +1398,12 @@ export default function TraderfyApp() {
                         const avgTrade = symbolTrades.length > 0 ? (totalPnl / symbolTrades.length).toFixed(2) : 0
 
                         return (
-                          <Card key={symbol} className="bg-gray-700 border-gray-600">
+                          <Card key={symbol} className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-purple-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300 hover:scale-105">
                             <CardHeader className="pb-2">
-                              <CardTitle className="text-white text-lg">{symbol}</CardTitle>
+                              <CardTitle className="text-white text-lg flex items-center gap-2">
+                                <Target className="w-4 h-4 text-cyan-400" />
+                                {symbol}
+                              </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-2">
                               <div className="flex justify-between">
