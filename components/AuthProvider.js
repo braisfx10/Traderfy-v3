@@ -58,6 +58,10 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   const signIn = async (email, password) => {
+    if (!supabase) {
+      return { data: null, error: { message: 'Supabase no configurado. Funcionando en modo demo.' } }
+    }
+
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -76,6 +80,10 @@ export const AuthProvider = ({ children }) => {
   }
 
   const signUp = async (email, password, role = 'Trader') => {
+    if (!supabase) {
+      return { data: null, error: { message: 'Supabase no configurado. Funcionando en modo demo.' } }
+    }
+
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -99,6 +107,11 @@ export const AuthProvider = ({ children }) => {
   }
 
   const signOut = async () => {
+    if (!supabase) {
+      setUser(null)
+      return { error: null }
+    }
+
     try {
       const { error } = await supabase.auth.signOut()
       if (error) {
