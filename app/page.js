@@ -1062,7 +1062,8 @@ const ConfigurationAlert = ({ showToast }) => {
 
 // Componente principal
 export default function TraderfyApp() {
-  const [user, setUser] = useState(null)
+  const { user, loading: authLoading, signOut } = useAuth()
+  const [showAuthModal, setShowAuthModal] = useState(false)
   const [loading, setLoading] = useState(true)
   const [toast, setToast] = useState(null)
   const [isCollapsed, setIsCollapsed] = useState(false)
