@@ -1097,6 +1097,7 @@ export default function TraderfyApp() {
     }
   }, [authLoading, user, demoMode, showAuthModal])
 
+  // Effect to load initial data and handle loading state
   useEffect(() => {
     // Verificar si Supabase está configurado
     if (!supabase) {
@@ -1106,7 +1107,12 @@ export default function TraderfyApp() {
         { id: '2', name: 'FTMO Challenge 100K', tag: 'Demo', user_id: 'demo' },
         { id: '3', name: 'Prop Firm Live', tag: 'Live', user_id: 'demo' }
       ])
+    }
+    
+    // Always set loading to false after auth loading is complete
+    if (!authLoading) {
       setLoading(false)
+    }
       return
     }
 
