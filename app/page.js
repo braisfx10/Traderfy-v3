@@ -1137,7 +1137,7 @@ export default function TraderfyApp() {
     )
 
     return () => subscription.unsubscribe()
-  }, [setAccounts])
+  }, [setAccounts, authLoading])
 
   const handleLogout = async () => {
     try {
