@@ -345,14 +345,17 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
     return (
       <div
         key={day}
-        className={`min-h-[80px] p-2 rounded-lg ${bgColor} cursor-pointer transition-colors ${textColor}`}
+        className={`min-h-[80px] p-2 rounded-lg trading-calendar-day cursor-pointer transition-all duration-300 ${bgColor} ${textColor} hover:scale-105`}
         onClick={() => dayData && setSelectedDay({ date: dateKey, ...dayData })}
       >
-        <div className="font-medium text-sm">{day}</div>
+        <div className="font-medium text-sm relative z-10">{day}</div>
         {dayData && (
-          <div className="text-xs mt-1">
-            <div>{dayData.trades.length} trades</div>
-            <div className={dayData.totalPnl > 0 ? 'text-green-400' : 'text-red-400'}>
+          <div className="text-xs mt-1 relative z-10">
+            <div className="flex items-center gap-1">
+              <Activity className="w-3 h-3" />
+              <span>{dayData.trades.length} trades</span>
+            </div>
+            <div className={`font-bold ${dayData.totalPnl > 0 ? 'text-green-400 glow-text-cyan' : 'text-red-400 glow-text-purple'}`}>
               ${dayData.totalPnl.toFixed(2)}
             </div>
           </div>
