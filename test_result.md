@@ -101,3 +101,87 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "User reports that when uploading HTML trading reports, the data doesn't appear in any sections (Resumen, Calendario, Operaciones, Análisis are all empty). Need to test HTML parser functionality specifically for the Traderfy trading platform."
+
+backend:
+  - task: "HTML Parser Function Testing"
+    implemented: true
+    working: "NA"
+    file: "/app/lib/htmlParser.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "Need to test parseHTMLReport function with sample MetaTrader HTML data to verify it correctly extracts symbol, direction, close_time, entry_price, close_price, lots, pnl"
+
+  - task: "HTML Upload API Endpoint"
+    implemented: true
+    working: "NA"
+    file: "/app/app/api/[[...path]]/route.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "Need to test POST /api/parse-html endpoint that processes HTML content and saves trades to database"
+
+  - task: "Data Structure Consistency"
+    implemented: true
+    working: "NA"
+    file: "/app/lib/htmlParser.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "Need to verify field naming consistency between parser output and frontend expectations (close_time vs closeTime, entry_price vs entryPrice)"
+
+  - task: "Account ID Assignment"
+    implemented: true
+    working: "NA"
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "Need to test that account_id is properly assigned to trades in HTMLUploader component"
+
+frontend:
+  - task: "HTML Upload Component"
+    implemented: true
+    working: "NA"
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "Frontend testing not performed - focusing on backend parser functionality"
+
+metadata:
+  created_by: "testing_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "HTML Parser Function Testing"
+    - "HTML Upload API Endpoint"
+    - "Data Structure Consistency"
+    - "Account ID Assignment"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+    - agent: "testing"
+    - message: "Starting comprehensive testing of HTML parser functionality for Traderfy trading platform. Focus on parseHTMLReport function, API endpoint, and data flow from upload to display."
