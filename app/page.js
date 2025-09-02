@@ -157,7 +157,7 @@ const OperationsPanel = ({ trades = [], selectedAccount }) => {
                 placeholder="Ej: EURUSD"
                 value={symbolFilter}
                 onChange={(e) => setSymbolFilter(e.target.value)}
-                className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-purple-500/30 text-white placeholder:text-purple-200/50"
+                className="bg-gradient-to-r from-slate-800 to-slate-700 border-purple-500/50 text-white placeholder:text-slate-400 focus:border-purple-400 focus:ring-purple-400/20 hover:border-purple-400/70"
               />
             </div>
             <div>
@@ -165,11 +165,11 @@ const OperationsPanel = ({ trades = [], selectedAccount }) => {
               <select
                 value={directionFilter}
                 onChange={(e) => setDirectionFilter(e.target.value)}
-                className="w-full p-2 bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border border-cyan-500/30 rounded text-white"
+                className="w-full p-2 bg-gradient-to-r from-slate-800 to-slate-700 border border-cyan-500/50 rounded text-white focus:border-cyan-400 focus:ring-cyan-400/20 hover:border-cyan-400/70"
               >
-                <option value="">Todas</option>
-                <option value="Buy">Buy</option>
-                <option value="Sell">Sell</option>
+                <option value="" className="bg-slate-800 text-white">Todas</option>
+                <option value="Buy" className="bg-slate-800 text-white">Buy</option>
+                <option value="Sell" className="bg-slate-800 text-white">Sell</option>
               </select>
             </div>
             <div>
@@ -178,7 +178,7 @@ const OperationsPanel = ({ trades = [], selectedAccount }) => {
                 type="date"
                 value={dateFromFilter}
                 onChange={(e) => setDateFromFilter(e.target.value)}
-                className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-indigo-500/30 text-white"
+                className="bg-gradient-to-r from-slate-800 to-slate-700 border-indigo-500/50 text-white focus:border-indigo-400 focus:ring-indigo-400/20 hover:border-indigo-400/70"
               />
             </div>
             <div>
@@ -187,7 +187,7 @@ const OperationsPanel = ({ trades = [], selectedAccount }) => {
                 type="date"
                 value={dateToFilter}
                 onChange={(e) => setDateToFilter(e.target.value)}
-                className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-purple-500/30 text-white"
+                className="bg-gradient-to-r from-slate-800 to-slate-700 border-purple-500/50 text-white focus:border-purple-400 focus:ring-purple-400/20 hover:border-purple-400/70"
               />
             </div>
           </div>
