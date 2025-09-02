@@ -993,16 +993,150 @@ export default function TraderfyApp() {
       
       case 'panel-trades':
         return (
-          <Card className="bg-gray-800 border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-white">Historial de Operaciones</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-gray-400">
-                Tabla de operaciones (por implementar)
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white">
+                Historial de Operaciones
+                {selectedAccount && (
+                  <span className="text-sm font-normal text-gray-400 ml-2">- {selectedAccount.name}</span>
+                )}
+              </h2>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">
+                  <Download className="w-4 h-4 mr-2" />
+                  Exportar
+                </Button>
+                <Button variant="outline" size="sm" onClick={loadUserData}>
+                  <Activity className="w-4 h-4 mr-2" />
+                  Actualizar
+                </Button>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+
+            {/* Filtros */}
+            <Card className="bg-gray-800 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Filter className="w-4 h-4" />
+                  Filtros
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div>
+                    <Label className="text-white">Símbolo</Label>
+                    <Input
+                      placeholder="Ej: EURUSD"
+                      className="bg-gray-700 border-gray-600 text-white"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-white">Dirección</Label>
+                    <select className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-white">
+                      <option value="">Todas</option>
+                      <option value="Buy">Buy</option>
+                      <option value="Sell">Sell</option>
+                    </select>
+                  </div>
+                  <div>
+                    <Label className="text-white">Fecha Desde</Label>
+                    <Input
+                      type="date"
+                      className="bg-gray-700 border-gray-600 text-white"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-white">Fecha Hasta</Label>
+                    <Input
+                      type="date"
+                      className="bg-gray-700 border-gray-600 text-white"
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Tabla de operaciones */}
+            <Card className="bg-gray-800 border-gray-700">
+              <CardContent className="p-0">
+                {(() => {
+                  const accountTrades = selectedAccount 
+                    ? trades.filter(t => t.account_id === selectedAccount.id)
+                    : trades
+                  
+                  console.log('Trades para tabla:', accountTrades.length)
+                  
+                  if (accountTrades.length === 0) {
+                    return (
+                      <div className="p-8 text-center text-gray-400">
+                        {selectedAccount 
+                          ? `No hay operaciones registradas para ${selectedAccount.name}`
+                          : "No hay operaciones registradas. Sube un reporte HTML para comenzar."
+                        }
+                      </div>
+                    )
+                  }
+
+                  return (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-gray-700">
+                          <tr>
+                            <th className="text-left p-4 text-white">Fecha</th>
+                            <th className="text-left p-4 text-white">Símbolo</th>
+                            <th className="text-left p-4 text-white">Tipo</th>
+                            <th className="text-right p-4 text-white">Entrada</th>
+                            <th className="text-right p-4 text-white">Cierre</th>
+                            <th className="text-right p-4 text-white">Lotes</th>
+                            <th className="text-right p-4 text-white">P&L</th>
+                            <th className="text-right p-4 text-white">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {accountTrades.map((trade, index) => (
+                            <tr key={trade.id || index} className="border-b border-gray-700 hover:bg-gray-700/50">
+                              <td className="p-4 text-gray-300">
+                                {new Date(trade.close_time).toLocaleDateString('es-ES')}
+                                <div className="text-xs text-gray-500">
+                                  {new Date(trade.close_time).toLocaleTimeString('es-ES')}
+                                </div>
+                              </td>
+                              <td className="p-4 text-white font-medium">{trade.symbol}</td>
+                              <td className="p-4">
+                                <span className={`px-2 py-1 rounded text-xs font-medium ${
+                                  trade.direction === 'Buy' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+                                }`}>
+                                  {trade.direction}
+                                </span>
+                              </td>
+                              <td className="p-4 text-right text-gray-300">{trade.entry_price || 'N/A'}</td>
+                              <td className="p-4 text-right text-gray-300">{trade.close_price || 'N/A'}</td>
+                              <td className="p-4 text-right text-gray-300">{trade.lots || 'N/A'}</td>
+                              <td className={`p-4 text-right font-bold ${
+                                parseFloat(trade.pnl) >= 0 ? 'text-green-400' : 'text-red-400'
+                              }`}>
+                                ${parseFloat(trade.pnl).toFixed(2)}
+                              </td>
+                              <td className="p-4 text-right">
+                                <div className="flex gap-1 justify-end">
+                                  <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
+                                    <Edit className="w-4 h-4" />
+                                  </Button>
+                                  <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )
+                })()}
+              </CardContent>
+            </Card>
+          </div>
         )
       
       case 'panel-analysis':
