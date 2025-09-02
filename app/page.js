@@ -675,15 +675,22 @@ export default function TraderfyApp() {
   }
 
   const handleUploadSuccess = (data) => {
+    console.log('handleUploadSuccess called with:', data)
+    console.log('Number of trades to add:', data.trades?.length)
+    
     // Agregar los nuevos trades al estado global
-    setTrades(prevTrades => [...prevTrades, ...data.trades])
+    setTrades(prevTrades => {
+      const newTrades = [...prevTrades, ...data.trades]
+      console.log('Previous trades:', prevTrades.length)
+      console.log('New trades total:', newTrades.length)
+      console.log('Sample trade:', data.trades[0])
+      return newTrades
+    })
     
     // Navegar al calendario para ver los nuevos datos
     if (currentView !== 'panel-calendar') {
       setCurrentView('panel-calendar')
     }
-    
-    console.log('Trades actualizados:', data.trades)
   }
 
   // Responsive handling
