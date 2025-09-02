@@ -366,24 +366,24 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-gray-800 border-gray-700">
+      <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-white flex items-center gap-2">
               <Calendar className="w-5 h-5 text-purple-400" />
               Calendario de Trading
               {selectedAccount && (
-                <span className="text-sm font-normal text-gray-400">- {selectedAccount.name}</span>
+                <span className="text-sm font-normal text-purple-200/70">- {selectedAccount.name}</span>
               )}
             </CardTitle>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => navigateMonth(-1)}>
+              <Button variant="outline" size="sm" onClick={() => navigateMonth(-1)} className="border-purple-500/30 hover:bg-purple-500/10">
                 ←
               </Button>
               <span className="text-white font-medium px-4">
                 {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
               </span>
-              <Button variant="outline" size="sm" onClick={() => navigateMonth(1)}>
+              <Button variant="outline" size="sm" onClick={() => navigateMonth(1)} className="border-purple-500/30 hover:bg-purple-500/10">
                 →
               </Button>
             </div>
@@ -392,7 +392,7 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
         <CardContent>
           <div className="grid grid-cols-7 gap-1 mb-4">
             {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(day => (
-              <div key={day} className="text-center text-gray-400 font-medium py-2 text-sm">
+              <div key={day} className="text-center text-purple-300 font-medium py-2 text-sm">
                 {day}
               </div>
             ))}
