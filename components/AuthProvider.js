@@ -18,6 +18,13 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Verificar si Supabase está configurado
+    if (!supabase) {
+      console.log('Supabase no configurado - funcionando en modo demo')
+      setLoading(false)
+      return
+    }
+
     // Get initial session
     const getInitialSession = async () => {
       try {
