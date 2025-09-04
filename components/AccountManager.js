@@ -130,6 +130,7 @@ const AccountManager = ({ user, onAccountsChange }) => {
           description: formData.description.trim(),
           tag: formData.tag,
           labels: formData.selectedLabels,
+          rules: formData.rules,
           created_at: new Date().toISOString()
         }
         
