@@ -38,7 +38,13 @@ const AccountManager = ({ user, onAccountsChange }) => {
     name: '',
     description: '',
     tag: 'Demo', // Valor predeterminado
-    selectedLabels: []
+    selectedLabels: [],
+    rules: {
+      maxTradesPerDay: '',
+      maxDailyLoss: '',
+      maxRiskPerTrade: '',
+      tradingHours: { start: '', end: '' }
+    }
   })
 
   useEffect(() => {
