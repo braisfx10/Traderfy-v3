@@ -1144,7 +1144,10 @@ export default function TraderfyApp() {
 
   // Solución simple y definitiva para evitar bucles infinitos
   useEffect(() => {
-    // Configuración inicial inmediata
+    // Solo ejecutar cuando authLoading haya terminado
+    if (authLoading) return;
+    
+    // Configuración inicial
     if (!supabase) {
       setAccounts([
         { id: '1', name: 'FTT Funded 15K', tag: 'Funded', user_id: 'demo' },
@@ -1154,7 +1157,7 @@ export default function TraderfyApp() {
       setDemoMode(true)
     }
     
-    // Establecer loading como false inmediatamente
+    // Establecer loading como false inmediatamente después de authLoading
     setLoading(false)
     
     // Mostrar modal de auth solo si es necesario
@@ -1162,8 +1165,8 @@ export default function TraderfyApp() {
       if (!user && !demoMode) {
         setShowAuthModal(true)
       }
-    }, 1000)
-  }, []) // Solo ejecutar una vez al montar
+    }, 500)
+  }, [authLoading, user, demoMode]) // Depender de authLoading para sincronizar
 
   const handleLogout = async () => {
     try {
