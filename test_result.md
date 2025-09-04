@@ -105,7 +105,7 @@
 user_problem_statement: "FIXED - Infinite loading bug resolved. The app now loads correctly. NEW FEATURES IMPLEMENTED: 1. Label organizer section in 'Resumen Total' with clickable accounts grouped by tags (Funded, Demo, Live). 2. Changed 'Mi Mentor' to 'Mentor' in sidebar. 3. Enhanced UX with better visual feedback and responsive design. READY FOR BACKEND TESTING: Need to test HTML parser functionality, API endpoints, and data flow from upload to display as originally identified."
 
 backend:
-  - task: "Symbol Filter Bug Fix"
+  - task: "Frontend Loading Bug Fix"
     implemented: true
     working: true
     file: "/app/app/page.js"
@@ -115,7 +115,31 @@ backend:
     status_history:
         - working: true
         - agent: "main"
-        - comment: "Fixed symbol filter by creating separate OperationsPanel component with proper useState hooks. Filter now responds correctly to user input and filters trades by symbol, direction, and date ranges."
+        - comment: "RESOLVED: Fixed infinite loading state by synchronizing authLoading and loading states. App now loads correctly without getting stuck on 'Cargando...' screen."
+
+  - task: "Label Organizer Feature Implementation"
+    implemented: true
+    working: true
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+        - agent: "main"
+        - comment: "IMPLEMENTED: Added 'Organizar por Etiquetas' section in Resumen Total with clickable accounts grouped by tags (Funded, Demo, Live). Enhanced UX with visual feedback."
+
+  - task: "Mentor Section Name Change"
+    implemented: true
+    working: true
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "low"
+    needs_retesting: false
+    status_history:
+        - working: true
+        - agent: "main"
+        - comment: "COMPLETED: Changed 'Mi Mentor' to 'Mentor' in sidebar navigation as requested."
 
   - task: "Authentication System Implementation"
     implemented: true
