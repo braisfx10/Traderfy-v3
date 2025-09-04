@@ -81,7 +81,13 @@ const AccountManager = ({ user, onAccountsChange }) => {
       name: '',
       description: '',
       tag: 'Demo',
-      selectedLabels: []
+      selectedLabels: [],
+      rules: {
+        maxTradesPerDay: '',
+        maxDailyLoss: '',
+        maxRiskPerTrade: '',
+        tradingHours: { start: '', end: '' }
+      }
     })
     setError('')
   }
