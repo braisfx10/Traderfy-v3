@@ -208,4 +208,6 @@ test_plan:
 
 agent_communication:
     - agent: "main"
+    - message: "CRITICAL BUG FOUND: Infinite loading state caused by race condition between two loading states. AuthProvider.loading and TraderfyApp.loading are not synchronized. The app gets stuck on 'Cargando...' screen because the condition only checks local loading state, not authLoading. Fixed by updating loading condition to check both states and ensuring proper initialization flow."
+    - agent: "main"
     - message: "MAJOR PROGRESS UPDATE: 1. FIXED symbol filter in Operaciones section by refactoring from IIFE to proper React component with useState hooks. Filter now works correctly for symbol, direction, and date filtering. 2. IMPLEMENTED complete authentication system with Supabase Auth including login/register modal, AuthProvider context, and demo mode fallback when Supabase is not configured. 3. Navigation between sections works correctly. 4. Ready to test backend HTML parsing functionality to resolve the core issue of data not appearing after HTML upload. Focus testing on HTML parser, API endpoint, and data flow from upload to display."
