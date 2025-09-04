@@ -370,9 +370,16 @@ async function handleRoute(request, { params }) {
             insertedTrades: insertedTrades.length
           }))
         } else {
-          // Sin Supabase, devolver solo los datos parseados
+          // Sin Supabase, asignar account_id y devolver los datos parseados
+          const tradesWithAccountId = parsedData.trades.map(trade => ({
+            ...trade,
+            account_id: accountId || null,
+            user_id: 'demo'
+          }))
+          
           return handleCORS(NextResponse.json({
             ...parsedData,
+            trades: tradesWithAccountId,
             message: "Datos procesados correctamente (modo demo)"
           }))
         }
