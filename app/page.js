@@ -1783,6 +1783,18 @@ export default function TraderfyApp() {
           setDemoMode(true)
         }} />
       )}
+
+      {/* Modal de Journal de Trade */}
+      {selectedTradeForJournal && (
+        <TradeJournalModal
+          trade={selectedTradeForJournal}
+          onClose={() => setSelectedTradeForJournal(null)}
+          onSave={(updatedTrade) => {
+            // Aquí podrías actualizar el trade en el estado si es necesario
+            console.log('Trade journal saved:', updatedTrade)
+          }}
+        />
+      )}
     </>
   )
 }
