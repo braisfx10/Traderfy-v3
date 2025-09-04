@@ -81,13 +81,12 @@ const Toast = ({ message, type = 'info', onClose }) => (
 )
 
 // Componente de operaciones con filtros funcionales
-const OperationsPanel = ({ trades = [], selectedAccount }) => {
+const OperationsPanel = ({ trades = [], selectedAccount, selectedTradeForJournal, setSelectedTradeForJournal }) => {
   const [symbolFilter, setSymbolFilter] = useState('')
   const [directionFilter, setDirectionFilter] = useState('')
   const [dateFromFilter, setDateFromFilter] = useState('')
   const [dateToFilter, setDateToFilter] = useState('')
   const [currentPage, setCurrentPage] = useState(0)
-  const [selectedTradeForJournal, setSelectedTradeForJournal] = useState(null)
   const tradesPerPage = 10
 
   const accountTrades = selectedAccount 
