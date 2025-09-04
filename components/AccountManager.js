@@ -50,12 +50,21 @@ const AccountManager = ({ user, onAccountsChange }) => {
   const loadAccounts = async () => {
     try {
       setLoading(true)
-      const accountsWithLabels = await getAccountsWithLabels(user.id)
-      setAccounts(accountsWithLabels)
-      onAccountsChange?.(accountsWithLabels)
+      
+      if (supabase && user?.id !== 'demo') {
+        // Modo Supabase
+        const accountsWithLabels = await getAccountsWithLabels(user.id)
+        setAccounts(accountsWithLabels)
+      } else {
+        // Modo demo - usar localStorage
+        const storedAccounts = JSON.parse(localStorage.getItem('demo_accounts') || '[]')
+        setAccounts(storedAccounts)
+      }
+      
+      onAccountsChange?.(accounts)
     } catch (error) {
       console.error('Error loading accounts:', error)
-      setError('Error al cargar las cuentas')
+      setError('Error al cargar las cuentas: ' + (error.message || 'Error desconocido'))
     } finally {
       setLoading(false)
     }
