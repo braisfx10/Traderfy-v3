@@ -147,7 +147,7 @@ export const AuthModal = ({ onClose }) => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-cyan-500/30 text-white placeholder:text-cyan-200/50 focus:border-cyan-400 focus:ring-cyan-400/20 pr-10"
+                  className="bg-gradient-to-r from-slate-800 to-slate-700 border-cyan-500/50 text-white placeholder:text-slate-400 focus:border-cyan-400 focus:ring-cyan-400/20 hover:border-cyan-400/70 pr-10"
                 />
                 <Button
                   type="button"
