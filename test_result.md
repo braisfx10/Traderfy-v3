@@ -200,15 +200,18 @@ backend:
 
   - task: "Account ID Assignment"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/app/page.js"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
         - agent: "testing"
         - comment: "Need to test that account_id is properly assigned to trades in HTMLUploader component"
+        - working: true
+        - agent: "testing"
+        - comment: "TESTED: Account ID assignment working correctly. Fixed issue in API where account_id was not being assigned in demo mode. Now all trades receive the correct account_id from the request. Frontend HTMLUploader passes selectedAccount.id correctly. All trades also get user_id: 'demo' in demo mode."
 
 frontend:
   - task: "HTML Upload Component"
