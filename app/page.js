@@ -1367,7 +1367,9 @@ export default function TraderfyApp() {
       case 'panel-trades':
         return <OperationsPanel 
           trades={trades} 
-          selectedAccount={selectedAccount} 
+          selectedAccount={selectedAccount}
+          selectedTradeForJournal={selectedTradeForJournal}
+          setSelectedTradeForJournal={setSelectedTradeForJournal}
         />
       
       case 'panel-analysis':
