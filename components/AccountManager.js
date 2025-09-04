@@ -143,34 +143,52 @@ const AccountManager = ({ user, onAccountsChange }) => {
     }
 
     try {
-      // Actualizar cuenta
-      const { error: updateError } = await supabase
-        .from('accounts')
-        .update({
-          name: formData.name.trim(),
-          description: formData.description.trim(),
-          tag: formData.tag
-        })
-        .eq('id', accountId)
+      if (supabase && user?.id !== 'demo') {
+        // Modo Supabase
+        const { error: updateError } = await supabase
+          .from('accounts')
+          .update({
+            name: formData.name.trim(),
+            description: formData.description.trim(),
+            tag: formData.tag
+          })
+          .eq('id', accountId)
 
-      if (updateError) throw updateError
+        if (updateError) throw updateError
 
-      // Actualizar etiquetas
-      const currentAccount = accounts.find(acc => acc.id === accountId)
-      const currentLabelIds = currentAccount.labels?.map(l => l.id) || []
-      const newLabelIds = formData.selectedLabels.map(l => l.id)
+        // Actualizar etiquetas
+        const currentAccount = accounts.find(acc => acc.id === accountId)
+        const currentLabelIds = currentAccount.labels?.map(l => l.id) || []
+        const newLabelIds = formData.selectedLabels.map(l => l.id)
 
-      // Remover etiquetas que ya no están
-      for (const labelId of currentLabelIds) {
-        if (!newLabelIds.includes(labelId)) {
-          await removeLabelFromAccount(accountId, labelId)
+        // Remover etiquetas que ya no están
+        for (const labelId of currentLabelIds) {
+          if (!newLabelIds.includes(labelId)) {
+            await removeLabelFromAccount(accountId, labelId)
+          }
         }
-      }
 
-      // Agregar nuevas etiquetas
-      for (const labelId of newLabelIds) {
-        if (!currentLabelIds.includes(labelId)) {
-          await assignLabelToAccount(accountId, labelId)
+        // Agregar nuevas etiquetas
+        for (const labelId of newLabelIds) {
+          if (!currentLabelIds.includes(labelId)) {
+            await assignLabelToAccount(accountId, labelId)
+          }
+        }
+      } else {
+        // Modo demo - actualizar en localStorage
+        const storedAccounts = JSON.parse(localStorage.getItem('demo_accounts') || '[]')
+        const accountIndex = storedAccounts.findIndex(acc => acc.id === accountId)
+        
+        if (accountIndex !== -1) {
+          storedAccounts[accountIndex] = {
+            ...storedAccounts[accountIndex],
+            name: formData.name.trim(),
+            description: formData.description.trim(),
+            tag: formData.tag,
+            labels: formData.selectedLabels,
+            updated_at: new Date().toISOString()
+          }
+          localStorage.setItem('demo_accounts', JSON.stringify(storedAccounts))
         }
       }
 
@@ -179,7 +197,7 @@ const AccountManager = ({ user, onAccountsChange }) => {
       resetForm()
     } catch (error) {
       console.error('Error updating account:', error)
-      setError('Error al actualizar la cuenta')
+      setError('Error al actualizar la cuenta: ' + (error.message || 'Error desconocido'))
     }
   }
 
