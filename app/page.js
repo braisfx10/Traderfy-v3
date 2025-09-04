@@ -1204,7 +1204,7 @@ export default function TraderfyApp() {
     // Solo ejecutar cuando authLoading haya terminado
     if (authLoading) return;
     
-    // Configuración inicial
+    // Configuración inicial solo una vez
     if (!supabase) {
       setAccounts([
         { id: '1', name: 'FTT Funded 15K', tag: 'Funded', user_id: 'demo' },
@@ -1219,11 +1219,11 @@ export default function TraderfyApp() {
     
     // Mostrar modal de auth solo si es necesario
     setTimeout(() => {
-      if (!user && !demoMode) {
+      if (!user && !demoMode && supabase) {
         setShowAuthModal(true)
       }
     }, 500)
-  }, [authLoading, user, demoMode]) // Depender de authLoading para sincronizar
+  }, [authLoading]) // Solo depender de authLoading
 
   const handleLogout = async () => {
     try {
