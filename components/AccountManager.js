@@ -207,17 +207,25 @@ const AccountManager = ({ user, onAccountsChange }) => {
     }
 
     try {
-      const { error } = await supabase
-        .from('accounts')
-        .delete()
-        .eq('id', accountId)
+      if (supabase && user?.id !== 'demo') {
+        // Modo Supabase
+        const { error } = await supabase
+          .from('accounts')
+          .delete()
+          .eq('id', accountId)
 
-      if (error) throw error
+        if (error) throw error
+      } else {
+        // Modo demo - eliminar de localStorage
+        const storedAccounts = JSON.parse(localStorage.getItem('demo_accounts') || '[]')
+        const filteredAccounts = storedAccounts.filter(acc => acc.id !== accountId)
+        localStorage.setItem('demo_accounts', JSON.stringify(filteredAccounts))
+      }
       
       await loadAccounts()
     } catch (error) {
       console.error('Error deleting account:', error)
-      setError('Error al eliminar la cuenta')
+      setError('Error al eliminar la cuenta: ' + (error.message || 'Error desconocido'))
     }
   }
 
