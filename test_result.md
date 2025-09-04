@@ -170,15 +170,18 @@ backend:
 
   - task: "HTML Upload API Endpoint"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/app/api/[[...path]]/route.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
         - agent: "testing"
         - comment: "Need to test POST /api/parse-html endpoint that processes HTML content and saves trades to database"
+        - working: true
+        - agent: "testing"
+        - comment: "TESTED: API endpoint working correctly. POST /api/parse-html processes HTML content successfully in demo mode. Returns 200 with parsed trades, account info, and summary. Correctly handles error cases (400 for missing HTML content). Demo mode message included in response."
 
   - task: "Data Structure Consistency"
     implemented: true
