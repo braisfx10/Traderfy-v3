@@ -1199,6 +1199,11 @@ export default function TraderfyApp() {
     setTimeout(() => setToast(null), 5000)
   }
 
+  const handleAccountSelect = (account) => {
+    setSelectedAccount(account)
+    setCurrentView('panel-summary')
+  }
+
   // Solución simple y definitiva para evitar bucles infinitos
   useEffect(() => {
     // Solo ejecutar cuando authLoading haya terminado
