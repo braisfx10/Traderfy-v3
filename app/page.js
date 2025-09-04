@@ -262,6 +262,15 @@ const OperationsPanel = ({ trades = [], selectedAccount }) => {
                           <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10">
                             <Edit className="w-4 h-4" />
                           </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => setSelectedTradeForJournal(trade)}
+                            className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10"
+                            title="Abrir Journal"
+                          >
+                            <BookOpen className="w-4 h-4" />
+                          </Button>
                           <Button variant="ghost" size="sm" className="text-red-400 hover:text-red-300 hover:bg-red-500/10">
                             <Trash2 className="w-4 h-4" />
                           </Button>
