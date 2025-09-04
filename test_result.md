@@ -245,3 +245,5 @@ test_plan:
 agent_communication:
     - agent: "main"
     - message: "SUCCESS: All critical frontend issues have been resolved. 1. FIXED infinite loading bug by synchronizing authLoading and loading states. 2. IMPLEMENTED label organizer feature in Resumen Total with clickable accounts grouped by tags. 3. CHANGED 'Mi Mentor' to 'Mentor' in sidebar. App now works perfectly. READY FOR BACKEND TESTING: Focus on HTML parser, API endpoints, and data flow testing as originally planned."
+    - agent: "testing"
+    - message: "BACKEND TESTING COMPLETE: All 4 high-priority backend tasks are now working correctly. ✅ HTML Parser extracts trades from Spanish MetaTrader format. ✅ API endpoint /api/parse-html processes uploads successfully. ✅ Data structure uses consistent snake_case naming. ✅ Account ID assignment fixed and working in demo mode. Fixed critical bug where account_id was not assigned in demo mode. Backend is fully functional for HTML upload and processing workflow."
