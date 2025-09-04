@@ -78,25 +78,42 @@ const AccountManager = ({ user, onAccountsChange }) => {
     }
 
     try {
-      // Crear la cuenta en Supabase
-      const { data: newAccount, error: accountError } = await supabase
-        .from('accounts')
-        .insert({
-          user_id: user.id,
+      if (supabase && user?.id !== 'demo') {
+        // Modo Supabase
+        const { data: newAccount, error: accountError } = await supabase
+          .from('accounts')
+          .insert({
+            user_id: user.id,
+            name: formData.name.trim(),
+            description: formData.description.trim(),
+            tag: formData.tag
+          })
+          .select()
+          .single()
+
+        if (accountError) throw accountError
+
+        // Asignar etiquetas a la cuenta
+        if (formData.selectedLabels.length > 0) {
+          for (const label of formData.selectedLabels) {
+            await assignLabelToAccount(newAccount.id, label.id)
+          }
+        }
+      } else {
+        // Modo demo - usar localStorage
+        const existingAccounts = JSON.parse(localStorage.getItem('demo_accounts') || '[]')
+        const newAccount = {
+          id: Date.now().toString(),
+          user_id: 'demo',
           name: formData.name.trim(),
           description: formData.description.trim(),
-          tag: formData.tag
-        })
-        .select()
-        .single()
-
-      if (accountError) throw accountError
-
-      // Asignar etiquetas a la cuenta
-      if (formData.selectedLabels.length > 0) {
-        for (const label of formData.selectedLabels) {
-          await assignLabelToAccount(newAccount.id, label.id)
+          tag: formData.tag,
+          labels: formData.selectedLabels,
+          created_at: new Date().toISOString()
         }
+        
+        existingAccounts.push(newAccount)
+        localStorage.setItem('demo_accounts', JSON.stringify(existingAccounts))
       }
 
       // Recargar cuentas
@@ -106,7 +123,7 @@ const AccountManager = ({ user, onAccountsChange }) => {
       resetForm()
     } catch (error) {
       console.error('Error creating account:', error)
-      setError('Error al crear la cuenta')
+      setError('Error al crear la cuenta: ' + (error.message || 'Error desconocido'))
     }
   }
 
