@@ -248,7 +248,13 @@ const AccountManager = ({ user, onAccountsChange }) => {
       name: account.name,
       description: account.description || '',
       tag: account.tag,
-      selectedLabels: account.labels || []
+      selectedLabels: account.labels || [],
+      rules: account.rules || {
+        maxTradesPerDay: '',
+        maxDailyLoss: '',
+        maxRiskPerTrade: '',
+        tradingHours: { start: '', end: '' }
+      }
     })
     setEditing(account.id)
   }
