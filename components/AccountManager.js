@@ -13,7 +13,8 @@ import {
   X, 
   User, 
   Wallet,
-  Tag
+  Tag,
+  AlertTriangle
 } from 'lucide-react'
 import LabelSelector from './LabelSelector'
 import LabelsManager from './LabelsManager'
