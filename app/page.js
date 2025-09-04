@@ -1142,22 +1142,28 @@ export default function TraderfyApp() {
     setTimeout(() => setToast(null), 5000)
   }
 
-  // Simplificar useEffect para evitar bucles infinitos
+  // Solución simple y definitiva para evitar bucles infinitos
   useEffect(() => {
-    // Auto-establecer datos demo y loading false inmediatamente
-    setAccounts([
-      { id: '1', name: 'FTT Funded 15K', tag: 'Funded', user_id: 'demo' },
-      { id: '2', name: 'FTMO Challenge 100K', tag: 'Demo', user_id: 'demo' },
-      { id: '3', name: 'Prop Firm Live', tag: 'Live', user_id: 'demo' }
-    ])
-    setDemoMode(true)
+    // Configuración inicial inmediata
+    if (!supabase) {
+      setAccounts([
+        { id: '1', name: 'FTT Funded 15K', tag: 'Funded', user_id: 'demo' },
+        { id: '2', name: 'FTMO Challenge 100K', tag: 'Demo', user_id: 'demo' },
+        { id: '3', name: 'Prop Firm Live', tag: 'Live', user_id: 'demo' }
+      ])
+      setDemoMode(true)
+    }
+    
+    // Establecer loading como false inmediatamente
     setLoading(false)
     
-    // Solo mostrar modal si no estamos en demo mode
-    if (!supabase && !user) {
-      setTimeout(() => setShowAuthModal(true), 500)
-    }
-  }, [])
+    // Mostrar modal de auth solo si es necesario
+    setTimeout(() => {
+      if (!user && !demoMode) {
+        setShowAuthModal(true)
+      }
+    }, 1000)
+  }, []) // Solo ejecutar una vez al montar
 
   const handleLogout = async () => {
     try {
