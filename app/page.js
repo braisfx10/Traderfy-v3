@@ -798,7 +798,7 @@ const TradingCalendar = ({ trades = [], selectedAccount }) => {
 }
 
 // Componente de métricas expandidas
-const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
+const MetricsCards = ({ trades = [], title = "Métricas Generales", accounts = [], onAccountSelect }) => {
   const winningTrades = trades.filter(t => t.pnl > 0)
   const losingTrades = trades.filter(t => t.pnl < 0)
   
@@ -822,9 +822,66 @@ const MetricsCards = ({ trades = [], title = "Métricas Generales" }) => {
     avgTradeSize: trades.length > 0 ? (trades.reduce((sum, t) => sum + (t.lots || 0), 0) / trades.length).toFixed(2) : 0
   }
 
+  // Agrupar cuentas por etiquetas
+  const groupedAccounts = accounts.reduce((groups, account) => {
+    const tag = account.tag || 'Sin Etiqueta'
+    if (!groups[tag]) {
+      groups[tag] = []
+    }
+    groups[tag].push(account)
+    return groups
+  }, {})
+
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-white">{title}</h2>
+      
+      {/* Sección de etiquetas organizadoras */}
+      {accounts.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-sm font-semibold text-purple-300 flex items-center gap-2">
+            <Wallet className="w-4 h-4" />
+            Organizar por Etiquetas
+          </h3>
+          <div className="space-y-2">
+            {Object.entries(groupedAccounts).map(([tag, tagAccounts]) => (
+              <Card key={tag} className="bg-gradient-to-r from-slate-800/50 to-slate-700/30 border-purple-500/20 hover:border-purple-400/40 transition-all duration-300">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        tag === 'Live' ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-500/30' :
+                        tag === 'Demo' ? 'bg-yellow-400/20 text-yellow-400 border border-yellow-500/30' :
+                        tag === 'Funded' ? 'bg-purple-400/20 text-purple-400 border border-purple-500/30' :
+                        'bg-gray-400/20 text-gray-400 border border-gray-500/30'
+                      }`}>
+                        {tag}
+                      </span>
+                      <span className="text-sm text-gray-300">{tagAccounts.length} cuenta{tagAccounts.length > 1 ? 's' : ''}</span>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {tagAccounts.map((account) => (
+                      <Button
+                        key={account.id}
+                        variant="ghost"
+                        size="sm"
+                        className="justify-start p-2 h-auto text-left hover:bg-purple-500/10 border border-transparent hover:border-purple-500/30 transition-all duration-200"
+                        onClick={() => onAccountSelect && onAccountSelect(account)}
+                      >
+                        <div>
+                          <div className="text-sm font-medium text-white">{account.name}</div>
+                          <div className="text-xs text-gray-400">Haz clic para ver métricas</div>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-purple-500/30 hover:from-purple-500/20 hover:to-cyan-400/20 transition-all duration-300 hover:scale-105 hover:border-purple-400/50">
           <CardHeader className="pb-2">
