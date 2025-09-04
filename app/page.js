@@ -87,6 +87,7 @@ const OperationsPanel = ({ trades = [], selectedAccount }) => {
   const [dateFromFilter, setDateFromFilter] = useState('')
   const [dateToFilter, setDateToFilter] = useState('')
   const [currentPage, setCurrentPage] = useState(0)
+  const [selectedTradeForJournal, setSelectedTradeForJournal] = useState(null)
   const tradesPerPage = 10
 
   const accountTrades = selectedAccount 
