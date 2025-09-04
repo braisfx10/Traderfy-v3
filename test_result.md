@@ -185,15 +185,18 @@ backend:
 
   - task: "Data Structure Consistency"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/lib/htmlParser.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
         - agent: "testing"
         - comment: "Need to verify field naming consistency between parser output and frontend expectations (close_time vs closeTime, entry_price vs entryPrice)"
+        - working: true
+        - agent: "testing"
+        - comment: "TESTED: Data structure is consistent. Parser outputs snake_case fields (close_time, entry_price, close_price) which matches backend expectations. All required fields present: symbol, direction, close_time, entry_price, close_price, lots, pnl, account_id, user_id. Field types are correct (strings for text, numbers for numeric values)."
 
   - task: "Account ID Assignment"
     implemented: true
