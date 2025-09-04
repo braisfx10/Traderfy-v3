@@ -1232,7 +1232,7 @@ export default function TraderfyApp() {
       case 'accounts-summary':
         return (
           <div className="space-y-6">
-            <MetricsCards trades={trades} title="Resumen Total de Todas las Cuentas" />
+            <MetricsCards trades={trades} title="Resumen Total de Todas las Cuentas" accounts={accounts} onAccountSelect={handleAccountSelect} />
             {!supabase && (
               <Card className="bg-yellow-900/20 border-yellow-600">
                 <CardHeader>
