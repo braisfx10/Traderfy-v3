@@ -174,7 +174,7 @@ export const AuthModal = ({ onClose }) => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-indigo-500/30 text-white placeholder:text-indigo-200/50 focus:border-indigo-400 focus:ring-indigo-400/20"
+                  className="bg-gradient-to-r from-slate-800 to-slate-700 border-indigo-500/50 text-white placeholder:text-slate-400 focus:border-indigo-400 focus:ring-indigo-400/20 hover:border-indigo-400/70"
                 />
               </div>
             )}
