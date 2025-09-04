@@ -1125,6 +1125,7 @@ export default function TraderfyApp() {
   const [loading, setLoading] = useState(true)
   const [toast, setToast] = useState(null)
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const [selectedTradeForJournal, setSelectedTradeForJournal] = useState(null)
   
   const {
     selectedAccount,
