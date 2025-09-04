@@ -521,7 +521,7 @@ const Sidebar = ({
             onClick={() => setCurrentView('mentor-selection')}
           >
             <Target className="w-4 h-4" />
-            {!isCollapsed && <span>Mi Mentor</span>}
+            {!isCollapsed && <span>Mentor</span>}
           </Button>
         )}
 
