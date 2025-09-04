@@ -155,15 +155,18 @@ backend:
 
   - task: "HTML Parser Function Testing"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/lib/htmlParser.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
         - agent: "testing"
         - comment: "Need to test parseHTMLReport function with sample MetaTrader HTML data to verify it correctly extracts symbol, direction, close_time, entry_price, close_price, lots, pnl"
+        - working: true
+        - agent: "testing"
+        - comment: "TESTED: HTML parser working correctly. Successfully extracts trades from Spanish MetaTrader format (test-report.html: 3 trades). Parser correctly ignores English format files (sample_mt4_report.html) as it's designed for Spanish format. All required fields extracted: symbol, direction, close_time, entry_price, close_price, lots, pnl."
 
   - task: "HTML Upload API Endpoint"
     implemented: true
