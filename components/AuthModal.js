@@ -130,7 +130,7 @@ export const AuthModal = ({ onClose }) => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
                 required
-                className="bg-gradient-to-r from-purple-500/10 to-cyan-400/10 border-purple-500/30 text-white placeholder:text-purple-200/50 focus:border-purple-400 focus:ring-purple-400/20"
+                className="bg-gradient-to-r from-slate-800 to-slate-700 border-purple-500/50 text-white placeholder:text-slate-400 focus:border-purple-400 focus:ring-purple-400/20"
               />
             </div>
 
