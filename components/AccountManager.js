@@ -199,6 +199,7 @@ const AccountManager = ({ user, onAccountsChange }) => {
             description: formData.description.trim(),
             tag: formData.tag,
             labels: formData.selectedLabels,
+            rules: formData.rules,
             updated_at: new Date().toISOString()
           }
           localStorage.setItem('demo_accounts', JSON.stringify(storedAccounts))
