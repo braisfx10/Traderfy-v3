@@ -40,7 +40,8 @@ import {
   TrendingDown,
   Trophy,
   XCircle,
-  Users
+  Users,
+  BookOpen
 } from 'lucide-react'
 
 // Estado global de la aplicación
