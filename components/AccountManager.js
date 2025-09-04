@@ -521,9 +521,30 @@ const AccountManager = ({ user, onAccountsChange }) => {
                 </div>
               </div>
             </CardHeader>
-            {account.description && (
-              <CardContent className="pt-0">
-                <p className="text-sm text-gray-300">{account.description}</p>
+            {(account.description || account.rules) && (
+              <CardContent className="pt-0 space-y-2">
+                {account.description && (
+                  <p className="text-sm text-gray-300">{account.description}</p>
+                )}
+                {account.rules && (
+                  <div className="space-y-1">
+                    <div className="text-xs text-purple-300 font-medium">Normas configuradas:</div>
+                    <div className="grid grid-cols-2 gap-1 text-xs text-gray-400">
+                      {account.rules.maxTradesPerDay && (
+                        <div>• Max trades/día: {account.rules.maxTradesPerDay}</div>
+                      )}
+                      {account.rules.maxDailyLoss && (
+                        <div>• Max pérdida: ${account.rules.maxDailyLoss}</div>
+                      )}
+                      {account.rules.maxRiskPerTrade && (
+                        <div>• Max riesgo: {account.rules.maxRiskPerTrade}%</div>
+                      )}
+                      {account.rules.tradingHours?.start && account.rules.tradingHours?.end && (
+                        <div>• Horario: {account.rules.tradingHours.start}-{account.rules.tradingHours.end}</div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </CardContent>
             )}
           </Card>
