@@ -363,6 +363,91 @@ const AccountManager = ({ user, onAccountsChange }) => {
               maxLabels={3}
             />
 
+            {/* Sección de Normas/Reglas */}
+            <div className="space-y-4 p-4 bg-gradient-to-r from-indigo-900/20 to-purple-900/20 border border-indigo-500/30 rounded-lg">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-yellow-400" />
+                <h3 className="text-lg font-semibold text-white">Normas de Trading</h3>
+              </div>
+              <p className="text-sm text-gray-300">Define las reglas que deben cumplirse para esta cuenta. Se mostrarán alertas si se incumplen.</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-yellow-300">Máximo Trades por Día</Label>
+                  <Input
+                    type="number"
+                    value={formData.rules.maxTradesPerDay}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      rules: { ...prev.rules, maxTradesPerDay: e.target.value }
+                    }))}
+                    placeholder="Ej: 5"
+                    className="bg-gradient-to-r from-slate-800 to-slate-700 border-yellow-500/50 text-white"
+                  />
+                </div>
+                
+                <div>
+                  <Label className="text-red-300">Pérdida Máxima Diaria ($)</Label>
+                  <Input
+                    type="number"
+                    value={formData.rules.maxDailyLoss}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      rules: { ...prev.rules, maxDailyLoss: e.target.value }
+                    }))}
+                    placeholder="Ej: 500"
+                    className="bg-gradient-to-r from-slate-800 to-slate-700 border-red-500/50 text-white"
+                  />
+                </div>
+                
+                <div>
+                  <Label className="text-orange-300">Riesgo Máximo por Operación (%)</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={formData.rules.maxRiskPerTrade}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      rules: { ...prev.rules, maxRiskPerTrade: e.target.value }
+                    }))}
+                    placeholder="Ej: 2.5"
+                    className="bg-gradient-to-r from-slate-800 to-slate-700 border-orange-500/50 text-white"
+                  />
+                </div>
+                
+                <div>
+                  <Label className="text-cyan-300">Horario Operativo</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="time"
+                      value={formData.rules.tradingHours.start}
+                      onChange={(e) => setFormData(prev => ({ 
+                        ...prev, 
+                        rules: { 
+                          ...prev.rules, 
+                          tradingHours: { ...prev.rules.tradingHours, start: e.target.value }
+                        }
+                      }))}
+                      className="bg-gradient-to-r from-slate-800 to-slate-700 border-cyan-500/50 text-white"
+                    />
+                    <span className="text-cyan-300 self-center">-</span>
+                    <Input
+                      type="time"
+                      value={formData.rules.tradingHours.end}
+                      onChange={(e) => setFormData(prev => ({ 
+                        ...prev, 
+                        rules: { 
+                          ...prev.rules, 
+                          tradingHours: { ...prev.rules.tradingHours, end: e.target.value }
+                        }
+                      }))}
+                      className="bg-gradient-to-r from-slate-800 to-slate-700 border-cyan-500/50 text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="flex gap-3">
               <Button 
                 onClick={creating ? handleCreateAccount : () => handleUpdateAccount(editing)}
