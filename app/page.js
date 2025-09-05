@@ -1760,7 +1760,7 @@ export default function TraderfyApp() {
                   </div>
                   
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Evolución de Beneficio */}
+                    {/* Evolución de Beneficio en Porcentaje */}
                     <Card className="bg-gradient-to-br from-green-900/20 via-emerald-900/10 to-cyan-900/20 border-green-500/30">
                       <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
@@ -1768,32 +1768,57 @@ export default function TraderfyApp() {
                           Evolución de Beneficio
                         </CardTitle>
                         <CardDescription className="text-green-200/70">
-                          P&L acumulado por operación
+                          Beneficio acumulado en % del balance inicial (${initialBalance.toLocaleString()})
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
                         <ResponsiveContainer width="100%" height={250}>
                           <LineChart data={evolutionData}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                            <XAxis dataKey="trade" stroke="#9CA3AF" />
-                            <YAxis stroke="#9CA3AF" />
+                            <XAxis 
+                              dataKey="date" 
+                              stroke="#9CA3AF" 
+                              fontSize={10}
+                              angle={-45}
+                              textAnchor="end"
+                              height={60}
+                            />
+                            <YAxis 
+                              stroke="#9CA3AF"
+                              domain={['dataMin - 1', 'dataMax + 1']}
+                              tickFormatter={(value) => `${value.toFixed(1)}%`}
+                            />
                             <Tooltip 
                               contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #10B981', borderRadius: '8px' }}
                               labelStyle={{ color: '#F3F4F6' }}
+                              formatter={(value, name) => {
+                                if (name === 'profitPercent') {
+                                  const point = evolutionData.find(p => p.profitPercent === value);
+                                  return [
+                                    <div key="profit-tooltip">
+                                      <div>{`Profit: ${value.toFixed(2)}%`}</div>
+                                      <div>{`P&L: $${point?.pnlDollars.toFixed(2)}`}</div>
+                                    </div>
+                                  ];
+                                }
+                                return [value, name];
+                              }}
+                              labelFormatter={(label) => `Fecha: ${label}`}
                             />
                             <Line 
                               type="monotone" 
-                              dataKey="pnl" 
+                              dataKey="profitPercent" 
                               stroke="#10B981" 
                               strokeWidth={2}
                               dot={{ fill: '#10B981', r: 3 }}
+                              name="profitPercent"
                             />
                           </LineChart>
                         </ResponsiveContainer>
                       </CardContent>
                     </Card>
                     
-                    {/* Evolución de Drawdown */}
+                    {/* Evolución de Drawdown en Porcentaje */}
                     <Card className="bg-gradient-to-br from-red-900/20 via-rose-900/10 to-orange-900/20 border-red-500/30">
                       <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
@@ -1801,25 +1826,50 @@ export default function TraderfyApp() {
                           Evolución de Drawdown
                         </CardTitle>
                         <CardDescription className="text-red-200/70">
-                          Pérdida máxima desde el pico más alto
+                          Drawdown en % del balance inicial (${initialBalance.toLocaleString()})
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
                         <ResponsiveContainer width="100%" height={250}>
                           <LineChart data={drawdownData}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                            <XAxis dataKey="trade" stroke="#9CA3AF" />
-                            <YAxis stroke="#9CA3AF" />
+                            <XAxis 
+                              dataKey="date" 
+                              stroke="#9CA3AF" 
+                              fontSize={10}
+                              angle={-45}
+                              textAnchor="end"
+                              height={60}
+                            />
+                            <YAxis 
+                              stroke="#9CA3AF"
+                              domain={['dataMin - 0.5', 0]}
+                              tickFormatter={(value) => `${Math.abs(value).toFixed(1)}%`}
+                            />
                             <Tooltip 
                               contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #EF4444', borderRadius: '8px' }}
                               labelStyle={{ color: '#F3F4F6' }}
+                              formatter={(value, name) => {
+                                if (name === 'drawdownPercent') {
+                                  const point = drawdownData.find(p => p.drawdownPercent === value);
+                                  return [
+                                    <div key="drawdown-tooltip">
+                                      <div>{`Drawdown: ${Math.abs(value).toFixed(2)}%`}</div>
+                                      <div>{`Balance: $${point?.balance.toFixed(2)}`}</div>
+                                    </div>
+                                  ];
+                                }
+                                return [value, name];
+                              }}
+                              labelFormatter={(label) => `Fecha: ${label}`}
                             />
                             <Line 
                               type="monotone" 
-                              dataKey="drawdown" 
+                              dataKey="drawdownPercent" 
                               stroke="#EF4444" 
                               strokeWidth={2}
                               dot={{ fill: '#EF4444', r: 3 }}
+                              name="drawdownPercent"
                             />
                           </LineChart>
                         </ResponsiveContainer>
