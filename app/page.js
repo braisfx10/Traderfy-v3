@@ -1487,6 +1487,7 @@ export default function TraderfyApp() {
           <TradingCalendar 
             trades={trades} 
             selectedAccount={selectedAccount} 
+            setSelectedTradeForJournal={setSelectedTradeForJournal}
           />
         )
       
