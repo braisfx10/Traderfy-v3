@@ -1990,6 +1990,9 @@ export default function TraderfyApp() {
                         </CardTitle>
                         <CardDescription className="text-red-200/70">
                           Drawdown en % del balance inicial (${initialBalance.toLocaleString()})
+                          <div className="mt-1 text-xs text-yellow-300">
+                            🔶 Puntos amarillos indican días con Withdraws (no se consideran como drawdown)
+                          </div>
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
