@@ -556,7 +556,7 @@ const Sidebar = ({
 }
 
 // Componente del Calendario con modal emergente
-const TradingCalendar = ({ trades = [], selectedAccount }) => {
+const TradingCalendar = ({ trades = [], selectedAccount, setSelectedTradeForJournal }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDay, setSelectedDay] = useState(null)
   
