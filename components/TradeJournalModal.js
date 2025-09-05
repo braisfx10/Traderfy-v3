@@ -83,22 +83,29 @@ const TradeJournalModal = ({ trade, onClose, onSave }) => {
   const handleSave = async () => {
     setLoading(true)
     try {
-      // Guardar en localStorage para modo demo, o en Supabase si está configurado
+      // Asegurar que el trade tenga un ID único
+      const tradeId = trade.id || `trade_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      
+      // Crear trade actualizado con ID único
       const updatedTrade = {
         ...trade,
+        id: tradeId,
         journal_data: journalData,
         last_updated: new Date().toISOString()
       }
       
       // En modo demo, guardar en localStorage
       const existingJournals = JSON.parse(localStorage.getItem('trade_journals') || '{}')
-      existingJournals[trade.id] = journalData
+      existingJournals[tradeId] = journalData
       localStorage.setItem('trade_journals', JSON.stringify(existingJournals))
+      
+      console.log('Saving journal for trade:', tradeId, journalData)
       
       onSave?.(updatedTrade)
       onClose()
     } catch (error) {
       console.error('Error saving trade journal:', error)
+      alert('Error al guardar el journal. Por favor intenta de nuevo.')
     } finally {
       setLoading(false)
     }
