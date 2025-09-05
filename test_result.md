@@ -261,6 +261,54 @@ backend:
         - agent: "testing"
         - comment: "TESTED: Complete data flow working correctly. HTML parser extracts trades (3 trades from test-report.html), API processes uploads successfully, account_id assignment works, and metric calculations complete without undefined variables. The critical line 2039 fix prevents JavaScript errors in the display formatting."
 
+  - task: "New Valoración Formula Implementation"
+    implemented: true
+    working: "NA"
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "main"
+        - comment: "IMPLEMENTED: New valoración formula with corrected BeneficioScore (0 if <4, linear 5-8 if 4≤x<10, 10 if ≥10), DrawdownScore (0 if ≥10, linear scales), and WinRateScore (2 if <30, linear scales up to 9-10 if ≥70). Functions: calculateBeneficioScore, calculateDrawdownScore, calculateWinRateScore."
+
+  - task: "Withdraw Detection Logic"
+    implemented: true
+    working: "NA"
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "main"
+        - comment: "IMPLEMENTED: New withdraw detection logic that identifies negative values > $500 as withdraws (line 1705). Separates withdraws from normal trading losses to prevent affecting profit/drawdown calculations. Uses isWithdraw flag in processedTrades."
+
+  - task: "Improved Chart Data Processing"
+    implemented: true
+    working: "NA"
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "main"
+        - comment: "IMPLEMENTED: Enhanced chart data processing - Evolution charts start from 0% (evolutionData), drawdown calculations based on initial balance without withdraws, assets chart shows percentages instead of raw numbers. Improved data consistency for all chart types."
+
+  - task: "Chart Mathematical Accuracy"
+    implemented: true
+    working: "NA"
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "main"
+        - comment: "IMPLEMENTED: Ensured mathematical accuracy in all chart calculations. Evolution chart starts from 0%, drawdown calculations exclude withdraws, profit percentages calculated against initial balance. All calculations are mathematically correct and consistent."
+
 frontend:
   - task: "HTML Upload Component"
     implemented: true
