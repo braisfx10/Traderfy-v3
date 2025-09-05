@@ -717,6 +717,33 @@ const TradingCalendar = ({ trades = [], selectedAccount, setSelectedTradeForJour
           </div>
         </CardHeader>
         <CardContent>
+          {/* Tabla de estadísticas mensuales */}
+          <div className="mb-6 p-4 bg-gradient-to-r from-purple-900/20 to-cyan-900/20 rounded-lg border border-purple-500/30">
+            <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+              <Target className="w-5 h-5 text-purple-400" />
+              Resumen del Mes - {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-3 bg-gradient-to-br from-purple-500/20 to-indigo-600/10 rounded-lg border border-purple-500/20">
+                <div className={`text-2xl font-bold ${monthlyStats.totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  ${monthlyStats.totalPnL.toFixed(2)}
+                </div>
+                <div className="text-sm text-purple-200/70">P&L Mensual</div>
+              </div>
+              <div className="text-center p-3 bg-gradient-to-br from-cyan-500/20 to-blue-600/10 rounded-lg border border-cyan-500/20">
+                <div className="text-2xl font-bold text-white">{monthlyStats.totalTrades}</div>
+                <div className="text-sm text-cyan-200/70">Total Trades</div>
+              </div>
+              <div className="text-center p-3 bg-gradient-to-br from-green-500/20 to-emerald-600/10 rounded-lg border border-green-500/20">
+                <div className="text-2xl font-bold text-green-400">{monthlyStats.winningDays}</div>
+                <div className="text-sm text-green-200/70">Días Ganadores</div>
+              </div>
+              <div className="text-center p-3 bg-gradient-to-br from-red-500/20 to-rose-600/10 rounded-lg border border-red-500/20">
+                <div className="text-2xl font-bold text-red-400">{monthlyStats.losingDays}</div>
+                <div className="text-sm text-red-200/70">Días Perdedores</div>
+              </div>
+            </div>
+          </div>
           <div className="grid grid-cols-7 gap-1 mb-4">
             {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(day => (
               <div key={day} className="text-center text-purple-300 font-medium py-2 text-sm">
