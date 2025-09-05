@@ -2069,7 +2069,7 @@ export default function TraderfyApp() {
                               cx="50%"
                               cy="50%"
                               labelLine={false}
-                              label={({ name, value }) => `${name}: ${value}`}
+                              label={({ name, percentage }) => `${name}: ${percentage}%`}
                               outerRadius={80}
                               fill="#8884d8"
                               dataKey="value"
@@ -2080,6 +2080,18 @@ export default function TraderfyApp() {
                             </Pie>
                             <Tooltip 
                               contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #8B5CF6', borderRadius: '8px' }}
+                              labelStyle={{ color: '#F3F4F6' }}
+                              formatter={(value, name, props) => {
+                                const entry = props.payload;
+                                return [
+                                  <div key="asset-tooltip">
+                                    <div>{`Trades: ${value} (${entry.percentage}%)`}</div>
+                                    <div className={entry.pnl >= 0 ? 'text-green-400' : 'text-red-400'}>
+                                      {`P&L: $${entry.pnl.toFixed(2)}`}
+                                    </div>
+                                  </div>
+                                ];
+                              }}
                             />
                           </PieChart>
                         </ResponsiveContainer>
