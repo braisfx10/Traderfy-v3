@@ -1697,24 +1697,36 @@ export default function TraderfyApp() {
               console.log('Balance inicial detectado:', initialBalance)
               console.log('Summary completo:', selectedAccount.summary)
               
-              // Procesar trades para detectar withdraws y dividir tipos de movimientos
+              // Procesar trades y withdraws detectados del parser HTML
+              const parseResult = await res.json()
+              const detectedWithdraws = parseResult.withdraws || []
+              
+              console.log('Detected withdraws from parser:', detectedWithdraws)
+              
+              // Crear un mapa de fechas con withdraws para referencia rápida
+              const withdrawDateMap = {}
+              detectedWithdraws.forEach(withdraw => {
+                const date = new Date(withdraw.close_time).toDateString()
+                if (!withdrawDateMap[date]) {
+                  withdrawDateMap[date] = []
+                }
+                withdrawDateMap[date].push(withdraw)
+              })
+              
               const processedTrades = accountTrades.map(trade => {
                 const pnl = parseFloat(trade.pnl);
-                // Detectar withdraws (cantidades negativas inusuales que podrían ser retiros)
-                // Lógica mejorada: considerar withdraws si es muy negativo comparado con el promedio
-                const avgLoss = accountTrades
-                  .filter(t => parseFloat(t.pnl) < 0 && parseFloat(t.pnl) > -500)
-                  .reduce((sum, t, _, arr) => sum + Math.abs(parseFloat(t.pnl)) / arr.length, 0);
+                const tradeDate = new Date(trade.close_time).toDateString()
                 
-                // Withdraw si es más de 3 veces el promedio de pérdidas normales O si es mayor a $200 negativos
-                const isWithdraw = pnl < -200 || (avgLoss > 0 && pnl < -(avgLoss * 3));
+                // Verificar si hay withdraws en la misma fecha que este trade
+                const hasWithdrawOnSameDate = withdrawDateMap[tradeDate] && withdrawDateMap[tradeDate].length > 0
                 
-                console.log(`Trade PnL: ${pnl}, Average Loss: ${avgLoss}, Is Withdraw: ${isWithdraw}`);
+                console.log(`Trade on ${tradeDate}: PnL ${pnl}, Has withdraw: ${hasWithdrawOnSameDate}`);
                 
                 return {
                   ...trade,
                   pnl: pnl,
-                  isWithdraw: isWithdraw,
+                  isWithdraw: false, // Los trades no son withdraws
+                  hasWithdrawOnSameDate: hasWithdrawOnSameDate,
                   close_time: new Date(trade.close_time)
                 };
               });
