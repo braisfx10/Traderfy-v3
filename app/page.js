@@ -1945,6 +1945,7 @@ export default function TraderfyApp() {
                                     <div key="profit-tooltip">
                                       <div>{`Profit: ${value.toFixed(2)}%`}</div>
                                       <div>{`P&L: $${point?.pnlDollars.toFixed(2)}`}</div>
+                                      {point?.hasWithdraws && <div className="text-yellow-400">⚠️ Día con Withdraw</div>}
                                     </div>
                                   ];
                                 }
@@ -1957,7 +1958,19 @@ export default function TraderfyApp() {
                               dataKey="profitPercent" 
                               stroke="#10B981" 
                               strokeWidth={2}
-                              dot={{ fill: '#10B981', r: 3 }}
+                              dot={(props) => {
+                                const { cx, cy, payload } = props;
+                                return (
+                                  <circle
+                                    cx={cx}
+                                    cy={cy}
+                                    r={payload.hasWithdraws ? 5 : 3}
+                                    fill={payload.hasWithdraws ? '#F59E0B' : '#10B981'}
+                                    stroke={payload.hasWithdraws ? '#FCD34D' : '#10B981'}
+                                    strokeWidth={payload.hasWithdraws ? 2 : 0}
+                                  />
+                                );
+                              }}
                               name="profitPercent"
                             />
                           </LineChart>
