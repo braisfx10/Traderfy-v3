@@ -1647,7 +1647,9 @@ export default function TraderfyApp() {
                           Rendimiento por Día de la Semana
                         </h3>
                         <div className="space-y-2">
-                          {Object.entries(weekdayStats).map(([day, stats]) => (
+                          {Object.entries(weekdayStats)
+                            .sort(([,a], [,b]) => b.totalPnl - a.totalPnl)
+                            .map(([day, stats]) => (
                             <div key={day} className="flex items-center justify-between p-3 bg-gradient-to-r from-slate-700/60 to-slate-600/40 rounded-lg border border-purple-500/20 hover:from-slate-600/70 hover:to-slate-500/50 transition-all duration-300">
                               <div>
                                 <span className="text-white font-medium">{day}</span>
