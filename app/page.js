@@ -473,7 +473,7 @@ const Sidebar = ({
                   { key: 'panel-summary', label: 'Resumen', icon: Activity },
                   { key: 'panel-calendar', label: 'Calendario', icon: Calendar },
                   { key: 'panel-trades', label: 'Operaciones', icon: FileText },
-                  { key: 'panel-analysis', label: 'Análisis', icon: PieChart }
+                  { key: 'panel-analysis', label: 'Análisis', icon: PieChartIcon }
                 ].map(({ key, label, icon: Icon }) => (
                   <Button
                     key={key}
