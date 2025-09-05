@@ -1912,7 +1912,7 @@ export default function TraderfyApp() {
                       </CardContent>
                     </Card>
                     
-                    {/* Valoración de Trading Corregida */}
+                    {/* Valoración de Trading Basada en Porcentajes */}
                     <Card className="bg-gradient-to-br from-cyan-900/20 via-blue-900/10 to-indigo-900/20 border-cyan-500/30">
                       <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
@@ -1920,7 +1920,7 @@ export default function TraderfyApp() {
                           Valoración de Trading
                         </CardTitle>
                         <CardDescription className="text-cyan-200/70">
-                          Puntuación del 0-10 basada en winrate, drawdown y P&L
+                          Puntuación 0-10 basada en % del balance inicial (${initialBalance.toLocaleString()})
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
@@ -1939,16 +1939,28 @@ export default function TraderfyApp() {
                               <span className="text-white">{winRate.toFixed(1)}% ({winRateScore.toFixed(1)}/4 pts)</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-400">P&L Total:</span>
-                              <span className={totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}>
-                                ${totalPnL.toFixed(2)} ({pnlScore.toFixed(1)}/3 pts)
+                              <span className="text-gray-400">Beneficio Total:</span>
+                              <span className={finalProfitPercent >= 0 ? 'text-green-400' : 'text-red-400'}>
+                                {finalProfitPercent.toFixed(2)}% ({profitScore.toFixed(1)}/3 pts)
                               </span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-400">Drawdown Máximo:</span>
-                              <span className={maxDrawdown <= 10 ? 'text-green-400' : 'text-red-400'}>
-                                {maxDrawdown.toFixed(1)}% ({drawdownScore}/3 pts)
+                              <span className={maxDrawdownPercent <= 5 ? 'text-green-400' : 'text-red-400'}>
+                                {maxDrawdownPercent.toFixed(2)}% ({drawdownScore}/3 pts)
                               </span>
+                            </div>
+                            <div className="mt-4 pt-2 border-t border-cyan-500/30">
+                              <div className="flex justify-between text-xs text-gray-300">
+                                <span>Balance Inicial:</span>
+                                <span>${initialBalance.toLocaleString()}</span>
+                              </div>
+                              <div className="flex justify-between text-xs text-gray-300">
+                                <span>Balance Actual:</span>
+                                <span className={finalProfitPercent >= 0 ? 'text-green-300' : 'text-red-300'}>
+                                  ${(initialBalance + (evolutionData.length > 0 ? evolutionData[evolutionData.length - 1].pnlDollars : 0)).toLocaleString()}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
