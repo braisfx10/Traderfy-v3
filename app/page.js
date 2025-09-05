@@ -1698,10 +1698,10 @@ export default function TraderfyApp() {
               console.log('Summary completo:', selectedAccount.summary)
               
               // Procesar trades y withdraws detectados del parser HTML
-              const parseResult = await res.json()
-              const detectedWithdraws = parseResult.withdraws || []
+              // Los withdraws deberían venir de la cuenta guardada
+              const detectedWithdraws = selectedAccount.withdraws || []
               
-              console.log('Detected withdraws from parser:', detectedWithdraws)
+              console.log('Detected withdraws from account:', detectedWithdraws)
               
               // Crear un mapa de fechas con withdraws para referencia rápida
               const withdrawDateMap = {}
