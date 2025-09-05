@@ -766,7 +766,10 @@ class TraderfyBackendTester:
             self.test_date_parsing_format,
             self.test_account_id_assignment,
             self.test_sample_metatrader_data,
-            self.test_html_parser_api_endpoint
+            self.test_html_parser_api_endpoint,
+            self.test_score_calculations_fix,
+            self.test_complete_data_flow,
+            self.test_javascript_error_prevention
         ]
         
         passed = 0
