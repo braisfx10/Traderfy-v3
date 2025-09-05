@@ -1700,9 +1700,16 @@ export default function TraderfyApp() {
               // Procesar trades para detectar withdraws y dividir tipos de movimientos
               const processedTrades = accountTrades.map(trade => {
                 const pnl = parseFloat(trade.pnl);
-                // Detectar withdraws (grandes cantidades negativas que no son pérdidas normales)
-                // Asumimos que withdraws son cantidades superiores a $500 negativos
-                const isWithdraw = pnl < -500; // Ajustar este valor según sea necesario
+                // Detectar withdraws (cantidades negativas inusuales que podrían ser retiros)
+                // Lógica mejorada: considerar withdraws si es muy negativo comparado con el promedio
+                const avgLoss = accountTrades
+                  .filter(t => parseFloat(t.pnl) < 0 && parseFloat(t.pnl) > -500)
+                  .reduce((sum, t, _, arr) => sum + Math.abs(parseFloat(t.pnl)) / arr.length, 0);
+                
+                // Withdraw si es más de 3 veces el promedio de pérdidas normales O si es mayor a $200 negativos
+                const isWithdraw = pnl < -200 || (avgLoss > 0 && pnl < -(avgLoss * 3));
+                
+                console.log(`Trade PnL: ${pnl}, Average Loss: ${avgLoss}, Is Withdraw: ${isWithdraw}`);
                 
                 return {
                   ...trade,
