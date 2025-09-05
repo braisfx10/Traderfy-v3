@@ -1861,7 +1861,12 @@ export default function TraderfyApp() {
           trade={selectedTradeForJournal}
           onClose={() => setSelectedTradeForJournal(null)}
           onSave={(updatedTrade) => {
-            // Aquí podrías actualizar el trade en el estado si es necesario
+            // Actualizar el trade en el estado de trades
+            setTrades(prevTrades => 
+              prevTrades.map(trade => 
+                trade.id === updatedTrade.id ? updatedTrade : trade
+              )
+            )
             console.log('Trade journal saved:', updatedTrade)
           }}
         />
