@@ -1232,12 +1232,18 @@ export default function TraderfyApp() {
       ])
       
       // Añadir algunos trades de ejemplo con IDs únicos para poder probar el Journal
+      const today = new Date()
+      const yesterday = new Date(today)
+      yesterday.setDate(today.getDate() - 1)
+      const dayBefore = new Date(today)
+      dayBefore.setDate(today.getDate() - 2)
+      
       setTrades([
         {
           id: 'trade_demo_1',
           symbol: 'EURUSD',
           direction: 'Buy',
-          close_time: '2024-01-15T10:30:00Z',
+          close_time: yesterday.toISOString(),
           entry_price: 1.0850,
           close_price: 1.0890,
           lots: 0.10,
@@ -1249,7 +1255,7 @@ export default function TraderfyApp() {
           id: 'trade_demo_2', 
           symbol: 'GBPUSD',
           direction: 'Sell',
-          close_time: '2024-01-15T14:15:00Z',
+          close_time: yesterday.toISOString(),
           entry_price: 1.2650,
           close_price: 1.2620,
           lots: 0.15,
@@ -1261,7 +1267,7 @@ export default function TraderfyApp() {
           id: 'trade_demo_3',
           symbol: 'AUDUSD', 
           direction: 'Buy',
-          close_time: '2024-01-16T09:45:00Z',
+          close_time: dayBefore.toISOString(),
           entry_price: 0.6580,
           close_price: 0.6555,
           lots: 0.20,
