@@ -2128,7 +2128,7 @@ export default function TraderfyApp() {
                           <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
                               <span className="text-gray-400">Win Rate:</span>
-                              <span className="text-white">{winRate.toFixed(1)}% ({winRateScore.toFixed(1)}/4 pts)</span>
+                              <span className="text-white">{winRate.toFixed(1)}% ({winRateScore.toFixed(2)}/10 pts)</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-400">Beneficio Total:</span>
