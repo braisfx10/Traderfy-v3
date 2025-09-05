@@ -2015,7 +2015,9 @@ export default function TraderfyApp() {
                                   return [
                                     <div key="drawdown-tooltip">
                                       <div>{`Drawdown: ${Math.abs(value).toFixed(2)}%`}</div>
-                                      <div>{`Balance: $${point?.balance.toFixed(2)}`}</div>
+                                      <div>{`Balance Trading: $${point?.balance.toFixed(2)}`}</div>
+                                      <div>{`Peak: $${point?.peak.toFixed(2)}`}</div>
+                                      {point?.hasWithdraws && <div className="text-yellow-400">⚠️ Día con Withdraw</div>}
                                     </div>
                                   ];
                                 }
@@ -2028,7 +2030,19 @@ export default function TraderfyApp() {
                               dataKey="drawdownPercent" 
                               stroke="#EF4444" 
                               strokeWidth={2}
-                              dot={{ fill: '#EF4444', r: 3 }}
+                              dot={(props) => {
+                                const { cx, cy, payload } = props;
+                                return (
+                                  <circle
+                                    cx={cx}
+                                    cy={cy}
+                                    r={payload.hasWithdraws ? 5 : 3}
+                                    fill={payload.hasWithdraws ? '#F59E0B' : '#EF4444'}
+                                    stroke={payload.hasWithdraws ? '#FCD34D' : '#EF4444'}
+                                    strokeWidth={payload.hasWithdraws ? 2 : 0}
+                                  />
+                                );
+                              }}
                               name="drawdownPercent"
                             />
                           </LineChart>
