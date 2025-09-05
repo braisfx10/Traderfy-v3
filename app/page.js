@@ -1660,6 +1660,224 @@ export default function TraderfyApp() {
               return null;
             })()}
             
+            {/* Gráficos de Panel de Cuenta - Resumen */}
+            {(() => {
+              const accountTrades = trades.filter(t => t.account_id === selectedAccount.id);
+              if (accountTrades.length === 0) return null;
+              
+              // Preparar datos para gráfico de evolución de beneficio
+              const evolutionData = accountTrades.map((trade, index) => {
+                const cumulativePnL = accountTrades.slice(0, index + 1).reduce((sum, t) => sum + parseFloat(t.pnl), 0);
+                return {
+                  trade: index + 1,
+                  pnl: cumulativePnL,
+                  date: new Date(trade.close_time).toLocaleDateString('es-ES')
+                };
+              });
+              
+              // Calcular drawdown correctamente
+              let peak = 0;
+              let maxDrawdown = 0;
+              const drawdownData = evolutionData.map(point => {
+                if (point.pnl > peak) peak = point.pnl;
+                const drawdown = peak > 0 ? ((peak - point.pnl) / peak) * 100 : 0;
+                if (drawdown > maxDrawdown) maxDrawdown = drawdown;
+                return {
+                  trade: point.trade,
+                  drawdown: -drawdown, // Negativo para mostrar hacia abajo
+                  date: point.date
+                };
+              });
+              
+              // Datos para gráfico de activos operados
+              const symbolStats = accountTrades.reduce((acc, trade) => {
+                if (!acc[trade.symbol]) {
+                  acc[trade.symbol] = { symbol: trade.symbol, trades: 0, pnl: 0 };
+                }
+                acc[trade.symbol].trades += 1;
+                acc[trade.symbol].pnl += parseFloat(trade.pnl);
+                return acc;
+              }, {});
+              
+              const assetsData = Object.values(symbolStats).map(stat => ({
+                name: stat.symbol,
+                value: stat.trades,
+                pnl: stat.pnl
+              }));
+              
+              // Colores para el gráfico circular
+              const COLORS = ['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#8B5A2B'];
+              
+              // Valoración de trading corregida - solo winrate, drawdown máximo y P&L
+              const totalPnL = accountTrades.reduce((sum, t) => sum + parseFloat(t.pnl), 0);
+              const winRate = accountTrades.length > 0 ? ((accountTrades.filter(t => t.pnl > 0).length / accountTrades.length) * 100) : 0;
+              
+              // Puntuación del 0 al 10 basada únicamente en winrate, drawdown máximo y P&L
+              const winRateScore = Math.min(4, (winRate / 100) * 4); // Max 4 puntos por winrate
+              const pnlScore = totalPnL > 0 ? Math.min(3, (totalPnL / 100) * 3) : 0; // Max 3 puntos por P&L positivo
+              const drawdownScore = maxDrawdown <= 5 ? 3 : maxDrawdown <= 10 ? 2 : maxDrawdown <= 20 ? 1 : 0; // Max 3 puntos por drawdown bajo
+              
+              const tradingScore = Math.min(10, winRateScore + pnlScore + drawdownScore);
+              
+              return (
+                <div className="mt-6 space-y-6">
+                  <div className="border-t border-purple-500/30 pt-6">
+                    <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                      <BarChart3 className="w-6 h-6 text-purple-400" />
+                      Análisis Avanzado de Rendimiento
+                    </h3>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Evolución de Beneficio */}
+                    <Card className="bg-gradient-to-br from-green-900/20 via-emerald-900/10 to-cyan-900/20 border-green-500/30">
+                      <CardHeader>
+                        <CardTitle className="text-white flex items-center gap-2">
+                          <TrendingUp className="w-5 h-5 text-green-400" />
+                          Evolución de Beneficio
+                        </CardTitle>
+                        <CardDescription className="text-green-200/70">
+                          P&L acumulado por operación
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <ResponsiveContainer width="100%" height={250}>
+                          <LineChart data={evolutionData}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                            <XAxis dataKey="trade" stroke="#9CA3AF" />
+                            <YAxis stroke="#9CA3AF" />
+                            <Tooltip 
+                              contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #10B981', borderRadius: '8px' }}
+                              labelStyle={{ color: '#F3F4F6' }}
+                            />
+                            <Line 
+                              type="monotone" 
+                              dataKey="pnl" 
+                              stroke="#10B981" 
+                              strokeWidth={2}
+                              dot={{ fill: '#10B981', r: 3 }}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </CardContent>
+                    </Card>
+                    
+                    {/* Evolución de Drawdown */}
+                    <Card className="bg-gradient-to-br from-red-900/20 via-rose-900/10 to-orange-900/20 border-red-500/30">
+                      <CardHeader>
+                        <CardTitle className="text-white flex items-center gap-2">
+                          <TrendingDown className="w-5 h-5 text-red-400" />
+                          Evolución de Drawdown
+                        </CardTitle>
+                        <CardDescription className="text-red-200/70">
+                          Pérdida máxima desde el pico más alto
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <ResponsiveContainer width="100%" height={250}>
+                          <LineChart data={drawdownData}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                            <XAxis dataKey="trade" stroke="#9CA3AF" />
+                            <YAxis stroke="#9CA3AF" />
+                            <Tooltip 
+                              contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #EF4444', borderRadius: '8px' }}
+                              labelStyle={{ color: '#F3F4F6' }}
+                            />
+                            <Line 
+                              type="monotone" 
+                              dataKey="drawdown" 
+                              stroke="#EF4444" 
+                              strokeWidth={2}
+                              dot={{ fill: '#EF4444', r: 3 }}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </CardContent>
+                    </Card>
+                    
+                    {/* Activos Operados */}
+                    <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-blue-900/20 border-purple-500/30">
+                      <CardHeader>
+                        <CardTitle className="text-white flex items-center gap-2">
+                          <Target className="w-5 h-5 text-purple-400" />
+                          Activos Operados
+                        </CardTitle>
+                        <CardDescription className="text-purple-200/70">
+                          Distribución por símbolo
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <ResponsiveContainer width="100%" height={250}>
+                          <PieChart>
+                            <Pie
+                              data={assetsData}
+                              cx="50%"
+                              cy="50%"
+                              labelLine={false}
+                              label={({ name, value }) => `${name}: ${value}`}
+                              outerRadius={80}
+                              fill="#8884d8"
+                              dataKey="value"
+                            >
+                              {assetsData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                              ))}
+                            </Pie>
+                            <Tooltip 
+                              contentStyle={{ backgroundColor: '#1F2937', border: '1px solid #8B5CF6', borderRadius: '8px' }}
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </CardContent>
+                    </Card>
+                    
+                    {/* Valoración de Trading Corregida */}
+                    <Card className="bg-gradient-to-br from-cyan-900/20 via-blue-900/10 to-indigo-900/20 border-cyan-500/30">
+                      <CardHeader>
+                        <CardTitle className="text-white flex items-center gap-2">
+                          <BarChart3 className="w-5 h-5 text-cyan-400" />
+                          Valoración de Trading
+                        </CardTitle>
+                        <CardDescription className="text-cyan-200/70">
+                          Puntuación del 0-10 basada en winrate, drawdown y P&L
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          <div className="text-center">
+                            <div className={`text-4xl font-bold ${tradingScore >= 7 ? 'text-green-400' : tradingScore >= 4 ? 'text-yellow-400' : 'text-red-400'}`}>
+                              {tradingScore.toFixed(1)}/10
+                            </div>
+                            <div className={`text-lg ${tradingScore >= 7 ? 'text-green-300' : tradingScore >= 4 ? 'text-yellow-300' : 'text-red-300'}`}>
+                              {tradingScore >= 7 ? 'Excelente' : tradingScore >= 4 ? 'Bueno' : 'Necesita Mejorar'}
+                            </div>
+                          </div>
+                          <div className="space-y-2 text-sm">
+                            <div className="flex justify-between">
+                              <span className="text-gray-400">Win Rate:</span>
+                              <span className="text-white">{winRate.toFixed(1)}% ({winRateScore.toFixed(1)}/4 pts)</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-400">P&L Total:</span>
+                              <span className={totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}>
+                                ${totalPnL.toFixed(2)} ({pnlScore.toFixed(1)}/3 pts)
+                              </span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-400">Drawdown Máximo:</span>
+                              <span className={maxDrawdown <= 10 ? 'text-green-400' : 'text-red-400'}>
+                                {maxDrawdown.toFixed(1)}% ({drawdownScore}/3 pts)
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              );
+            })()}
+            
             <HTMLUploader 
               selectedAccount={selectedAccount}
               onSuccess={handleUploadSuccess}
