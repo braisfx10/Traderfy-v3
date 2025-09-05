@@ -705,6 +705,14 @@ const TradingCalendar = ({ trades = [], selectedAccount, setSelectedTradeForJour
               <Button variant="outline" size="sm" onClick={() => navigateMonth(1)} className="border-purple-500/30 hover:bg-purple-500/10">
                 →
               </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setViewMode(viewMode === 'month' ? 'year' : 'month')}
+                className="border-cyan-500/30 hover:bg-cyan-500/10 text-cyan-300 ml-2"
+              >
+                {viewMode === 'month' ? 'Vista Anual' : 'Vista Mensual'}
+              </Button>
             </div>
           </div>
         </CardHeader>
