@@ -1210,6 +1210,10 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
 
         if (response.ok) {
           const apiResult = await response.json()
+          console.log('API Response received:', apiResult)
+          console.log('Trades in response:', apiResult.trades?.length)
+          console.log('Sample trade:', apiResult.trades?.[0])
+          
           if (apiResult.trades && apiResult.trades.length > 0) {
             // Asignar account_id si no está presente
             const tradesWithAccountId = apiResult.trades.map(trade => ({
@@ -1223,10 +1227,15 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
               trades: tradesWithAccountId
             }
 
+            console.log('Calling onSuccess with processed data:', processedData)
             showToast(`Reporte procesado vía API: ${apiResult.trades.length} operaciones encontradas`, 'success')
             onSuccess(processedData)
             return
+          } else {
+            console.log('API returned no trades or invalid response')
           }
+        } else {
+          console.log('API response not ok:', response.status, response.statusText)
         }
       } catch (apiError) {
         console.log('API no disponible, procesando localmente:', apiError.message)
