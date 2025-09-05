@@ -282,10 +282,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "HTML Parser Function Testing"
-    - "HTML Upload API Endpoint"
-    - "Data Structure Consistency"
-    - "Account ID Assignment"
+    - "ProfitScore/BeneficioScore Fix"
+    - "Score Calculations Integrity"
+    - "Data Flow from HTML to Metrics"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
