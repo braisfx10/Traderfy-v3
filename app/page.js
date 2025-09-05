@@ -775,12 +775,26 @@ const TradingCalendar = ({ trades = [], selectedAccount, setSelectedTradeForJour
                               </div>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className={`text-xl font-bold ${trade.pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                              ${parseFloat(trade.pnl).toFixed(2)}
+                          <div className="flex items-center justify-between">
+                            <div className="text-right">
+                              <div className={`text-xl font-bold ${trade.pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                ${parseFloat(trade.pnl).toFixed(2)}
+                              </div>
+                              <div className="text-xs text-gray-400">
+                                {trade.pnl >= 0 ? 'Ganancia' : 'Pérdida'}
+                              </div>
                             </div>
-                            <div className="text-xs text-gray-400">
-                              {trade.pnl >= 0 ? 'Ganancia' : 'Pérdida'}
+                            <div className="ml-4">
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => setSelectedTradeForJournal?.(trade)}
+                                className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 border border-cyan-500/30 hover:border-cyan-400/50"
+                                title="Abrir Journal"
+                              >
+                                <BookOpen className="w-4 h-4 mr-1" />
+                                Journal
+                              </Button>
                             </div>
                           </div>
                         </div>
