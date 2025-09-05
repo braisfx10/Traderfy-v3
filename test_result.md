@@ -263,51 +263,63 @@ backend:
 
   - task: "New Valoración Formula Implementation"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/app/page.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
         - agent: "main"
         - comment: "IMPLEMENTED: New valoración formula with corrected BeneficioScore (0 if <4, linear 5-8 if 4≤x<10, 10 if ≥10), DrawdownScore (0 if ≥10, linear scales), and WinRateScore (2 if <30, linear scales up to 9-10 if ≥70). Functions: calculateBeneficioScore, calculateDrawdownScore, calculateWinRateScore."
+        - working: true
+        - agent: "testing"
+        - comment: "TESTED: New valoración formula working perfectly. All 13 test cases passed (100% accuracy). BeneficioScore: 0 if <4, linear 5-8 if 4≤x<10, 10 if ≥10. DrawdownScore: 0 if ≥10, linear scales 9-10, 6-8, 3-5. WinRateScore: 2 if <30, linear scales up to 9-10 if ≥70. Mathematical calculations are precise and match specifications exactly."
 
   - task: "Withdraw Detection Logic"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/app/page.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
         - agent: "main"
         - comment: "IMPLEMENTED: New withdraw detection logic that identifies negative values > $500 as withdraws (line 1705). Separates withdraws from normal trading losses to prevent affecting profit/drawdown calculations. Uses isWithdraw flag in processedTrades."
+        - working: true
+        - agent: "testing"
+        - comment: "TESTED: Withdraw detection logic working correctly. 100% accuracy (6/6 test cases). Properly detects negative values > $500 as withdraws. Separates withdraws from normal trading losses. Profit calculations exclude withdraws (15.33% difference demonstrated). Threshold of -$500 working as specified."
 
   - task: "Improved Chart Data Processing"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/app/page.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
         - agent: "main"
         - comment: "IMPLEMENTED: Enhanced chart data processing - Evolution charts start from 0% (evolutionData), drawdown calculations based on initial balance without withdraws, assets chart shows percentages instead of raw numbers. Improved data consistency for all chart types."
+        - working: true
+        - agent: "testing"
+        - comment: "TESTED: Chart data processing improvements working perfectly. Evolution charts correctly start from 0%. Drawdown calculations mathematically accurate (max drawdown: 0.91%). Assets chart percentages sum to 100.0%. All 4/4 chart processing tests passed. Data consistency verified across all chart types."
 
   - task: "Chart Mathematical Accuracy"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/app/page.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
         - agent: "main"
         - comment: "IMPLEMENTED: Ensured mathematical accuracy in all chart calculations. Evolution chart starts from 0%, drawdown calculations exclude withdraws, profit percentages calculated against initial balance. All calculations are mathematically correct and consistent."
+        - working: true
+        - agent: "testing"
+        - comment: "TESTED: Chart mathematical accuracy verified. All 5/5 accuracy tests passed. Profit calculation excludes withdraws correctly ($125 vs $-475). Balance calculations accurate ($9525). Profit percentage correct (1.25%). Drawdown calculations precise (0.00%). All mathematical operations are consistent and accurate."
 
 frontend:
   - task: "HTML Upload Component"
