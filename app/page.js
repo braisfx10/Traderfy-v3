@@ -1697,12 +1697,27 @@ export default function TraderfyApp() {
               console.log('Balance inicial detectado:', initialBalance)
               console.log('Summary completo:', selectedAccount.summary)
               
-              // Preparar datos para gráfico de evolución de beneficio (por fechas y porcentajes)
+              // Procesar trades para detectar withdraws y dividir tipos de movimientos
+              const processedTrades = accountTrades.map(trade => {
+                const pnl = parseFloat(trade.pnl);
+                // Detectar withdraws (grandes cantidades negativas que no son pérdidas normales)
+                // Asumimos que withdraws son cantidades superiores a $500 negativos
+                const isWithdraw = pnl < -500; // Ajustar este valor según sea necesario
+                
+                return {
+                  ...trade,
+                  pnl: pnl,
+                  isWithdraw: isWithdraw,
+                  close_time: new Date(trade.close_time)
+                };
+              });
+
+              // Preparar datos para gráfico de evolución de beneficio (empezar siempre desde 0%)
               const tradesByDate = {};
               
               // Agrupar trades por fecha
-              accountTrades.forEach(trade => {
-                const dateKey = new Date(trade.close_time).toDateString();
+              processedTrades.forEach(trade => {
+                const dateKey = trade.close_time.toDateString();
                 if (!tradesByDate[dateKey]) {
                   tradesByDate[dateKey] = [];
                 }
@@ -1712,46 +1727,81 @@ export default function TraderfyApp() {
               // Crear datos ordenados por fecha
               const sortedDates = Object.keys(tradesByDate).sort((a, b) => new Date(a) - new Date(b));
               let cumulativePnL = 0;
+              let cumulativeWithdraws = 0;
               let runningBalance = initialBalance;
-              let peak = initialBalance; // Empezar desde el balance inicial
+              let peak = initialBalance;
               let maxDrawdownPercent = 0;
               
-              const evolutionData = sortedDates.map(dateKey => {
+              // Agregar punto inicial en 0%
+              const evolutionData = [{
+                date: 'Inicio',
+                profitPercent: 0,
+                pnlDollars: 0,
+                balance: initialBalance,
+                peak: initialBalance,
+                isStart: true
+              }];
+              
+              sortedDates.forEach(dateKey => {
                 const dayTrades = tradesByDate[dateKey];
-                const dayPnL = dayTrades.reduce((sum, trade) => sum + parseFloat(trade.pnl), 0);
+                
+                // Separar trades normales de withdraws
+                const normalTrades = dayTrades.filter(t => !t.isWithdraw);
+                const withdrawTrades = dayTrades.filter(t => t.isWithdraw);
+                
+                const dayPnL = normalTrades.reduce((sum, trade) => sum + trade.pnl, 0);
+                const dayWithdraws = withdrawTrades.reduce((sum, trade) => sum + trade.pnl, 0);
                 
                 cumulativePnL += dayPnL;
-                runningBalance = initialBalance + cumulativePnL;
+                cumulativeWithdraws += dayWithdraws;
+                runningBalance = initialBalance + cumulativePnL + cumulativeWithdraws;
                 
-                // Actualizar peak si es necesario
-                if (runningBalance > peak) peak = runningBalance;
+                // Actualizar peak solo con trading normal (sin withdraws)
+                const tradingBalance = initialBalance + cumulativePnL;
+                if (tradingBalance > peak) peak = tradingBalance;
                 
-                // Calcular profit como porcentaje del balance inicial
+                // Calcular profit como porcentaje del balance inicial (sin incluir withdraws)
                 const profitPercent = (cumulativePnL / initialBalance) * 100;
                 
-                return {
+                evolutionData.push({
                   date: new Date(dateKey).toLocaleDateString('es-ES'),
                   profitPercent: profitPercent,
                   pnlDollars: cumulativePnL,
+                  withdraws: cumulativeWithdraws,
                   balance: runningBalance,
-                  peak: peak, // Añadir peak para debugging
-                  dateKey: dateKey
-                };
+                  tradingBalance: tradingBalance,
+                  peak: peak,
+                  dateKey: dateKey,
+                  hasWithdraws: dayWithdraws !== 0
+                });
               });
               
-              // Calcular drawdown correctamente basado en el balance inicial como referencia
-              const drawdownData = evolutionData.map(point => {
-                // Drawdown = (Peak - Current Balance) / Balance Inicial * 100
-                const drawdownPercent = ((peak - point.balance) / initialBalance) * 100;
-                if (drawdownPercent > maxDrawdownPercent) maxDrawdownPercent = drawdownPercent;
+              // Calcular drawdown correctamente (solo basado en trading, sin withdraws)
+              const drawdownData = [];
+              let currentPeak = initialBalance;
+              
+              evolutionData.forEach(point => {
+                const tradingBalance = point.tradingBalance || point.balance;
                 
-                return {
+                // Actualizar peak solo con balance de trading
+                if (tradingBalance > currentPeak) {
+                  currentPeak = tradingBalance;
+                }
+                
+                // Drawdown = (Peak - Current Trading Balance) / Peak * 100 (negativo)
+                const drawdownPercent = currentPeak > 0 ? -((currentPeak - tradingBalance) / currentPeak) * 100 : 0;
+                
+                if (Math.abs(drawdownPercent) > maxDrawdownPercent) {
+                  maxDrawdownPercent = Math.abs(drawdownPercent);
+                }
+                
+                drawdownData.push({
                   date: point.date,
-                  drawdownPercent: -drawdownPercent, // Negativo para mostrar hacia abajo
-                  balance: point.balance,
-                  peak: peak,
-                  dateKey: point.dateKey
-                };
+                  drawdownPercent: drawdownPercent,
+                  balance: tradingBalance,
+                  peak: currentPeak,
+                  hasWithdraws: point.hasWithdraws || false
+                });
               });
               
               // Datos para gráfico de activos operados (sin cambios)
