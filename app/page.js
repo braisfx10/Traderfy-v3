@@ -1687,8 +1687,15 @@ export default function TraderfyApp() {
               const accountTrades = trades.filter(t => t.account_id === selectedAccount.id);
               if (accountTrades.length === 0) return null;
               
-              // Obtener balance inicial de la cuenta (se puede obtener de summary o usar valor por defecto)
-              const initialBalance = selectedAccount.summary?.deposit || 10000; // Default 10k si no hay dato
+              // Obtener balance inicial de la cuenta correctamente
+              // Prioridad: deposit > capital > valor por defecto
+              const initialBalance = selectedAccount.summary?.deposit || 
+                                   selectedAccount.summary?.capital ||
+                                   selectedAccount.summary?.balance ||
+                                   15000; // Default basado en logs del backend
+              
+              console.log('Balance inicial detectado:', initialBalance)
+              console.log('Summary completo:', selectedAccount.summary)
               
               // Preparar datos para gráfico de evolución de beneficio (por fechas y porcentajes)
               const tradesByDate = {};
