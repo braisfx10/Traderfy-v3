@@ -2133,7 +2133,7 @@ export default function TraderfyApp() {
                             <div className="flex justify-between">
                               <span className="text-gray-400">Beneficio Total:</span>
                               <span className={finalProfitPercent >= 0 ? 'text-green-400' : 'text-red-400'}>
-                                {finalProfitPercent.toFixed(2)}% ({beneficioScore.toFixed(1)}/3 pts)
+                                {finalProfitPercent.toFixed(2)}% ({beneficioScore.toFixed(2)}/10 pts)
                               </span>
                             </div>
                             <div className="flex justify-between">
