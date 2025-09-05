@@ -279,12 +279,15 @@ const TradeJournalModal = ({ trade, onClose, onSave }) => {
                         className="hidden"
                         id="exit-upload"
                       />
-                      <Label htmlFor="exit-upload" className="cursor-pointer">
-                        <Button size="sm" variant="outline" className="border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10">
-                          <Upload className="w-4 h-4 mr-2" />
-                          Seleccionar Imagen
-                        </Button>
-                      </Label>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10"
+                        onClick={() => document.getElementById('exit-upload').click()}
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        Seleccionar Imagen
+                      </Button>
                     </div>
                   )}
                 </div>
