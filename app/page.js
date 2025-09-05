@@ -1773,16 +1773,77 @@ export default function TraderfyApp() {
               // Colores para el gráfico circular
               const COLORS = ['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#8B5A2B'];
               
-              // Valoración de trading basada en porcentajes del balance inicial
+              // Valoración de trading con nueva fórmula mejorada
               const finalProfitPercent = evolutionData.length > 0 ? evolutionData[evolutionData.length - 1].profitPercent : 0;
               const winRate = accountTrades.length > 0 ? ((accountTrades.filter(t => t.pnl > 0).length / accountTrades.length) * 100) : 0;
               
-              // Puntuación del 0 al 10 basada en porcentajes del balance inicial
-              const winRateScore = Math.min(4, (winRate / 100) * 4); // Max 4 puntos por winrate
-              const profitScore = finalProfitPercent > 0 ? Math.min(3, (finalProfitPercent / 20) * 3) : 0; // Max 3 puntos por ganancia >20%
-              const drawdownScore = maxDrawdownPercent <= 2 ? 3 : maxDrawdownPercent <= 5 ? 2 : maxDrawdownPercent <= 10 ? 1 : 0; // Max 3 puntos por drawdown bajo
+              console.log('Datos para valoración:', {
+                finalProfitPercent,
+                maxDrawdownPercent,
+                winRate
+              });
               
-              const tradingScore = Math.min(10, winRateScore + profitScore + drawdownScore);
+              // Función para calcular BeneficioScore
+              const calculateBeneficioScore = (beneficio) => {
+                if (beneficio < 8) return 0;
+                if (beneficio >= 13) return 10;
+                if (beneficio >= 8 && beneficio < 13) {
+                  // Escalar linealmente entre 5 y 8
+                  return 5 + ((beneficio - 8) / (13 - 8)) * (8 - 5);
+                }
+                return 0;
+              };
+              
+              // Función para calcular DrawdownScore
+              const calculateDrawdownScore = (drawdown) => {
+                if (drawdown >= 10) return 0;
+                if (drawdown < 4) {
+                  // Escalar linealmente entre 9 y 10
+                  return 9 + ((4 - drawdown) / 4) * (10 - 9);
+                }
+                if (drawdown >= 4 && drawdown < 7) {
+                  // Escalar linealmente entre 6 y 8
+                  return 6 + ((7 - drawdown) / (7 - 4)) * (8 - 6);
+                }
+                if (drawdown >= 7 && drawdown < 10) {
+                  // Escalar linealmente entre 3 y 5
+                  return 3 + ((10 - drawdown) / (10 - 7)) * (5 - 3);
+                }
+                return 0;
+              };
+              
+              // Función para calcular WinRateScore
+              const calculateWinRateScore = (winRate) => {
+                if (winRate < 40) return 2;
+                if (winRate >= 75) {
+                  // Escalar linealmente entre 9 y 10
+                  return 9 + ((winRate - 75) / 25) * (10 - 9);
+                }
+                if (winRate >= 60 && winRate < 75) {
+                  // Escalar linealmente entre 7 y 8
+                  return 7 + ((winRate - 60) / (75 - 60)) * (8 - 7);
+                }
+                if (winRate >= 40 && winRate < 60) {
+                  // Escalar linealmente entre 5 y 7
+                  return 5 + ((winRate - 40) / (60 - 40)) * (7 - 5);
+                }
+                return 2;
+              };
+              
+              // Calcular puntuaciones individuales
+              const beneficioScore = calculateBeneficioScore(Math.abs(finalProfitPercent));
+              const drawdownScore = calculateDrawdownScore(maxDrawdownPercent);
+              const winRateScore = calculateWinRateScore(winRate);
+              
+              // Valoración final con pesos específicos
+              const tradingScore = (beneficioScore * 0.4) + (drawdownScore * 0.4) + (winRateScore * 0.2);
+              
+              console.log('Scores calculados:', {
+                beneficioScore,
+                drawdownScore,
+                winRateScore,
+                tradingScore
+              });
               
               return (
                 <div className="mt-6 space-y-6">
