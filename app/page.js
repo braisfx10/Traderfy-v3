@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import React from 'react'
 import { useAuth } from '../components/AuthProvider'
 import { AuthModal } from '../components/AuthModal'
 import AccountManager from '../components/AccountManager'
