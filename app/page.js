@@ -1216,6 +1216,47 @@ export default function TraderfyApp() {
         { id: '2', name: 'FTMO Challenge 100K', tag: 'Demo', user_id: 'demo' },
         { id: '3', name: 'Prop Firm Live', tag: 'Live', user_id: 'demo' }
       ])
+      
+      // Añadir algunos trades de ejemplo con IDs únicos para poder probar el Journal
+      setTrades([
+        {
+          id: 'trade_demo_1',
+          symbol: 'EURUSD',
+          direction: 'Buy',
+          close_time: '2024-01-15T10:30:00Z',
+          entry_price: 1.0850,
+          close_price: 1.0890,
+          lots: 0.10,
+          pnl: 40.00,
+          account_id: '2',
+          user_id: 'demo'
+        },
+        {
+          id: 'trade_demo_2', 
+          symbol: 'GBPUSD',
+          direction: 'Sell',
+          close_time: '2024-01-15T14:15:00Z',
+          entry_price: 1.2650,
+          close_price: 1.2620,
+          lots: 0.15,
+          pnl: 45.00,
+          account_id: '2',
+          user_id: 'demo'
+        },
+        {
+          id: 'trade_demo_3',
+          symbol: 'AUDUSD', 
+          direction: 'Buy',
+          close_time: '2024-01-16T09:45:00Z',
+          entry_price: 0.6580,
+          close_price: 0.6555,
+          lots: 0.20,
+          pnl: -50.00,
+          account_id: '2',
+          user_id: 'demo'
+        }
+      ])
+      
       setDemoMode(true)
     }
     
