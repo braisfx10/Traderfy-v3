@@ -745,19 +745,74 @@ const TradingCalendar = ({ trades = [], selectedAccount, setSelectedTradeForJour
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-7 gap-1 mb-4">
-            {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(day => (
-              <div key={day} className="text-center text-purple-300 font-medium py-2 text-sm">
-                {day}
+          
+          {/* Vista Anual o Mensual */}
+          {viewMode === 'year' ? (
+            /* Vista Anual - Muestra los 12 meses del año */
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-white text-center mb-4">Año {currentDate.getFullYear()}</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {Array.from({ length: 12 }, (_, monthIndex) => {
+                  const monthDate = new Date(currentDate.getFullYear(), monthIndex, 1)
+                  const monthName = monthNames[monthIndex]
+                  
+                  // Calcular estadísticas del mes
+                  const monthTrades = accountTrades.filter(trade => {
+                    const tradeDate = new Date(trade.close_time)
+                    return tradeDate.getMonth() === monthIndex && tradeDate.getFullYear() === currentDate.getFullYear()
+                  })
+                  
+                  const monthPnL = monthTrades.reduce((sum, trade) => sum + parseFloat(trade.pnl), 0)
+                  const isCurrentMonth = monthIndex === currentDate.getMonth()
+                  
+                  return (
+                    <Card 
+                      key={monthIndex}
+                      className={`cursor-pointer transition-all duration-300 hover:scale-105 ${
+                        isCurrentMonth 
+                          ? 'bg-gradient-to-br from-purple-500/30 to-cyan-500/20 border-purple-400/50' 
+                          : 'bg-gradient-to-br from-slate-800/50 to-slate-700/30 border-slate-600/30 hover:border-purple-400/40'
+                      }`}
+                      onClick={() => {
+                        setCurrentDate(monthDate)
+                        setViewMode('month')
+                      }}
+                    >
+                      <CardContent className="p-4 text-center">
+                        <div className="font-semibold text-white mb-2">{monthName}</div>
+                        <div className="space-y-1">
+                          <div className="text-sm text-gray-300">{monthTrades.length} trades</div>
+                          <div className={`text-lg font-bold ${
+                            monthPnL > 0 ? 'text-green-400' : 
+                            monthPnL < 0 ? 'text-red-400' : 'text-gray-400'
+                          }`}>
+                            ${monthPnL.toFixed(2)}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-7 gap-1">
-            {Array.from({ length: startingDayOfWeek }, (_, i) => (
-              <div key={`empty-${i}`} className="min-h-[80px]" />
-            ))}
-            {Array.from({ length: daysInMonth }, (_, i) => renderCalendarDay(i + 1))}
-          </div>
+            </div>
+          ) : (
+            /* Vista Mensual - Calendario tradicional */
+            <div className="space-y-4">
+              <div className="grid grid-cols-7 gap-1 mb-4">
+                {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(day => (
+                  <div key={day} className="text-center text-purple-300 font-medium py-2 text-sm">
+                    {day}
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-7 gap-1">
+                {Array.from({ length: startingDayOfWeek }, (_, i) => (
+                  <div key={`empty-${i}`} className="min-h-[80px]" />
+                ))}
+                {Array.from({ length: daysInMonth }, (_, i) => renderCalendarDay(i + 1))}
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
