@@ -1501,19 +1501,36 @@ export default function TraderfyApp() {
     
     // Actualizar la cuenta seleccionada con la información del summary
     if (data.summary && selectedAccount) {
-      setAccounts(prevAccounts => 
-        prevAccounts.map(account => 
-          account.id === selectedAccount.id 
-            ? { ...account, summary: data.summary }
-            : account
-        )
+      const updatedAccounts = accounts.map(account => 
+        account.id === selectedAccount.id 
+          ? { 
+              ...account, 
+              summary: data.summary,
+              trades: [...(account.trades || []), ...data.trades],
+              withdraws: [...(account.withdraws || []), ...(data.withdraws || [])]
+            }
+          : account
       )
       
-      // También actualizar selectedAccount directamente
-      setSelectedAccount(prev => ({ ...prev, summary: data.summary }))
+      // Guardar en localStorage
+      localStorage.setItem('accounts', JSON.stringify(updatedAccounts))
       
-      console.log('Updated account with summary:', {
+      // Actualizar estados
+      setAccounts(updatedAccounts)
+      
+      // También actualizar selectedAccount directamente
+      const updatedSelectedAccount = {
+        ...selectedAccount, 
+        summary: data.summary,
+        trades: [...(selectedAccount.trades || []), ...data.trades],
+        withdraws: [...(selectedAccount.withdraws || []), ...(data.withdraws || [])]
+      }
+      setSelectedAccount(updatedSelectedAccount)
+      
+      console.log('Updated and saved account with MT5 data:', {
         accountId: selectedAccount.id,
+        tradesCount: updatedSelectedAccount.trades?.length || 0,
+        withdrawsCount: updatedSelectedAccount.withdraws?.length || 0,
         deposit: data.summary.deposit,
         balance: data.summary.balance,
         realizedPnl: data.summary.realizedPnl
