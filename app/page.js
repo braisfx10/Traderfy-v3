@@ -20,7 +20,7 @@ import {
   Upload, 
   BarChart3, 
   Settings, 
-  PieChart, 
+  PieChart as PieChartIcon, 
   Target,
   AlertTriangle,
   Menu,
