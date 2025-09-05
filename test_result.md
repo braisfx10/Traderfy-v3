@@ -330,9 +330,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "ProfitScore/BeneficioScore Fix"
-    - "Score Calculations Integrity"
-    - "Data Flow from HTML to Metrics"
+    - "New Valoración Formula Implementation"
+    - "Withdraw Detection Logic"
+    - "Improved Chart Data Processing"
+    - "Chart Mathematical Accuracy"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
