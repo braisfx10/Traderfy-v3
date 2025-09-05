@@ -1488,6 +1488,7 @@ export default function TraderfyApp() {
   const handleUploadSuccess = (data) => {
     console.log('handleUploadSuccess called with:', data)
     console.log('Number of trades to add:', data.trades?.length)
+    console.log('Summary data:', data.summary)
     
     // Agregar los nuevos trades al estado global
     setTrades(prevTrades => {
@@ -1497,6 +1498,27 @@ export default function TraderfyApp() {
       console.log('Sample trade:', data.trades[0])
       return newTrades
     })
+    
+    // Actualizar la cuenta seleccionada con la información del summary
+    if (data.summary && selectedAccount) {
+      setAccounts(prevAccounts => 
+        prevAccounts.map(account => 
+          account.id === selectedAccount.id 
+            ? { ...account, summary: data.summary }
+            : account
+        )
+      )
+      
+      // También actualizar selectedAccount directamente
+      setSelectedAccount(prev => ({ ...prev, summary: data.summary }))
+      
+      console.log('Updated account with summary:', {
+        accountId: selectedAccount.id,
+        deposit: data.summary.deposit,
+        balance: data.summary.balance,
+        realizedPnl: data.summary.realizedPnl
+      })
+    }
     
     // Navegar al calendario para ver los nuevos datos
     if (currentView !== 'panel-calendar') {
