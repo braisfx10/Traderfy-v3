@@ -796,20 +796,74 @@ const TradingCalendar = ({ trades = [], selectedAccount, setSelectedTradeForJour
               </div>
             </div>
           ) : (
-            /* Vista Mensual - Calendario tradicional */
+            /* Vista Mensual - Calendario tradicional con resúmenes semanales */
             <div className="space-y-4">
-              <div className="grid grid-cols-7 gap-1 mb-4">
-                {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(day => (
+              <div className="grid grid-cols-8 gap-1 mb-4">
+                {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Semana'].map(day => (
                   <div key={day} className="text-center text-purple-300 font-medium py-2 text-sm">
                     {day}
                   </div>
                 ))}
               </div>
-              <div className="grid grid-cols-7 gap-1">
-                {Array.from({ length: startingDayOfWeek }, (_, i) => (
-                  <div key={`empty-${i}`} className="min-h-[80px]" />
-                ))}
-                {Array.from({ length: daysInMonth }, (_, i) => renderCalendarDay(i + 1))}
+              <div className="grid grid-cols-8 gap-1">
+                {/* Calcular semanas del mes */}
+                {(() => {
+                  const weeks = []
+                  let currentWeek = []
+                  
+                  // Añadir días vacíos del inicio
+                  for (let i = 0; i < startingDayOfWeek; i++) {
+                    currentWeek.push(null)
+                  }
+                  
+                  // Añadir días del mes
+                  for (let day = 1; day <= daysInMonth; day++) {
+                    currentWeek.push(day)
+                    
+                    // Si completamos la semana o es el último día
+                    if (currentWeek.length === 7 || day === daysInMonth) {
+                      // Completar semana con nulls si es necesario
+                      while (currentWeek.length < 7) {
+                        currentWeek.push(null)
+                      }
+                      weeks.push([...currentWeek])
+                      currentWeek = []
+                    }
+                  }
+                  
+                  return weeks.map((week, weekIndex) => {
+                    // Calcular estadísticas de la semana
+                    const weekTrades = week.filter(day => day !== null).flatMap(day => {
+                      const dateKey = new Date(currentDate.getFullYear(), currentDate.getMonth(), day).toDateString()
+                      return tradesByDay[dateKey]?.trades || []
+                    })
+                    
+                    const weekPnL = weekTrades.reduce((sum, trade) => sum + parseFloat(trade.pnl), 0)
+                    
+                    return (
+                      <React.Fragment key={weekIndex}>
+                        {/* Días de la semana */}
+                        {week.map((day, dayIndex) => (
+                          <div key={`${weekIndex}-${dayIndex}`}>
+                            {day ? renderCalendarDay(day) : <div className="min-h-[80px]" />}
+                          </div>
+                        ))}
+                        
+                        {/* Resumen semanal */}
+                        <div className="min-h-[80px] p-2 bg-gradient-to-br from-indigo-900/30 to-purple-900/20 border border-indigo-500/30 rounded-lg flex flex-col justify-center items-center">
+                          <div className="text-xs text-indigo-200/70 mb-1">Semana {weekIndex + 1}</div>
+                          <div className="text-sm text-white font-medium">{weekTrades.length} trades</div>
+                          <div className={`text-sm font-bold ${
+                            weekPnL > 0 ? 'text-green-400' : 
+                            weekPnL < 0 ? 'text-red-400' : 'text-gray-400'
+                          }`}>
+                            ${weekPnL.toFixed(2)}
+                          </div>
+                        </div>
+                      </React.Fragment>
+                    )
+                  })
+                })()}
               </div>
             </div>
           )}
