@@ -1764,16 +1764,15 @@ export default function TraderfyApp() {
               sortedDates.forEach(dateKey => {
                 const dayTrades = tradesByDate[dateKey];
                 
-                // Separar trades normales de withdraws
-                const normalTrades = dayTrades.filter(t => !t.isWithdraw);
-                const withdrawTrades = dayTrades.filter(t => t.isWithdraw);
+                // Separar trades normales de withdraws (ya no hay withdraws en trades)
+                const normalTrades = dayTrades; // Todos los trades son normales
+                const dayWithdraws = withdrawDateMap[dateKey] ? withdrawDateMap[dateKey].reduce((sum, w) => sum + w.amount, 0) : 0;
                 
                 const dayPnL = normalTrades.reduce((sum, trade) => sum + trade.pnl, 0);
-                const dayWithdraws = withdrawTrades.reduce((sum, trade) => sum + trade.pnl, 0);
                 
                 cumulativePnL += dayPnL;
-                cumulativeWithdraws += dayWithdraws;
-                runningBalance = initialBalance + cumulativePnL + cumulativeWithdraws;
+                // No sumar withdraws al P&L acumulativo
+                runningBalance = initialBalance + cumulativePnL;
                 
                 // Actualizar peak solo con trading normal (sin withdraws)
                 const tradingBalance = initialBalance + cumulativePnL;
@@ -1786,12 +1785,12 @@ export default function TraderfyApp() {
                   date: new Date(dateKey).toLocaleDateString('es-ES'),
                   profitPercent: profitPercent,
                   pnlDollars: cumulativePnL,
-                  withdraws: cumulativeWithdraws,
+                  withdraws: dayWithdraws,
                   balance: runningBalance,
                   tradingBalance: tradingBalance,
                   peak: peak,
                   dateKey: dateKey,
-                  hasWithdraws: dayWithdraws !== 0
+                  hasWithdraws: dayWithdraws > 0
                 });
               });
               
