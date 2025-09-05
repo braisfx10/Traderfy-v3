@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Backend Test Suite for Traderfy HTML Parser Functionality
-Tests the HTML parser, API endpoints, and data flow for trading report uploads.
+Backend Test Suite for Traderfy - ProfitScore/BeneficioScore Fix Testing
+Tests the HTML parser, API endpoints, score calculations, and data flow.
+Focus: Testing the recently fixed profitScore/beneficioScore issue.
 """
 
 import requests
@@ -9,6 +10,7 @@ import json
 import sys
 import os
 from datetime import datetime
+from pathlib import Path
 
 # Configuration
 BASE_URL = os.getenv('NEXT_PUBLIC_BASE_URL', 'https://trading-metrics-4.preview.emergentagent.com')
