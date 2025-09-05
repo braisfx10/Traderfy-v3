@@ -1,68 +1,67 @@
 <analysis>
-The AI engineer successfully bootstrapped the Traderfy platform, initiating with complex HTML report parsing via Cheerio and building a Next.js frontend with Shadcn/ui and Tailwind. The trajectory details a highly iterative development process, first addressing core functionality (like a broken symbol filter) and UI design consistency, aligning with user's specific dark theme and purple-cyan accents. Subsequently, the focus shifted to implementing significant new features: a Supabase Auth-based login/registration system, custom account labels with dynamic colors, an advanced role-based system (Mentor/Alumno) with dedicated management UIs, and a trade journaling feature complete with image uploads and notes.
+The trajectory details the development of Traderfy by an AI engineer, starting from an MVP and iteratively adding complex features. The process was highly reactive to user feedback, involving frequent bug fixes and feature enhancements. Key initial challenges included a persistent infinite loading state bug in the Next.js frontend, which the AI engineer debugged multiple times, alongside integrating Supabase for authentication, custom account labels, and role-based management. The engineer also implemented a trade journaling system with image uploads and refined UI elements.
 
-A recurring and persistent challenge throughout the development was an infinite loading state bug in the frontend, often surfacing after code modifications, which repeatedly hindered testing and full verification of new functionalities. The engineer made numerous attempts to debug and resolve this -related issue in , while simultaneously integrating complex new features and refining the user interface based on continuous user feedback and bug reports. The last action in the trajectory was a final attempt to fix this persistent loading issue.
+Recurring themes included debugging  dependencies, handling demo mode logic for Supabase-dependent features, and precisely interpreting user requirements, especially concerning UI layouts and data calculations. The process involved extensive file modifications, primarily in  (the main application logic) and , , and  (for authentication and feature components). The engineer successfully addressed issues like account creation in demo mode, journal image uploads (after multiple user reports), calendar functionalities, and chart calculations, culminating in fixing the drawdown evolution and preparing to implement a complex new valuation formula.
 </analysis>
 
 <product_requirements>
-The user requested Traderfy, a web platform for traders to manage trading history, process HTML reports (MetaTrader 4/5, cTrader), calculate metrics, and provide journaling and advanced analysis. Key requirements include user authentication with roles (Admin, Mentor, Trader, Alumno) via Supabase, a responsive dark-themed UI (lila/cian accents, DD/MM/YYYY dates, USD currency), and data export. Core sections specified are Trading Calendar, Trading History, Performance by Symbol, Analytics Dashboard, Progress Tracker Rules, and Trading Portfolio with account management.
+Traderfy is a web platform for traders to manage trading history, process HTML reports (MetaTrader 4/5, cTrader), calculate metrics, and provide journaling and advanced analysis.
+**Core Requirements:**
+*   User authentication with roles (Admin, Mentor, Trader, Alumno) via Supabase.
+*   Responsive dark-themed UI with lila/cyan accents, DD/MM/YYYY dates, USD currency.
+*   Data export functionality.
+*   Key sections: Trading Calendar, Trading History, Performance by Symbol, Analytics Dashboard, Progress Tracker Rules, Trading Portfolio with account management.
 
 **Implementation Done So Far:**
--   A Next.js frontend with a collapsible sidebar, account overview, and sub-sections (Summary, Calendar, Operations, Analysis) featuring a consistent dark theme and purple-cyan gradients.
--   A robust HTML parser using Cheerio for extracting trade data and summary financial metrics from MetaTrader reports.
--   Placeholder Supabase integration with detailed setup instructions, including initial table schemas and RLS policies.
--   Functional display of metrics in the Summary section, and a Calendar with a working modal for day-specific trade details. The Operaciones table is present.
--   **New additions during the trajectory:** Supabase Auth for login/registration (with demo mode), custom labels for accounts (FTMO, Bullfy, etc., with dynamic colors and separate  table), advanced roles (Mentor/Alumno) with  table and dedicated UI (, ), and a trade journaling system in Operaciones allowing screenshot uploads and notes, integrated with calendar trade details.
+*   Next.js frontend with collapsible sidebar, account overview, and sub-sections (Summary, Calendar, Operations, Analysis) in a consistent dark theme.
+*   HTML parser using Cheerio for MetaTrader reports.
+*   Supabase integration (auth, database, RLS) with demo mode fallback for unconfigured environments.
+*   Functional metrics display in Summary, Calendar with trade details modal, and an Operaciones table.
+*   **Features added/modified during trajectory:**
+    *   Supabase Auth for login/registration with demo mode.
+    *   Custom account labels (FTMO, Bullfy) with dynamic colors.
+    *   Role-based system (Mentor/Alumno) with  table and UIs (, ).
+    *   Trade journaling system (in Operaciones and Calendar) with screenshot uploads and notes.
+    *   Account rules section for Max Trades/Day, Max Daily Loss, Max Risk/Operation, Operating Hours.
+    *   Improved Calendar: Monthly stats table, weekly summary, annual view.
+    *   Advanced charts in Account Panel > Summary: Profit/Drawdown evolution (percentage-based), Assets Operated (pie chart), Trading Valuation (custom formula).
+    *   Mi Mentor renamed to Mentor.
+    *   Time zone correction for Mejores horas de trading (London to Spain +1hr).
+    *   Corrected sorting for Rendimiento por día de la semana.
 </product_requirements>
 
 <key_technical_concepts>
--   **Next.js:** Frontend and backend framework.
--   **React:** UI library for building interactive components.
--   **Supabase:** Backend-as-a-Service for authentication (Auth) and database (RLS for access control).
--   **Tailwind CSS & Shadcn/ui:** Styling and UI component library for responsive design and theming.
--   **Cheerio:** Server-side HTML parsing for extracting data from MetaTrader reports.
--   **:** Used for persistence in demo mode when Supabase is not configured.
+-   **Next.js:** Full-stack framework (frontend/backend).
+-   **React:** UI library for components.
+-   **Supabase:** Auth, database, RLS policies.
+-   **Tailwind CSS & Shadcn/ui:** Styling and UI components.
+-   **Cheerio:** Server-side HTML parsing.
+-   **:** Demo mode data persistence.
+-   **Recharts:** React charting library.
+-   ** & :** React hooks for state and side effects, central to debugging.
 </key_technical_concepts>
 
 <code_architecture>
 AuthProviderlabelsaccount_labelsmentorships
+
 **File Summaries and Changes:**
--   ****: Central component managing all major application views, state, and data flow. It was extensively modified to:
-    *   Integrate  and .
-    *   Refactor the Operaciones filter into .
-    *   Implement and display , , , and .
-    *   Apply numerous design harmonizations to cards, inputs, and modals.
-    *   Host complex  and  logic, which has been the source of a persistent loading bug.
--   ****: Modified to wrap the entire application with  to provide authentication context.
--   ****: Created by extracting the table and filter logic from . It now includes the trade journaling button and modal.
--   ****: New component for user authentication. Its input field styles were fixed for better contrast.
--   ****: New context provider for Supabase authentication. Modified to gracefully handle unconfigured Supabase.
--   ****: New service for custom label management, updated to support  in demo mode.
--   ****: New modal component for recording trade analysis, screenshots, and notes.
--   ****: New SQL script containing DDL and RLS for , , and  tables.
--   ****: New Markdown file providing instructions for Supabase database migrations.
+-   ****: This is the central hub. It was repeatedly modified to fix the infinite loading bug by synchronizing  and  states. It now handles the main navigation, renders , , , and the new chart components. Changes include moving  to the main scope, modifying  to support clickable labels, implementing monthly stats, weekly summaries, and annual view for the calendar, adding Recharts imports, and integrating chart data processing. The  function was also updated to correctly store account summary data, especially the .
+-   ****: Modified to introduce Trading Rules fields (max trades, max loss, etc.) and adapt CRUD operations (, , , , ) to use  for persistence in demo mode when Supabase is unavailable.
+-   ****: Heavily modified to fix image upload issues (ensuring buttons correctly trigger file inputs and image data is stored), and to ensure the  function persists journal entries to . Unique IDs are now generated for trades to facilitate journal saving.
+-   ****: Updated to include  fallback for label CRUD operations in demo mode.
 </code_architecture>
 
 <pending_tasks>
--   Resolve the persistent infinite loading state bug in the frontend, which continuously prevents the application from fully rendering beyond the initial loading screen.
--   Verify that the custom labels, role-based sections (Alumnos, Mi Mentor), and the trade journaling feature are correctly displayed and fully functional once the loading issue is resolved.
--   Ensure that the trade journaling modal's integration with calendar trade details functions as expected.
+-   Implement the new, complex formula for Valoración de Trading as specified by the user (BeneficioScore, DrawdownScore, WinRateScore with linear scaling and thresholds).
+-   Verify that the Evolución de Drawdown chart correctly calculates and displays values starting from the initial balance, as the user reported it was not.
 </pending_tasks>
 
 <current_work>
-Immediately before this summary request, the AI engineer was actively engaged in fixing a critical and persistent infinite loading state bug within the frontend. This issue caused the application to get stuck on a Cargando... screen, preventing access to the main UI and newly implemented features.
+Immediately before this summary request, the AI engineer was addressing a critical bug reported by the user regarding the Evolución de Drawdown chart not calculating correctly from the initial balance. The previous step involved debugging the drawdown calculation logic in , specifically around lines 1715-1735, where the  variable used for calculating drawdown was being incorrectly initialized and referenced. The engineer identified and fixed issues in how  interacted with  and the subsequent percentage calculation.
 
-Prior to addressing this loading bug, the AI engineer had completed the following tasks, which were explicitly requested by the user:
-1.  **Corrected AuthModal Input Field Styles:** The input fields for email, password, and confirmation in  were updated to have better contrast, making text visible when typing (e.g., changing background from white to a darker slate tone).
-2.  **Resolved Label Creation Error in Demo Mode:** The  was modified to include a fallback mechanism using , allowing users to create, edit, and delete custom account labels even when Supabase environment variables are not fully configured.
-3.  **Implemented Trade Journaling System:**
-    *   A new component, , was created to provide a dedicated interface for recording trade notes and uploading pre/post-trade analysis screenshots.
-    *   An Acciones column in the Operaciones table (within  in ) was enhanced with a Journal button, identifiable by a  icon.
-    *   The necessary state management and integration logic were added to  to correctly display and interact with the .
-
-Despite the successful implementation of these features, a test (Chat 405) showed the Cargando... issue reoccurring. The AI engineer's last action was yet another attempt to simplify and correct the  logic in  to eliminate this infinite loading loop.
+The engineer had just successfully compiled the code after making these corrections to the drawdown calculation. The next immediate step planned was to implement a new, more sophisticated Valoración de Trading formula as explicitly requested by the user. This formula involves calculating BeneficioScore, DrawdownScore, and WinRateScore using linear scaling and specific thresholds, then combining them with weighted factors (40%, 40%, 20%).
 </current_work>
 
 <optional_next_step>
-The next step is to test the application again to verify if the latest fix for the infinite loading state was successful.
+Implement the new, complex Valoración de Trading formula in .
 </optional_next_step>

@@ -1352,8 +1352,8 @@ const ConfigurationAlert = ({ showToast }) => {
                 <li>Copia la Project URL y Anon Key</li>
                 <li>Agrega estas URLs a Authentication → URL Configuration:
                   <ul className="list-disc list-inside ml-4 mt-1">
-                    <li>https://tradestat-hub.preview.emergentagent.com/**</li>
-                    <li>https://tradestat-hub.preview.emergentagent.com/auth/callback</li>
+                    <li>https://trading-metrics-4.preview.emergentagent.com/**</li>
+                    <li>https://trading-metrics-4.preview.emergentagent.com/auth/callback</li>
                   </ul>
                 </li>
                 <li>Actualiza el archivo .env con tus credenciales</li>
