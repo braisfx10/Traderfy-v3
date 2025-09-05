@@ -559,6 +559,7 @@ const Sidebar = ({
 const TradingCalendar = ({ trades = [], selectedAccount, setSelectedTradeForJournal }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDay, setSelectedDay] = useState(null)
+  const [viewMode, setViewMode] = useState('month') // 'month' o 'year'
   
   // Debug: Log para ver qué trades llegan
   console.log('TradingCalendar - trades received:', trades.length)
@@ -581,6 +582,39 @@ const TradingCalendar = ({ trades = [], selectedAccount, setSelectedTradeForJour
     acc[date].totalPnl += parseFloat(trade.pnl) || 0
     return acc
   }, {})
+
+  // Calcular estadísticas mensuales
+  const calculateMonthlyStats = () => {
+    const currentMonth = currentDate.getMonth()
+    const currentYear = currentDate.getFullYear()
+    
+    // Filtrar trades del mes actual
+    const monthlyTrades = accountTrades.filter(trade => {
+      const tradeDate = new Date(trade.close_time)
+      return tradeDate.getMonth() === currentMonth && tradeDate.getFullYear() === currentYear
+    })
+    
+    const totalPnL = monthlyTrades.reduce((sum, trade) => sum + parseFloat(trade.pnl), 0)
+    const winningDays = Object.values(tradesByDay).filter(day => {
+      const dayDate = new Date(Object.keys(tradesByDay).find(date => tradesByDay[date] === day))
+      return dayDate.getMonth() === currentMonth && dayDate.getFullYear() === currentYear && day.totalPnl > 0
+    }).length
+    
+    const losingDays = Object.values(tradesByDay).filter(day => {
+      const dayDate = new Date(Object.keys(tradesByDay).find(date => tradesByDay[date] === day))
+      return dayDate.getMonth() === currentMonth && dayDate.getFullYear() === currentYear && day.totalPnl < 0
+    }).length
+    
+    return {
+      totalTrades: monthlyTrades.length,
+      totalPnL,
+      winningDays,
+      losingDays,
+      monthlyTrades
+    }
+  }
+
+  const monthlyStats = calculateMonthlyStats()
 
   console.log('TradingCalendar - tradesByDay:', Object.keys(tradesByDay).length, 'days with trades')
 
