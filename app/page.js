@@ -2139,7 +2139,7 @@ export default function TraderfyApp() {
                             <div className="flex justify-between">
                               <span className="text-gray-400">Drawdown Máximo:</span>
                               <span className={maxDrawdownPercent <= 5 ? 'text-green-400' : 'text-red-400'}>
-                                {maxDrawdownPercent.toFixed(2)}% ({drawdownScore}/3 pts)
+                                {maxDrawdownPercent.toFixed(2)}% ({drawdownScore.toFixed(2)}/10 pts)
                               </span>
                             </div>
                             <div className="mt-4 pt-2 border-t border-cyan-500/30">
