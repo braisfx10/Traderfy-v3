@@ -1713,7 +1713,7 @@ export default function TraderfyApp() {
               const sortedDates = Object.keys(tradesByDate).sort((a, b) => new Date(a) - new Date(b));
               let cumulativePnL = 0;
               let runningBalance = initialBalance;
-              let peak = initialBalance;
+              let peak = initialBalance; // Empezar desde el balance inicial
               let maxDrawdownPercent = 0;
               
               const evolutionData = sortedDates.map(dateKey => {
@@ -1723,6 +1723,9 @@ export default function TraderfyApp() {
                 cumulativePnL += dayPnL;
                 runningBalance = initialBalance + cumulativePnL;
                 
+                // Actualizar peak si es necesario
+                if (runningBalance > peak) peak = runningBalance;
+                
                 // Calcular profit como porcentaje del balance inicial
                 const profitPercent = (cumulativePnL / initialBalance) * 100;
                 
@@ -1731,20 +1734,22 @@ export default function TraderfyApp() {
                   profitPercent: profitPercent,
                   pnlDollars: cumulativePnL,
                   balance: runningBalance,
+                  peak: peak, // Añadir peak para debugging
                   dateKey: dateKey
                 };
               });
               
-              // Calcular drawdown correctamente basado en porcentajes
+              // Calcular drawdown correctamente basado en el balance inicial como referencia
               const drawdownData = evolutionData.map(point => {
-                if (point.balance > peak) peak = point.balance;
-                const drawdownPercent = peak > initialBalance ? ((peak - point.balance) / initialBalance) * 100 : 0;
+                // Drawdown = (Peak - Current Balance) / Balance Inicial * 100
+                const drawdownPercent = ((peak - point.balance) / initialBalance) * 100;
                 if (drawdownPercent > maxDrawdownPercent) maxDrawdownPercent = drawdownPercent;
                 
                 return {
                   date: point.date,
                   drawdownPercent: -drawdownPercent, // Negativo para mostrar hacia abajo
                   balance: point.balance,
+                  peak: peak,
                   dateKey: point.dateKey
                 };
               });
