@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 """
-Backend Test Suite for Traderfy - ProfitScore/BeneficioScore Fix Testing
-Tests the HTML parser, API endpoints, score calculations, and data flow.
-Focus: Testing the recently fixed profitScore/beneficioScore issue.
+Backend Test Suite for Trading Application - Recent Improvements Testing
+Tests the following recent improvements:
+1. Improved Valoración Display (2 decimals, correct /10 pts scale)
+2. MetaTrader 5 Parser (MT5 HTML parser with Posiciones/Transacciones)
+3. Withdraw Detection Logic (improved threshold -$200 or 3x average loss)
+4. Chart Data Processing (evolution from 0%, drawdown calculations, assets percentages)
+5. Decimal Formatting (valoración scores limited to 2 decimal places)
+
+Focus: Testing all recent improvements mentioned in the review request.
 """
 
 import requests
