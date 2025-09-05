@@ -213,6 +213,54 @@ backend:
         - agent: "testing"
         - comment: "TESTED: Account ID assignment working correctly. Fixed issue in API where account_id was not being assigned in demo mode. Now all trades receive the correct account_id from the request. Frontend HTMLUploader passes selectedAccount.id correctly. All trades also get user_id: 'demo' in demo mode."
 
+  - task: "ProfitScore/BeneficioScore Fix"
+    implemented: true
+    working: true
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+        - agent: "main"
+        - comment: "CRITICAL BUG: ReferenceError 'Can't find variable: profitScore' in line 2039 preventing access to account summary section"
+        - working: true
+        - agent: "main"
+        - comment: "FIXED: Changed line 2039 from profitScore.toFixed(1) to beneficioScore.toFixed(1). The beneficioScore variable was correctly calculated but profitScore was undefined."
+        - working: true
+        - agent: "testing"
+        - comment: "VERIFIED: Fix working correctly. BeneficioScore variable properly defined and formatted (-0.23% (0.0/3 pts)). All score calculations (beneficio: 0.0, drawdown: 3.0, winRate: 1.0, trading: 1.40) work without undefined variables. JavaScript error prevention confirmed - no ReferenceError occurs."
+
+  - task: "Score Calculations Integrity"
+    implemented: true
+    working: true
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "Need to verify beneficioScore, drawdownScore, and winRateScore calculations work correctly after the profitScore fix"
+        - working: true
+        - agent: "testing"
+        - comment: "TESTED: All score calculations working correctly. BeneficioScore calculation function works (0.0 for profit < 8%), DrawdownScore (3.0 for drawdown <= 5%), WinRateScore (1.0 for winRate < 40%), and final TradingScore (1.40) all calculated without errors. Complete calculation chain verified."
+
+  - task: "Data Flow from HTML to Metrics"
+    implemented: true
+    working: true
+    file: "/app/app/api/[[...path]]/route.js, /app/lib/htmlParser.js, /app/app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "Need to test complete flow from HTML upload to metric calculations ensuring no variables are undefined"
+        - working: true
+        - agent: "testing"
+        - comment: "TESTED: Complete data flow working correctly. HTML parser extracts trades (3 trades from test-report.html), API processes uploads successfully, account_id assignment works, and metric calculations complete without undefined variables. The critical line 2039 fix prevents JavaScript errors in the display formatting."
+
 frontend:
   - task: "HTML Upload Component"
     implemented: true
