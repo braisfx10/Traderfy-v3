@@ -43,6 +43,7 @@ import {
   Users,
   BookOpen
 } from 'lucide-react'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts'
 
 // Estado global de la aplicación
 const useAppState = () => {
