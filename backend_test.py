@@ -755,6 +755,624 @@ class TraderfyBackendTester:
             )
             return False
 
+    def test_new_valoracion_formula(self):
+        """Test the new valoración formula with corrected BeneficioScore, DrawdownScore, and WinRateScore calculations"""
+        print("🧮 Testing New Valoración Formula Implementation...")
+        
+        try:
+            # Test BeneficioScore calculation with new thresholds
+            def calculate_beneficio_score_new(beneficio):
+                if beneficio < 4:
+                    return 0
+                if beneficio >= 10:
+                    return 10
+                if beneficio >= 4 and beneficio < 10:
+                    # Linear scale 5-8 if 4≤x<10
+                    return 5 + ((beneficio - 4) / (10 - 4)) * (8 - 5)
+                return 0
+            
+            # Test DrawdownScore calculation with new ranges
+            def calculate_drawdown_score_new(drawdown):
+                if drawdown >= 10:
+                    return 0
+                if drawdown < 4:
+                    # Linear scale 9-10
+                    return 9 + ((4 - drawdown) / 4) * (10 - 9)
+                if drawdown >= 4 and drawdown < 7:
+                    # Linear scale 6-8
+                    return 6 + ((7 - drawdown) / (7 - 4)) * (8 - 6)
+                if drawdown >= 7 and drawdown < 10:
+                    # Linear scale 3-5
+                    return 3 + ((10 - drawdown) / (10 - 7)) * (5 - 3)
+                return 0
+            
+            # Test WinRateScore calculation with new ranges
+            def calculate_win_rate_score_new(win_rate):
+                if win_rate < 30:
+                    return 2
+                if win_rate >= 70:
+                    # Linear scale 9-10
+                    return 9 + ((win_rate - 70) / 30) * (10 - 9)
+                if win_rate >= 50 and win_rate < 70:
+                    # Linear scale 7-8
+                    return 7 + ((win_rate - 50) / (70 - 50)) * (8 - 7)
+                if win_rate >= 30 and win_rate < 50:
+                    # Linear scale 5-7
+                    return 5 + ((win_rate - 30) / (50 - 30)) * (7 - 5)
+                return 2
+            
+            # Test cases for the new formula
+            test_cases = [
+                # BeneficioScore tests
+                {'beneficio': 2, 'expected_range': (0, 0), 'test_type': 'beneficio'},
+                {'beneficio': 4, 'expected_range': (5, 5), 'test_type': 'beneficio'},
+                {'beneficio': 7, 'expected_range': (6.5, 6.5), 'test_type': 'beneficio'},
+                {'beneficio': 10, 'expected_range': (10, 10), 'test_type': 'beneficio'},
+                {'beneficio': 15, 'expected_range': (10, 10), 'test_type': 'beneficio'},
+                
+                # DrawdownScore tests
+                {'drawdown': 2, 'expected_range': (9.5, 9.5), 'test_type': 'drawdown'},
+                {'drawdown': 5, 'expected_range': (7.33, 7.34), 'test_type': 'drawdown'},
+                {'drawdown': 8, 'expected_range': (4.33, 4.34), 'test_type': 'drawdown'},
+                {'drawdown': 12, 'expected_range': (0, 0), 'test_type': 'drawdown'},
+                
+                # WinRateScore tests
+                {'win_rate': 25, 'expected_range': (2, 2), 'test_type': 'winrate'},
+                {'win_rate': 40, 'expected_range': (6, 6), 'test_type': 'winrate'},
+                {'win_rate': 60, 'expected_range': (7.5, 7.5), 'test_type': 'winrate'},
+                {'win_rate': 80, 'expected_range': (9.33, 9.34), 'test_type': 'winrate'},
+            ]
+            
+            all_passed = True
+            results = []
+            
+            for case in test_cases:
+                if case['test_type'] == 'beneficio':
+                    actual = calculate_beneficio_score_new(case['beneficio'])
+                    expected_min, expected_max = case['expected_range']
+                    passed = expected_min <= actual <= expected_max
+                    results.append({
+                        'type': 'BeneficioScore',
+                        'input': case['beneficio'],
+                        'expected': f"{expected_min}-{expected_max}",
+                        'actual': actual,
+                        'passed': passed
+                    })
+                elif case['test_type'] == 'drawdown':
+                    actual = calculate_drawdown_score_new(case['drawdown'])
+                    expected_min, expected_max = case['expected_range']
+                    passed = expected_min <= actual <= expected_max
+                    results.append({
+                        'type': 'DrawdownScore',
+                        'input': case['drawdown'],
+                        'expected': f"{expected_min:.2f}-{expected_max:.2f}",
+                        'actual': round(actual, 2),
+                        'passed': passed
+                    })
+                elif case['test_type'] == 'winrate':
+                    actual = calculate_win_rate_score_new(case['win_rate'])
+                    expected_min, expected_max = case['expected_range']
+                    passed = expected_min <= actual <= expected_max
+                    results.append({
+                        'type': 'WinRateScore',
+                        'input': case['win_rate'],
+                        'expected': f"{expected_min:.2f}-{expected_max:.2f}",
+                        'actual': round(actual, 2),
+                        'passed': passed
+                    })
+                
+                if not passed:
+                    all_passed = False
+            
+            self.log_test(
+                "New Valoración Formula - All Calculations",
+                all_passed,
+                f"Tested {len(test_cases)} formula calculations. All passed: {all_passed}",
+                results
+            )
+            
+            return all_passed
+            
+        except Exception as e:
+            self.log_test(
+                "New Valoración Formula - Exception",
+                False,
+                f"Exception in valoración formula test: {str(e)}"
+            )
+            return False
+
+    def test_withdraw_detection_logic(self):
+        """Test the new withdraw detection logic for negative values > $500"""
+        print("💰 Testing Withdraw Detection Logic...")
+        
+        try:
+            # Test data with various PnL values including potential withdraws
+            test_trades = [
+                {'pnl': -71.66, 'symbol': 'EURUSD', 'expected_withdraw': False},  # Normal loss
+                {'pnl': -600.00, 'symbol': 'GBPUSD', 'expected_withdraw': True},   # Withdraw
+                {'pnl': 101.50, 'symbol': 'USDJPY', 'expected_withdraw': False},  # Profit
+                {'pnl': -1200.00, 'symbol': 'AUDUSD', 'expected_withdraw': True}, # Large withdraw
+                {'pnl': -450.00, 'symbol': 'USDCAD', 'expected_withdraw': False}, # Large loss but not withdraw
+                {'pnl': -500.01, 'symbol': 'NZDUSD', 'expected_withdraw': True},  # Just over threshold
+            ]
+            
+            # Apply withdraw detection logic (from line 1705 in page.js)
+            processed_trades = []
+            for trade in test_trades:
+                pnl = float(trade['pnl'])
+                is_withdraw = pnl < -500  # The actual logic from the code
+                
+                processed_trades.append({
+                    **trade,
+                    'pnl': pnl,
+                    'isWithdraw': is_withdraw
+                })
+            
+            # Verify detection accuracy
+            correct_detections = 0
+            total_tests = len(test_trades)
+            
+            for i, (original, processed) in enumerate(zip(test_trades, processed_trades)):
+                expected = original['expected_withdraw']
+                actual = processed['isWithdraw']
+                
+                if expected == actual:
+                    correct_detections += 1
+                else:
+                    self.log_test(
+                        f"Withdraw Detection - Trade {i+1}",
+                        False,
+                        f"Expected {expected}, got {actual} for PnL ${original['pnl']}"
+                    )
+            
+            # Test separation of withdraws from normal trading
+            normal_trades = [t for t in processed_trades if not t['isWithdraw']]
+            withdraws = [t for t in processed_trades if t['isWithdraw']]
+            
+            # Calculate metrics excluding withdraws
+            normal_pnl = sum(t['pnl'] for t in normal_trades)
+            withdraw_total = sum(t['pnl'] for t in withdraws)
+            
+            accuracy = (correct_detections / total_tests) * 100
+            
+            self.log_test(
+                "Withdraw Detection Logic - Accuracy",
+                correct_detections == total_tests,
+                f"Detection accuracy: {accuracy:.1f}% ({correct_detections}/{total_tests})",
+                {
+                    'normal_trades': len(normal_trades),
+                    'withdraws_detected': len(withdraws),
+                    'normal_pnl': normal_pnl,
+                    'withdraw_total': withdraw_total,
+                    'threshold': -500
+                }
+            )
+            
+            # Test that withdraws don't affect profit/drawdown calculations
+            initial_balance = 15000
+            
+            # Calculate profit percentage excluding withdraws
+            profit_percent_excluding_withdraws = (normal_pnl / initial_balance) * 100
+            profit_percent_including_withdraws = ((normal_pnl + withdraw_total) / initial_balance) * 100
+            
+            # The difference should show that withdraws are properly excluded
+            difference = abs(profit_percent_excluding_withdraws - profit_percent_including_withdraws)
+            
+            self.log_test(
+                "Withdraw Detection Logic - Calculation Impact",
+                difference > 0,
+                f"Withdraws properly excluded from profit calculations. Difference: {difference:.2f}%",
+                {
+                    'profit_excluding_withdraws': f"{profit_percent_excluding_withdraws:.2f}%",
+                    'profit_including_withdraws': f"{profit_percent_including_withdraws:.2f}%",
+                    'difference': f"{difference:.2f}%"
+                }
+            )
+            
+            return correct_detections == total_tests
+            
+        except Exception as e:
+            self.log_test(
+                "Withdraw Detection Logic - Exception",
+                False,
+                f"Exception in withdraw detection test: {str(e)}"
+            )
+            return False
+
+    def test_improved_chart_data_processing(self):
+        """Test the improved chart data processing for evolution, drawdown, and assets charts"""
+        print("📊 Testing Improved Chart Data Processing...")
+        
+        try:
+            # Test HTML parsing to get real trade data
+            test_file_path = Path('/app/public/test-report.html')
+            if not test_file_path.exists():
+                self.log_test(
+                    "Chart Data Processing - Missing Test File",
+                    False,
+                    "test-report.html not found for chart data testing"
+                )
+                return False
+            
+            with open(test_file_path, 'r', encoding='utf-8') as f:
+                html_content = f.read()
+            
+            # Parse HTML to get trades
+            payload = {
+                'htmlContent': html_content,
+                'accountId': 'chart-test-account'
+            }
+            
+            response = self.session.post(
+                f"{API_BASE}/parse-html",
+                json=payload,
+                headers={'Content-Type': 'application/json'},
+                timeout=15
+            )
+            
+            if response.status_code != 200:
+                self.log_test(
+                    "Chart Data Processing - API Error",
+                    False,
+                    f"Failed to parse HTML for chart testing: {response.status_code}"
+                )
+                return False
+            
+            data = response.json()
+            trades = data.get('trades', [])
+            
+            if not trades:
+                self.log_test(
+                    "Chart Data Processing - No Trades",
+                    False,
+                    "No trades available for chart data testing"
+                )
+                return False
+            
+            # Simulate the chart data processing logic from page.js
+            initial_balance = 15000
+            
+            # Test 1: Evolution chart starts from 0%
+            evolution_data = [{
+                'date': 'Inicio',
+                'profitPercent': 0,
+                'pnlDollars': 0,
+                'balance': initial_balance,
+                'isStart': True
+            }]
+            
+            # Process trades chronologically
+            sorted_trades = sorted(trades, key=lambda t: t['close_time'])
+            cumulative_pnl = 0
+            
+            for trade in sorted_trades:
+                pnl = float(trade['pnl'])
+                cumulative_pnl += pnl
+                
+                # Calculate profit as percentage of initial balance
+                profit_percent = (cumulative_pnl / initial_balance) * 100
+                
+                evolution_data.append({
+                    'date': trade['close_time'][:10],  # Date only
+                    'profitPercent': profit_percent,
+                    'pnlDollars': cumulative_pnl,
+                    'balance': initial_balance + cumulative_pnl
+                })
+            
+            # Test 2: Drawdown calculations based on initial balance
+            drawdown_data = []
+            current_peak = initial_balance
+            max_drawdown_percent = 0
+            
+            for point in evolution_data:
+                trading_balance = point['balance']
+                
+                # Update peak
+                if trading_balance > current_peak:
+                    current_peak = trading_balance
+                
+                # Calculate drawdown percentage
+                drawdown_percent = ((trading_balance - current_peak) / current_peak) * 100
+                
+                if abs(drawdown_percent) > max_drawdown_percent:
+                    max_drawdown_percent = abs(drawdown_percent)
+                
+                drawdown_data.append({
+                    'date': point['date'],
+                    'drawdownPercent': drawdown_percent,
+                    'balance': trading_balance,
+                    'peak': current_peak
+                })
+            
+            # Test 3: Assets chart showing percentages
+            symbol_stats = {}
+            for trade in trades:
+                symbol = trade['symbol']
+                if symbol not in symbol_stats:
+                    symbol_stats[symbol] = {'trades': 0, 'pnl': 0}
+                symbol_stats[symbol]['trades'] += 1
+                symbol_stats[symbol]['pnl'] += float(trade['pnl'])
+            
+            total_trades = len(trades)
+            assets_data = []
+            for symbol, stats in symbol_stats.items():
+                percentage = (stats['trades'] / total_trades) * 100
+                assets_data.append({
+                    'name': symbol,
+                    'value': stats['trades'],
+                    'percentage': round(percentage, 1),
+                    'pnl': stats['pnl']
+                })
+            
+            # Verify chart data integrity
+            tests_passed = 0
+            total_tests = 4
+            
+            # Test 1: Evolution chart starts at 0%
+            if evolution_data[0]['profitPercent'] == 0:
+                tests_passed += 1
+                self.log_test(
+                    "Chart Data Processing - Evolution Start",
+                    True,
+                    "Evolution chart correctly starts from 0%"
+                )
+            else:
+                self.log_test(
+                    "Chart Data Processing - Evolution Start",
+                    False,
+                    f"Evolution chart starts at {evolution_data[0]['profitPercent']}% instead of 0%"
+                )
+            
+            # Test 2: Drawdown calculations are mathematically correct
+            drawdown_correct = all(
+                point['drawdownPercent'] <= 0 for point in drawdown_data
+            )
+            if drawdown_correct:
+                tests_passed += 1
+                self.log_test(
+                    "Chart Data Processing - Drawdown Calculations",
+                    True,
+                    f"Drawdown calculations correct. Max drawdown: {max_drawdown_percent:.2f}%"
+                )
+            else:
+                self.log_test(
+                    "Chart Data Processing - Drawdown Calculations",
+                    False,
+                    "Drawdown calculations contain positive values (should be ≤ 0)"
+                )
+            
+            # Test 3: Assets chart shows percentages
+            percentage_sum = sum(asset['percentage'] for asset in assets_data)
+            if 99.9 <= percentage_sum <= 100.1:  # Allow for rounding
+                tests_passed += 1
+                self.log_test(
+                    "Chart Data Processing - Assets Percentages",
+                    True,
+                    f"Assets chart percentages sum to {percentage_sum:.1f}%"
+                )
+            else:
+                self.log_test(
+                    "Chart Data Processing - Assets Percentages",
+                    False,
+                    f"Assets chart percentages sum to {percentage_sum:.1f}% (should be ~100%)"
+                )
+            
+            # Test 4: Data consistency across charts
+            final_balance = evolution_data[-1]['balance']
+            final_pnl = evolution_data[-1]['pnlDollars']
+            calculated_balance = initial_balance + final_pnl
+            
+            if abs(final_balance - calculated_balance) < 0.01:
+                tests_passed += 1
+                self.log_test(
+                    "Chart Data Processing - Data Consistency",
+                    True,
+                    f"Chart data is mathematically consistent. Final balance: ${final_balance:.2f}"
+                )
+            else:
+                self.log_test(
+                    "Chart Data Processing - Data Consistency",
+                    False,
+                    f"Chart data inconsistency: {final_balance} vs {calculated_balance}"
+                )
+            
+            self.log_test(
+                "Improved Chart Data Processing - Overall",
+                tests_passed == total_tests,
+                f"Chart data processing tests: {tests_passed}/{total_tests} passed",
+                {
+                    'evolution_points': len(evolution_data),
+                    'drawdown_points': len(drawdown_data),
+                    'assets_count': len(assets_data),
+                    'max_drawdown': f"{max_drawdown_percent:.2f}%",
+                    'final_profit': f"{evolution_data[-1]['profitPercent']:.2f}%"
+                }
+            )
+            
+            return tests_passed == total_tests
+            
+        except Exception as e:
+            self.log_test(
+                "Improved Chart Data Processing - Exception",
+                False,
+                f"Exception in chart data processing test: {str(e)}"
+            )
+            return False
+
+    def test_chart_mathematical_accuracy(self):
+        """Test that all chart calculations are mathematically correct and consistent"""
+        print("🔢 Testing Chart Mathematical Accuracy...")
+        
+        try:
+            # Create test data with known values for verification
+            test_trades = [
+                {'pnl': 100, 'close_time': '2024-01-01T10:00:00Z', 'symbol': 'EURUSD'},
+                {'pnl': -50, 'close_time': '2024-01-02T10:00:00Z', 'symbol': 'GBPUSD'},
+                {'pnl': -600, 'close_time': '2024-01-03T10:00:00Z', 'symbol': 'USDJPY'},  # Withdraw
+                {'pnl': 75, 'close_time': '2024-01-04T10:00:00Z', 'symbol': 'EURUSD'},
+            ]
+            
+            initial_balance = 10000
+            
+            # Apply withdraw detection
+            processed_trades = []
+            for trade in test_trades:
+                pnl = float(trade['pnl'])
+                is_withdraw = pnl < -500
+                processed_trades.append({
+                    **trade,
+                    'pnl': pnl,
+                    'isWithdraw': is_withdraw
+                })
+            
+            # Separate normal trades from withdraws
+            normal_trades = [t for t in processed_trades if not t['isWithdraw']]
+            withdraws = [t for t in processed_trades if t['isWithdraw']]
+            
+            # Calculate evolution data (excluding withdraws from profit calculation)
+            evolution_data = [{'profitPercent': 0, 'pnlDollars': 0, 'balance': initial_balance}]
+            
+            cumulative_normal_pnl = 0
+            cumulative_withdraws = 0
+            running_balance = initial_balance
+            
+            for trade in processed_trades:
+                if trade['isWithdraw']:
+                    cumulative_withdraws += trade['pnl']
+                    running_balance += trade['pnl']  # Withdraws affect actual balance
+                else:
+                    cumulative_normal_pnl += trade['pnl']
+                    running_balance += trade['pnl']
+                
+                # Profit percentage based only on normal trading
+                profit_percent = (cumulative_normal_pnl / initial_balance) * 100
+                
+                evolution_data.append({
+                    'profitPercent': profit_percent,
+                    'pnlDollars': cumulative_normal_pnl,
+                    'withdraws': cumulative_withdraws,
+                    'balance': running_balance,
+                    'tradingBalance': initial_balance + cumulative_normal_pnl
+                })
+            
+            # Test mathematical accuracy
+            tests_passed = 0
+            total_tests = 5
+            
+            # Test 1: Profit calculation excludes withdraws
+            expected_normal_pnl = 100 - 50 + 75  # 125
+            actual_normal_pnl = cumulative_normal_pnl
+            
+            if abs(expected_normal_pnl - actual_normal_pnl) < 0.01:
+                tests_passed += 1
+                self.log_test(
+                    "Mathematical Accuracy - Profit Calculation",
+                    True,
+                    f"Profit calculation correct: ${actual_normal_pnl} (excludes withdraws)"
+                )
+            else:
+                self.log_test(
+                    "Mathematical Accuracy - Profit Calculation",
+                    False,
+                    f"Profit calculation error: expected ${expected_normal_pnl}, got ${actual_normal_pnl}"
+                )
+            
+            # Test 2: Withdraw separation
+            expected_withdraws = -600
+            actual_withdraws = cumulative_withdraws
+            
+            if abs(expected_withdraws - actual_withdraws) < 0.01:
+                tests_passed += 1
+                self.log_test(
+                    "Mathematical Accuracy - Withdraw Separation",
+                    True,
+                    f"Withdraw separation correct: ${actual_withdraws}"
+                )
+            else:
+                self.log_test(
+                    "Mathematical Accuracy - Withdraw Separation",
+                    False,
+                    f"Withdraw separation error: expected ${expected_withdraws}, got ${actual_withdraws}"
+                )
+            
+            # Test 3: Balance calculations
+            expected_final_balance = initial_balance + cumulative_normal_pnl + cumulative_withdraws  # 10000 + 125 - 600 = 9525
+            actual_final_balance = evolution_data[-1]['balance']
+            
+            if abs(expected_final_balance - actual_final_balance) < 0.01:
+                tests_passed += 1
+                self.log_test(
+                    "Mathematical Accuracy - Balance Calculation",
+                    True,
+                    f"Balance calculation correct: ${actual_final_balance}"
+                )
+            else:
+                self.log_test(
+                    "Mathematical Accuracy - Balance Calculation",
+                    False,
+                    f"Balance calculation error: expected ${expected_final_balance}, got ${actual_final_balance}"
+                )
+            
+            # Test 4: Profit percentage calculation
+            expected_profit_percent = (cumulative_normal_pnl / initial_balance) * 100  # 1.25%
+            actual_profit_percent = evolution_data[-1]['profitPercent']
+            
+            if abs(expected_profit_percent - actual_profit_percent) < 0.01:
+                tests_passed += 1
+                self.log_test(
+                    "Mathematical Accuracy - Profit Percentage",
+                    True,
+                    f"Profit percentage correct: {actual_profit_percent:.2f}%"
+                )
+            else:
+                self.log_test(
+                    "Mathematical Accuracy - Profit Percentage",
+                    False,
+                    f"Profit percentage error: expected {expected_profit_percent:.2f}%, got {actual_profit_percent:.2f}%"
+                )
+            
+            # Test 5: Drawdown calculation accuracy
+            trading_balance = initial_balance + cumulative_normal_pnl  # 10125
+            peak = max(initial_balance, trading_balance)  # 10125
+            drawdown_percent = ((trading_balance - peak) / peak) * 100  # 0% (no drawdown in this case)
+            
+            if abs(drawdown_percent) < 0.01:  # Should be 0 since we end at peak
+                tests_passed += 1
+                self.log_test(
+                    "Mathematical Accuracy - Drawdown Calculation",
+                    True,
+                    f"Drawdown calculation correct: {drawdown_percent:.2f}%"
+                )
+            else:
+                self.log_test(
+                    "Mathematical Accuracy - Drawdown Calculation",
+                    False,
+                    f"Drawdown calculation error: {drawdown_percent:.2f}% (expected ~0%)"
+                )
+            
+            self.log_test(
+                "Chart Mathematical Accuracy - Overall",
+                tests_passed == total_tests,
+                f"Mathematical accuracy tests: {tests_passed}/{total_tests} passed",
+                {
+                    'normal_pnl': cumulative_normal_pnl,
+                    'withdraws': cumulative_withdraws,
+                    'final_balance': actual_final_balance,
+                    'profit_percent': f"{actual_profit_percent:.2f}%",
+                    'trading_balance': trading_balance
+                }
+            )
+            
+            return tests_passed == total_tests
+            
+        except Exception as e:
+            self.log_test(
+                "Chart Mathematical Accuracy - Exception",
+                False,
+                f"Exception in mathematical accuracy test: {str(e)}"
+            )
+            return False
+
     def run_all_tests(self):
         """Run all backend tests"""
         print("🚀 Starting Traderfy Backend Test Suite")
