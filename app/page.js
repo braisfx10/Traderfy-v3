@@ -1684,7 +1684,7 @@ export default function TraderfyApp() {
                             .map(([hour, stats]) => (
                               <div key={hour} className="flex items-center justify-between p-3 bg-gradient-to-r from-slate-700/60 to-slate-600/40 rounded-lg border border-cyan-500/20 hover:from-slate-600/70 hover:to-slate-500/50 transition-all duration-300">
                                 <div>
-                                  <span className="text-white font-medium">{hour}:00 - {parseInt(hour) + 1}:00</span>
+                                  <span className="text-white font-medium">{parseInt(hour) + 1}:00 - {parseInt(hour) + 2}:00 (España)</span>
                                   <div className="text-xs text-cyan-200/70">{stats.trades.length} trades</div>
                                 </div>
                                 <div className="text-right">
