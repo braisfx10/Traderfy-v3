@@ -1804,7 +1804,7 @@ export default function TraderfyApp() {
                 });
               });
               
-              // Datos para gráfico de activos operados (sin cambios)
+              // Datos para gráfico de activos operados (mostrar porcentajes en lugar de números)
               const symbolStats = accountTrades.reduce((acc, trade) => {
                 if (!acc[trade.symbol]) {
                   acc[trade.symbol] = { symbol: trade.symbol, trades: 0, pnl: 0 };
@@ -1814,17 +1814,19 @@ export default function TraderfyApp() {
                 return acc;
               }, {});
               
+              const totalTrades = accountTrades.length;
               const assetsData = Object.values(symbolStats).map(stat => ({
                 name: stat.symbol,
                 value: stat.trades,
+                percentage: ((stat.trades / totalTrades) * 100).toFixed(1),
                 pnl: stat.pnl
               }));
               
               // Colores para el gráfico circular
               const COLORS = ['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#8B5A2B'];
               
-              // Valoración de trading con nueva fórmula mejorada
-              const finalProfitPercent = evolutionData.length > 0 ? evolutionData[evolutionData.length - 1].profitPercent : 0;
+              // Valoración de trading con la nueva fórmula especificada
+              const finalProfitPercent = evolutionData.length > 1 ? evolutionData[evolutionData.length - 1].profitPercent : 0;
               const winRate = accountTrades.length > 0 ? ((accountTrades.filter(t => t.pnl > 0).length / accountTrades.length) * 100) : 0;
               
               console.log('Datos para valoración:', {
@@ -1833,18 +1835,18 @@ export default function TraderfyApp() {
                 winRate
               });
               
-              // Función para calcular BeneficioScore
+              // Nueva fórmula de BeneficioScore según especificación
               const calculateBeneficioScore = (beneficio) => {
-                if (beneficio < 8) return 0;
-                if (beneficio >= 13) return 10;
-                if (beneficio >= 8 && beneficio < 13) {
+                if (beneficio < 4) return 0;
+                if (beneficio >= 10) return 10;
+                if (beneficio >= 4 && beneficio < 10) {
                   // Escalar linealmente entre 5 y 8
-                  return 5 + ((beneficio - 8) / (13 - 8)) * (8 - 5);
+                  return 5 + ((beneficio - 4) / (10 - 4)) * (8 - 5);
                 }
                 return 0;
               };
               
-              // Función para calcular DrawdownScore
+              // Nueva fórmula de DrawdownScore según especificación
               const calculateDrawdownScore = (drawdown) => {
                 if (drawdown >= 10) return 0;
                 if (drawdown < 4) {
@@ -1862,20 +1864,20 @@ export default function TraderfyApp() {
                 return 0;
               };
               
-              // Función para calcular WinRateScore
+              // Nueva fórmula de WinRateScore según especificación
               const calculateWinRateScore = (winRate) => {
-                if (winRate < 40) return 2;
-                if (winRate >= 75) {
+                if (winRate < 30) return 2;
+                if (winRate >= 70) {
                   // Escalar linealmente entre 9 y 10
-                  return 9 + ((winRate - 75) / 25) * (10 - 9);
+                  return 9 + ((winRate - 70) / 30) * (10 - 9);
                 }
-                if (winRate >= 60 && winRate < 75) {
+                if (winRate >= 50 && winRate < 70) {
                   // Escalar linealmente entre 7 y 8
-                  return 7 + ((winRate - 60) / (75 - 60)) * (8 - 7);
+                  return 7 + ((winRate - 50) / (70 - 50)) * (8 - 7);
                 }
-                if (winRate >= 40 && winRate < 60) {
+                if (winRate >= 30 && winRate < 50) {
                   // Escalar linealmente entre 5 y 7
-                  return 5 + ((winRate - 40) / (60 - 40)) * (7 - 5);
+                  return 5 + ((winRate - 30) / (50 - 30)) * (7 - 5);
                 }
                 return 2;
               };
