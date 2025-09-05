@@ -1388,7 +1388,11 @@ class TraderfyBackendTester:
             self.test_html_parser_api_endpoint,
             self.test_score_calculations_fix,
             self.test_complete_data_flow,
-            self.test_javascript_error_prevention
+            self.test_javascript_error_prevention,
+            self.test_new_valoracion_formula,
+            self.test_withdraw_detection_logic,
+            self.test_improved_chart_data_processing,
+            self.test_chart_mathematical_accuracy
         ]
         
         passed = 0
