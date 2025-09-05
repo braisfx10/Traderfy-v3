@@ -1665,31 +1665,62 @@ export default function TraderfyApp() {
               const accountTrades = trades.filter(t => t.account_id === selectedAccount.id);
               if (accountTrades.length === 0) return null;
               
-              // Preparar datos para gráfico de evolución de beneficio
-              const evolutionData = accountTrades.map((trade, index) => {
-                const cumulativePnL = accountTrades.slice(0, index + 1).reduce((sum, t) => sum + parseFloat(t.pnl), 0);
+              // Obtener balance inicial de la cuenta (se puede obtener de summary o usar valor por defecto)
+              const initialBalance = selectedAccount.summary?.deposit || 10000; // Default 10k si no hay dato
+              
+              // Preparar datos para gráfico de evolución de beneficio (por fechas y porcentajes)
+              const tradesByDate = {};
+              
+              // Agrupar trades por fecha
+              accountTrades.forEach(trade => {
+                const dateKey = new Date(trade.close_time).toDateString();
+                if (!tradesByDate[dateKey]) {
+                  tradesByDate[dateKey] = [];
+                }
+                tradesByDate[dateKey].push(trade);
+              });
+              
+              // Crear datos ordenados por fecha
+              const sortedDates = Object.keys(tradesByDate).sort((a, b) => new Date(a) - new Date(b));
+              let cumulativePnL = 0;
+              let runningBalance = initialBalance;
+              let peak = initialBalance;
+              let maxDrawdownPercent = 0;
+              
+              const evolutionData = sortedDates.map(dateKey => {
+                const dayTrades = tradesByDate[dateKey];
+                const dayPnL = dayTrades.reduce((sum, trade) => sum + parseFloat(trade.pnl), 0);
+                
+                cumulativePnL += dayPnL;
+                runningBalance = initialBalance + cumulativePnL;
+                
+                // Calcular profit como porcentaje del balance inicial
+                const profitPercent = (cumulativePnL / initialBalance) * 100;
+                
                 return {
-                  trade: index + 1,
-                  pnl: cumulativePnL,
-                  date: new Date(trade.close_time).toLocaleDateString('es-ES')
+                  date: new Date(dateKey).toLocaleDateString('es-ES'),
+                  profitPercent: profitPercent,
+                  pnlDollars: cumulativePnL,
+                  balance: runningBalance,
+                  dateKey: dateKey
                 };
               });
               
-              // Calcular drawdown correctamente
-              let peak = 0;
-              let maxDrawdown = 0;
+              // Calcular drawdown correctamente basado en porcentajes
               const drawdownData = evolutionData.map(point => {
-                if (point.pnl > peak) peak = point.pnl;
-                const drawdown = peak > 0 ? ((peak - point.pnl) / peak) * 100 : 0;
-                if (drawdown > maxDrawdown) maxDrawdown = drawdown;
+                if (point.balance > peak) peak = point.balance;
+                const drawdownPercent = peak > initialBalance ? ((peak - point.balance) / initialBalance) * 100 : 0;
+                if (drawdownPercent > maxDrawdownPercent) maxDrawdownPercent = drawdownPercent;
+                
                 return {
-                  trade: point.trade,
-                  drawdown: -drawdown, // Negativo para mostrar hacia abajo
-                  date: point.date
+                  date: point.date,
+                  drawdownPercent: -drawdownPercent, // Negativo para mostrar hacia abajo
+                  balance: point.balance,
+                  dateKey: point.dateKey
                 };
               });
               
-              // Datos para gráfico de activos operados
+              // Datos para gráfico de activos operados (sin cambios)
               const symbolStats = accountTrades.reduce((acc, trade) => {
                 if (!acc[trade.symbol]) {
                   acc[trade.symbol] = { symbol: trade.symbol, trades: 0, pnl: 0 };
@@ -1708,16 +1739,16 @@ export default function TraderfyApp() {
               // Colores para el gráfico circular
               const COLORS = ['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#8B5A2B'];
               
-              // Valoración de trading corregida - solo winrate, drawdown máximo y P&L
-              const totalPnL = accountTrades.reduce((sum, t) => sum + parseFloat(t.pnl), 0);
+              // Valoración de trading basada en porcentajes del balance inicial
+              const finalProfitPercent = evolutionData.length > 0 ? evolutionData[evolutionData.length - 1].profitPercent : 0;
               const winRate = accountTrades.length > 0 ? ((accountTrades.filter(t => t.pnl > 0).length / accountTrades.length) * 100) : 0;
               
-              // Puntuación del 0 al 10 basada únicamente en winrate, drawdown máximo y P&L
+              // Puntuación del 0 al 10 basada en porcentajes del balance inicial
               const winRateScore = Math.min(4, (winRate / 100) * 4); // Max 4 puntos por winrate
-              const pnlScore = totalPnL > 0 ? Math.min(3, (totalPnL / 100) * 3) : 0; // Max 3 puntos por P&L positivo
-              const drawdownScore = maxDrawdown <= 5 ? 3 : maxDrawdown <= 10 ? 2 : maxDrawdown <= 20 ? 1 : 0; // Max 3 puntos por drawdown bajo
+              const profitScore = finalProfitPercent > 0 ? Math.min(3, (finalProfitPercent / 20) * 3) : 0; // Max 3 puntos por ganancia >20%
+              const drawdownScore = maxDrawdownPercent <= 2 ? 3 : maxDrawdownPercent <= 5 ? 2 : maxDrawdownPercent <= 10 ? 1 : 0; // Max 3 puntos por drawdown bajo
               
-              const tradingScore = Math.min(10, winRateScore + pnlScore + drawdownScore);
+              const tradingScore = Math.min(10, winRateScore + profitScore + drawdownScore);
               
               return (
                 <div className="mt-6 space-y-6">
