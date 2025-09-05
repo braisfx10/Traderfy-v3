@@ -32,7 +32,17 @@ const TradeJournalModal = ({ trade, onClose, onSave }) => {
 
   // Cargar datos existentes del journal si los hay
   useEffect(() => {
-    const existingJournal = trade?.journal_data || {}
+    if (!trade) return;
+    
+    // Crear ID único si no existe
+    const tradeId = trade.id || `trade_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    
+    // Intentar cargar desde localStorage
+    const existingJournals = JSON.parse(localStorage.getItem('trade_journals') || '{}')
+    const existingJournal = existingJournals[tradeId] || trade?.journal_data || {}
+    
+    console.log('Loading journal for trade:', tradeId, existingJournal)
+    
     setJournalData(prev => ({
       ...prev,
       ...existingJournal
