@@ -1916,6 +1916,9 @@ export default function TraderfyApp() {
                         </CardTitle>
                         <CardDescription className="text-green-200/70">
                           Beneficio acumulado en % del balance inicial (${initialBalance.toLocaleString()})
+                          <div className="mt-1 text-xs text-yellow-300">
+                            🔶 Puntos amarillos indican días con Withdraws (no afectan el cálculo de beneficio)
+                          </div>
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
