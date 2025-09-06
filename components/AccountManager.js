@@ -273,6 +273,14 @@ const AccountManager = ({ user, onAccountsChange }) => {
         maxDailyLoss: '',
         maxRiskPerTrade: '',
         tradingHours: { start: '', end: '' }
+      },
+      propfirmRules: account.propfirmRules || {
+        maxDailyDrawdown: '',
+        maxTotalDrawdown: '',
+        profitTarget: '',
+        tradingNews: 'No',
+        weekendTrading: 'No',
+        profitSplit: ''
       }
     })
     setEditing(account.id)
