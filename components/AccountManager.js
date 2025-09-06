@@ -388,7 +388,7 @@ const AccountManager = ({ user, onAccountsChange }) => {
                 </div>
                 
                 <div>
-                  <Label className="text-red-300">Pérdida Máxima Diaria ($)</Label>
+                  <Label className="text-red-300">Pérdida Máxima Diaria (%)</Label>
                   <Input
                     type="number"
                     value={formData.rules.maxDailyLoss}
