@@ -1381,7 +1381,7 @@ export default function TraderfyApp() {
   const { user, loading: authLoading, signOut } = useAuth()
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [demoMode, setDemoMode] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)  // Cambiar a false inicialmente
   const [toast, setToast] = useState(null)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [selectedTradeForJournal, setSelectedTradeForJournal] = useState(null)
