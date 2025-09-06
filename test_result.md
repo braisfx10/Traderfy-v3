@@ -457,6 +457,20 @@ agent_communication:
         - working: true
         - agent: "main"
         - comment: "SOLUTION: Created hybrid approach - enhanced UnifiedTradingParser with TradingHistoryParser's advanced metrics. Results: 110 trades, Win Rate 74.55%, Sharpe Ratio 0.18, Max Drawdown 5.39%, Expectancy $36.35, Recovery Factor 742. Combines reliability of proven parser with advanced analytics of new approach."
+  - task: "Fix Duplicate Trades & Undefined Error"
+    implemented: true
+    working: true
+    file: "/app/lib/unifiedTradingParser.js, /app/lib/htmlParser.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: false
+    status_history:
+        - working: false
+        - agent: "main"
+        - comment: "CRITICAL BUGS: 1) Parser extracted 110 trades instead of 55 (duplicated), profit $3,998 instead of $1,999. 2) UI upload error: 'undefined is not an object (evaluating parsedData.trades.length)'"
+        - working: true
+        - agent: "main"
+        - comment: "FIXED BOTH ISSUES: 1) Added historialTableProcessed flag to prevent processing duplicate tables (0 and 3 had same data). Now correctly extracts 55 trades, $1,999.35 profit. 2) Added comprehensive error handling in parseHTMLReport with validation and fallback logic. UI upload now works correctly."
     - agent: "main"
     - message: "MAJOR ACHIEVEMENT: Successfully implemented enhanced parser combining proven CTrader parsing with advanced TradingHistoryParser metrics. Real file (FTT 15k.html) now provides comprehensive analytics: 110 trades, 74.55% win rate, Sharpe ratio 0.18, max drawdown 5.39%, expectancy $36.35, recovery factor 742. Perfect filtering, direction capitalization, and MetaTrader card updates. Ready for production use with both platforms."
     - agent: "testing"
