@@ -2098,7 +2098,7 @@ export default function TraderfyApp() {
                               formatter={(value, name, props) => {
                                 const entry = props.payload;
                                 return [
-                                  <div key="asset-tooltip">
+                                  <div key="asset-tooltip" style={{ color: '#FFFFFF' }}>
                                     <div>{`Trades: ${value} (${entry.percentage}%)`}</div>
                                     <div className={entry.pnl >= 0 ? 'text-green-400' : 'text-red-400'}>
                                       {`P&L: $${entry.pnl.toFixed(2)}`}
