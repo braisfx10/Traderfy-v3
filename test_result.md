@@ -493,5 +493,7 @@ agent_communication:
         - agent: "main"
         - comment: "REQUIREMENTS: 1) Challenge type color too bright/garish. 2) Resumen section needs restructure: 2 cards side-by-side with 2x2 subtiles each. 3) Activos Operados tooltip text black/unreadable."
         - working: true
+    - agent: "main"
+    - message: "UI IMPROVEMENTS COMPLETED: Successfully refined visual elements and layout. Challenge type now uses elegant emerald color (#10B981). Restructured Resumen section with two balanced cards: 'Normas de Trading' (left) showing account trading rules in 2x2 grid, 'Reglas de Propfirm' (right) showing propfirm-specific rules in 2x2 grid. Fixed Activos Operados tooltip text color to white for proper contrast. All UI elements now more cohesive and professional."
         - agent: "main"
         - comment: "COMPLETED: 1) Changed Challenge color from #00FF00 to elegant #10B981 emerald. 2) Restructured Resumen: left card 'Normas de Trading' (4 subtiles), right card 'Reglas de Propfirm' (4 subtiles), both in 2x2 grid. 3) Fixed tooltip text color to white (#FFFFFF) for better visibility in Activos Operados chart."
