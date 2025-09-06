@@ -1414,57 +1414,11 @@ export default function TraderfyApp() {
     
     // Configuración inicial solo una vez
     if (!supabase) {
-      setAccounts([
-        { id: '1', name: 'FTT Funded 15K', tag: 'Funded', user_id: 'demo' },
-        { id: '2', name: 'FTMO Challenge 100K', tag: 'Demo', user_id: 'demo' },
-        { id: '3', name: 'Prop Firm Live', tag: 'Live', user_id: 'demo' }
-      ])
+      // Inicializar con lista de cuentas vacía - los usuarios pueden crear sus propias cuentas
+      setAccounts([])
       
-      // Añadir algunos trades de ejemplo con IDs únicos para poder probar el Journal
-      const today = new Date()
-      const yesterday = new Date(today)
-      yesterday.setDate(today.getDate() - 1)
-      const dayBefore = new Date(today)
-      dayBefore.setDate(today.getDate() - 2)
-      
-      setTrades([
-        {
-          id: 'trade_demo_1',
-          symbol: 'EURUSD',
-          direction: 'Buy',
-          close_time: yesterday.toISOString(),
-          entry_price: 1.0850,
-          close_price: 1.0890,
-          lots: 0.10,
-          pnl: 40.00,
-          account_id: '2',
-          user_id: 'demo'
-        },
-        {
-          id: 'trade_demo_2', 
-          symbol: 'GBPUSD',
-          direction: 'Sell',
-          close_time: yesterday.toISOString(),
-          entry_price: 1.2650,
-          close_price: 1.2620,
-          lots: 0.15,
-          pnl: 45.00,
-          account_id: '2',
-          user_id: 'demo'
-        },
-        {
-          id: 'trade_demo_3',
-          symbol: 'AUDUSD', 
-          direction: 'Buy',
-          close_time: dayBefore.toISOString(),
-          entry_price: 0.6580,
-          close_price: 0.6555,
-          lots: 0.20,
-          pnl: -50.00,
-          account_id: '2',
-          user_id: 'demo'
-        }
-      ])
+      // Inicializar con lista de trades vacía
+      setTrades([])
       
       setDemoMode(true)
     }
