@@ -428,6 +428,8 @@ agent_communication:
         - working: true
         - agent: "main"
         - comment: "VERIFIED WORKING: Parser correctly extracts 110 trades from real CTrader file. Test results: First trade EURUSD Buy, entry 1.14748, close 1.1464, P&L -71.66. Direction capitalization correct ('Buy'/'Sell'). API integration working perfectly. Issue was JSON formatting in test requests, not parser logic."
+    - agent: "main"
+    - message: "MAJOR SUCCESS: Real CTrader file parsing now works perfectly. Successfully tested with FTT 15k.html - extracts 110 trades with correct data (EURUSD Buy -71.66, proper direction capitalization, account_id assignment). All filtering works correctly - excludes deposits/withdrawals. MetaTrader summary card updated with requested fields. Parser handles real-world CTrader HTML structure flawlessly."
         - comment: "REQUIREMENT: Change 'Resumen de cuenta - MetaTrader' card fields from current labels to: 'Depósito Inicial', 'Saldo Actual', 'Withdraw Total', 'Valoración de Trading'"
         - working: true
         - agent: "main"
