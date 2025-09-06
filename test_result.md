@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "FIXED - Infinite loading bug resolved. The app now loads correctly. NEW FEATURES IMPLEMENTED: 1. Label organizer section in 'Resumen Total' with clickable accounts grouped by tags (Funded, Demo, Live). 2. Changed 'Mi Mentor' to 'Mentor' in sidebar. 3. Enhanced UX with better visual feedback and responsive design. READY FOR BACKEND TESTING: Need to test HTML parser functionality, API endpoints, and data flow from upload to display as originally identified."
+user_problem_statement: "COMPLETED - Removed three example accounts ('FTT Funded 15k', 'FTMO Challenge 100k', 'Prop Firm Live') and their associated sample trades from demo mode initialization. The account creation functionality remains fully operational. App now starts with empty accounts list, allowing users to create their own accounts from scratch."
 
 backend:
   - task: "Frontend Loading Bug Fix"
