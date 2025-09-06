@@ -467,6 +467,107 @@ const AccountManager = ({ user, onAccountsChange }) => {
               </div>
             </div>
 
+            {/* Nueva sección: Reglas de Propfirm */}
+            <div className="space-y-4 p-4 bg-gradient-to-r from-green-900/20 to-emerald-900/20 border border-green-500/30 rounded-lg">
+              <div className="flex items-center gap-2">
+                <Shield className="w-5 h-5 text-green-400" />
+                <h3 className="text-lg font-semibold text-white">Reglas de Propfirm</h3>
+              </div>
+              <p className="text-sm text-gray-300">Configura las reglas específicas de la prop firm para esta cuenta.</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-red-300">Max. Drawdown Diario (%)</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={formData.propfirmRules.maxDailyDrawdown}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      propfirmRules: { ...prev.propfirmRules, maxDailyDrawdown: e.target.value }
+                    }))}
+                    placeholder="Ej: 5.0"
+                    className="bg-gradient-to-r from-slate-800 to-slate-700 border-red-500/50 text-white"
+                  />
+                </div>
+                
+                <div>
+                  <Label className="text-red-300">Máx. Drawdown Total (%)</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={formData.propfirmRules.maxTotalDrawdown}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      propfirmRules: { ...prev.propfirmRules, maxTotalDrawdown: e.target.value }
+                    }))}
+                    placeholder="Ej: 10.0"
+                    className="bg-gradient-to-r from-slate-800 to-slate-700 border-red-500/50 text-white"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-green-300">Objetivo de Ganancias (%)</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={formData.propfirmRules.profitTarget}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      propfirmRules: { ...prev.propfirmRules, profitTarget: e.target.value }
+                    }))}
+                    placeholder="Ej: 8.0"
+                    className="bg-gradient-to-r from-slate-800 to-slate-700 border-green-500/50 text-white"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-blue-300">Noticias</Label>
+                  <select
+                    value={formData.propfirmRules.tradingNews}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      propfirmRules: { ...prev.propfirmRules, tradingNews: e.target.value }
+                    }))}
+                    className="w-full p-2 bg-gradient-to-r from-slate-800 to-slate-700 border border-blue-500/50 rounded text-white"
+                  >
+                    <option value="No">No</option>
+                    <option value="Si">Si</option>
+                  </select>
+                </div>
+
+                <div>
+                  <Label className="text-purple-300">Fin de Semana</Label>
+                  <select
+                    value={formData.propfirmRules.weekendTrading}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      propfirmRules: { ...prev.propfirmRules, weekendTrading: e.target.value }
+                    }))}
+                    className="w-full p-2 bg-gradient-to-r from-slate-800 to-slate-700 border border-purple-500/50 rounded text-white"
+                  >
+                    <option value="No">No</option>
+                    <option value="Si">Si</option>
+                  </select>
+                </div>
+
+                <div>
+                  <Label className="text-yellow-300">Profit Split (%)</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={formData.propfirmRules.profitSplit}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      propfirmRules: { ...prev.propfirmRules, profitSplit: e.target.value }
+                    }))}
+                    placeholder="Ej: 80.0"
+                    className="bg-gradient-to-r from-slate-800 to-slate-700 border-yellow-500/50 text-white"
+                  />
+                </div>
+              </div>
+            </div>
+
             <div className="flex gap-3">
               <Button 
                 onClick={creating ? handleCreateAccount : () => handleUpdateAccount(editing)}
