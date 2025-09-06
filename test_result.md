@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "SUCCESS - IMPLEMENTED ENHANCED TRADINGHISTORYPARSER: ✅ Combined best of both parsers - using proven UnifiedTradingParser base with TradingHistoryParser's advanced metrics. ✅ Real CTrader file parsing: 110 trades extracted correctly. ✅ Advanced metrics implemented: Win Rate 74.55%, Sharpe Ratio 0.18, Max Drawdown 5.39%, Expectancy $36.35, Recovery Factor 742. ✅ Perfect filtering: excludes deposits/withdrawals. ✅ Direction capitalization: Buy/Sell correct for UI colors. ✅ MetaTrader summary card updated with requested fields. ALL ISSUES RESOLVED."
+user_problem_statement: "PROBLEMS SOLVED - ✅ DUPLICATE TRADES FIXED: Parser was processing 2 identical tables (0 and 3) causing 110 trades instead of 55. Added historialTableProcessed flag to process only first table with data. ✅ CORRECT METRICS: Net Profit now $1,999.35 (was $3,998.70), trades count 55 (was 110), all metrics accurate. ✅ UNDEFINED ERROR FIXED: Added comprehensive error handling in parseHTMLReport to prevent 'undefined is not an object' errors. ✅ UI UPLOAD READY: Both API and UI file upload now work correctly with real CTrader files."
 
 backend:
   - task: "Frontend Loading Bug Fix"
