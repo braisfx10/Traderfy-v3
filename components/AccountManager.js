@@ -343,6 +343,7 @@ const AccountManager = ({ user, onAccountsChange }) => {
                   <option value="Demo">Demo</option>
                   <option value="Live">Live</option>
                   <option value="Funded">Funded</option>
+                  <option value="Challenge">Challenge</option>
                 </select>
               </div>
             </div>
