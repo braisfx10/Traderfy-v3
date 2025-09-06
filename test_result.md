@@ -365,6 +365,35 @@ agent_communication:
     - message: "SUCCESS: All critical frontend issues have been resolved. 1. FIXED infinite loading bug by synchronizing authLoading and loading states. 2. IMPLEMENTED label organizer feature in Resumen Total with clickable accounts grouped by tags. 3. CHANGED 'Mi Mentor' to 'Mentor' in sidebar. App now works perfectly. READY FOR BACKEND TESTING: Focus on HTML parser, API endpoints, and data flow testing as originally planned."
     - agent: "testing"
     - message: "BACKEND TESTING COMPLETE: All 4 high-priority backend tasks are now working correctly. ✅ HTML Parser extracts trades from Spanish MetaTrader format. ✅ API endpoint /api/parse-html processes uploads successfully. ✅ Data structure uses consistent snake_case naming. ✅ Account ID assignment fixed and working in demo mode. Fixed critical bug where account_id was not assigned in demo mode. Backend is fully functional for HTML upload and processing workflow."
+  - task: "Direction Capitalization Fix"
+    implemented: true
+    working: true
+    file: "/app/lib/htmlParser.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+        - agent: "main"
+        - comment: "IDENTIFIED: Parser was returning direction in lowercase ('buy'/'sell') instead of proper case ('Buy'/'Sell') causing frontend display issues"
+        - working: true
+        - agent: "main"
+        - comment: "FIXED: Added capitalizeFirst() helper function in htmlParser.js line 48 to convert trade.type to proper capitalization. API now returns direction: 'Buy'/'Sell' correctly. Verified with curl test: all 3 trades now have proper capitalization."
+
+  - task: "Infinite Loading Fix"
+    implemented: true
+    working: true
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+        - agent: "main"
+        - comment: "ISSUE: Application stuck on 'Cargando...' screen after removing example accounts due to useEffect dependency conflicts"
+        - working: true
+        - agent: "main"
+        - comment: "RESOLVED: Fixed useEffect dependencies from [authLoading] to [authLoading, user, demoMode, supabase] and changed initial loading state from useState(true) to useState(false). App now loads correctly to dashboard."
     - agent: "main"
     - message: "CRITICAL BUG FIX: Fixed 'ReferenceError: Can't find variable: profitScore' in Panel de cuenta > Resumen section. Changed line 2039 in /app/app/page.js from profitScore.toFixed(1) to beneficioScore.toFixed(1). The beneficioScore variable was correctly calculated but profitScore was undefined. Tested with HTML upload and account summary displays correctly without errors."
     - agent: "testing"
