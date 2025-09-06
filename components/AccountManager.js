@@ -271,6 +271,7 @@ const AccountManager = ({ user, onAccountsChange }) => {
       case 'Funded': return '#A020F0'
       case 'Live': return '#00FFFF'
       case 'Demo': return '#6B7280'
+      case 'Challenge': return '#00FF00'
       default: return '#8B5CF6'
     }
   }
