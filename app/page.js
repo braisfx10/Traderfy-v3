@@ -1583,96 +1583,41 @@ export default function TraderfyApp() {
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        {summary.deposit && (
-                          <div className="bg-gradient-to-br from-blue-900/40 to-indigo-800/30 p-4 rounded-lg border border-blue-500/30 hover:from-blue-800/50 hover:to-indigo-700/40 transition-all duration-300">
-                            <div className="text-sm text-blue-300">Depósito Inicial</div>
-                            <div className="text-xl font-bold text-blue-400 glow-text-cyan">
-                              ${summary.deposit.toLocaleString()}
-                            </div>
+                        {/* Max. Drawdown Diario */}
+                        <div className="bg-gradient-to-br from-red-900/40 to-pink-800/30 p-4 rounded-lg border border-red-500/30 hover:from-red-800/50 hover:to-pink-700/40 transition-all duration-300">
+                          <div className="text-sm text-red-300">Max. Drawdown Diario (%)</div>
+                          <div className="text-xl font-bold text-red-400 glow-text-purple">
+                            {selectedAccount.propfirmRules?.maxDailyDrawdown || 'N/A'}%
                           </div>
-                        )}
-                        
-                        {summary.realizedPnl && (
-                          <div className="bg-gradient-to-br from-purple-900/40 to-pink-800/30 p-4 rounded-lg border border-purple-500/30 hover:from-purple-800/50 hover:to-pink-700/40 transition-all duration-300">
-                            <div className="text-sm text-purple-300">Withdraw Total</div>
-                            <div className={`text-xl font-bold ${summary.withdrawal >= 0 ? 'text-green-400 glow-text-cyan' : 'text-red-400 glow-text-purple'}`}>
-                              ${summary.withdrawal ? summary.withdrawal.toLocaleString() : '0'}
-                            </div>
+                        </div>
+
+                        {/* Máx. Drawdown Total */}
+                        <div className="bg-gradient-to-br from-orange-900/40 to-red-800/30 p-4 rounded-lg border border-orange-500/30 hover:from-orange-800/50 hover:to-red-700/40 transition-all duration-300">
+                          <div className="text-sm text-orange-300">Máx. Drawdown Total (%)</div>
+                          <div className="text-xl font-bold text-orange-400 glow-text-cyan">
+                            {selectedAccount.propfirmRules?.maxTotalDrawdown || 'N/A'}%
                           </div>
-                        )}
-                        
-                        {summary.withdrawal && (
-                          <div className="bg-gradient-to-br from-red-900/40 to-rose-800/30 p-4 rounded-lg border border-red-500/30 hover:from-red-800/50 hover:to-rose-700/40 transition-all duration-300">
-                            <div className="text-sm text-red-300">Retirada</div>
-                            <div className="text-xl font-bold text-red-400 glow-text-purple">
-                              -${summary.withdrawal.toLocaleString()}
-                            </div>
+                        </div>
+
+                        {/* Objetivo de Ganancias */}
+                        <div className="bg-gradient-to-br from-green-900/40 to-emerald-800/30 p-4 rounded-lg border border-green-500/30 hover:from-green-800/50 hover:to-emerald-700/40 transition-all duration-300">
+                          <div className="text-sm text-green-300">Objetivo de Ganancias (%)</div>
+                          <div className="text-xl font-bold text-green-400 glow-text-cyan">
+                            {selectedAccount.propfirmRules?.profitTarget || 'N/A'}%
                           </div>
-                        )}
-                        
-                        {summary.netTotal && (
-                          <div className="bg-gradient-to-br from-cyan-900/40 to-teal-800/30 p-4 rounded-lg border border-cyan-500/30 hover:from-cyan-800/50 hover:to-teal-700/40 transition-all duration-300">
-                            <div className="text-sm text-cyan-300">Total Neto</div>
-                            <div className={`text-xl font-bold ${summary.netTotal >= 0 ? 'text-green-400 glow-text-cyan' : 'text-red-400 glow-text-purple'}`}>
-                              ${summary.netTotal.toLocaleString()}
-                            </div>
+                        </div>
+
+                        {/* Operar Noticias */}
+                        <div className="bg-gradient-to-br from-blue-900/40 to-indigo-800/30 p-4 rounded-lg border border-blue-500/30 hover:from-blue-800/50 hover:to-indigo-700/40 transition-all duration-300">
+                          <div className="text-sm text-blue-300">Operar Noticias</div>
+                          <div className={`text-xl font-bold ${
+                            selectedAccount.propfirmRules?.tradingNews === 'Si' 
+                              ? 'text-green-400 glow-text-cyan' 
+                              : 'text-red-400 glow-text-purple'
+                          }`}>
+                            {selectedAccount.propfirmRules?.tradingNews || 'No'}
                           </div>
-                        )}
-                        
-                        {summary.balance && (
-                          <div className="bg-gradient-to-br from-indigo-900/40 to-purple-800/30 p-4 rounded-lg border border-indigo-500/30 hover:from-indigo-800/50 hover:to-purple-700/40 transition-all duration-300">
-                            <div className="text-sm text-indigo-300">Saldo Actual</div>
-                            <div className="text-xl font-bold text-indigo-400 glow-text-cyan">
-                              ${summary.balance.toLocaleString()}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {summary.capital && (
-                          <div className="bg-gradient-to-br from-violet-900/40 to-purple-800/30 p-4 rounded-lg border border-violet-500/30 hover:from-violet-800/50 hover:to-purple-700/40 transition-all duration-300">
-                            <div className="text-sm text-violet-300">Capital</div>
-                            <div className="text-xl font-bold text-violet-400 glow-text-purple">
-                              ${summary.capital.toLocaleString()}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {summary.freeMargin && (
-                          <div className="bg-gradient-to-br from-teal-900/40 to-cyan-800/30 p-4 rounded-lg border border-teal-500/30 hover:from-teal-800/50 hover:to-cyan-700/40 transition-all duration-300">
-                            <div className="text-sm text-teal-300">Margen Libre</div>
-                            <div className="text-xl font-bold text-teal-400 glow-text-cyan">
-                              ${summary.freeMargin.toLocaleString()}
-                            </div>
-                          </div>
-                        )}
-                        
-                        {(() => {
-                          // Calcular valoración de trading para esta tarjeta
-                          const accountTrades = trades.filter(t => t.account_id === selectedAccount.id);
-                          if (accountTrades.length === 0) return null;
-                          
-                          const initialBalance = summary.deposit || summary.initialBalance || 25000;
-                          const currentBalance = summary.balance || initialBalance;
-                          const finalProfitPercent = ((currentBalance - initialBalance) / initialBalance) * 100;
-                          const winRate = accountTrades.length > 0 ? ((accountTrades.filter(t => t.pnl > 0).length / accountTrades.length) * 100) : 0;
-                          
-                          // Usar las mismas funciones de cálculo
-                          const beneficioScore = finalProfitPercent < 4 ? 0 : 
-                                               finalProfitPercent < 10 ? (5 + ((finalProfitPercent - 4) / 6) * 3) : 10;
-                          const drawdownScore = 3.0; // Simplificado para esta vista
-                          const winRateScore = winRate < 30 ? 2 : 
-                                             winRate < 70 ? (2 + ((winRate - 30) / 40) * 7) : 9 + ((winRate - 70) / 30);
-                          const tradingScore = (beneficioScore * 0.4) + (drawdownScore * 0.4) + (winRateScore * 0.2);
-                          
-                          return (
-                            <div className="bg-gradient-to-br from-purple-900/40 to-cyan-800/30 p-4 rounded-lg border border-purple-500/30 hover:from-purple-800/50 hover:to-cyan-700/40 transition-all duration-300">
-                              <div className="text-sm text-purple-300">Valoración de Trading</div>
-                              <div className="text-xl font-bold gradient-traderfy-text glow-text-cyan">
-                                {tradingScore.toFixed(1)}/10
-                              </div>
-                            </div>
-                          );
-                        })()}
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
