@@ -31,11 +31,31 @@ const req = http.request(options, (res) => {
   res.on('end', () => {
     try {
       const result = JSON.parse(data);
+      console.log('=== NUEVO TRADINGHISTORYPARSER TEST ===');
       console.log('Trades count:', result.trades ? result.trades.length : 0);
       console.log('Report type:', result.reportType);
+      console.log('Platform detected:', result.reportType);
+      
       if (result.trades && result.trades.length > 0) {
-        console.log('First trade:', result.trades[0]);
+        console.log('\nFirst trade:', result.trades[0]);
+        console.log('\nSample of more trades:');
+        for (let i = 0; i < Math.min(5, result.trades.length); i++) {
+          const trade = result.trades[i];
+          console.log(`${i+1}. ${trade.symbol} ${trade.direction} P&L: ${trade.pnl}`);
+        }
       }
+      
+      if (result.summary) {
+        console.log('\n=== ADVANCED METRICS ===');
+        console.log('Net Profit:', result.summary.netProfit);
+        console.log('Win Rate:', result.summary.winRate + '%');
+        console.log('Profit Factor:', result.summary.profitFactor);
+        console.log('Sharpe Ratio:', result.summary.sharpeRatio);
+        console.log('Max Drawdown:', result.summary.maxDrawdown + '%');
+        console.log('Expectancy:', result.summary.expectancy);
+        console.log('Recovery Factor:', result.summary.recoveryFactor);
+      }
+      
       if (result.error) {
         console.log('Error:', result.error);
       }
