@@ -1432,7 +1432,7 @@ export default function TraderfyApp() {
         setShowAuthModal(true)
       }
     }, 500)
-  }, [authLoading]) // Solo depender de authLoading
+  }, [authLoading, user, demoMode, supabase]) // Incluir todas las dependencias
 
   const handleLogout = async () => {
     try {
