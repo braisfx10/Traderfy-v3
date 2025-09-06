@@ -414,6 +414,20 @@ agent_communication:
     status_history:
         - working: false
         - agent: "main"
+  - task: "CTrader Real File Parsing"
+    implemented: true
+    working: true
+    file: "/app/lib/unifiedTradingParser.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+        - agent: "main"
+        - comment: "ISSUE: Real CTrader file (FTT 15k.html) was not parsing correctly, returning 0 trades despite 110+ visible trades in HTML"
+        - working: true
+        - agent: "main"
+        - comment: "VERIFIED WORKING: Parser correctly extracts 110 trades from real CTrader file. Test results: First trade EURUSD Buy, entry 1.14748, close 1.1464, P&L -71.66. Direction capitalization correct ('Buy'/'Sell'). API integration working perfectly. Issue was JSON formatting in test requests, not parser logic."
         - comment: "REQUIREMENT: Change 'Resumen de cuenta - MetaTrader' card fields from current labels to: 'Depósito Inicial', 'Saldo Actual', 'Withdraw Total', 'Valoración de Trading'"
         - working: true
         - agent: "main"
