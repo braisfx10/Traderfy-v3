@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "COMPLETED - Removed three example accounts ('FTT Funded 15k', 'FTMO Challenge 100k', 'Prop Firm Live') and their associated sample trades from demo mode initialization. The account creation functionality remains fully operational. App now starts with empty accounts list, allowing users to create their own accounts from scratch."
+user_problem_statement: "PARTIALLY RESOLVED - ✅ MAIN ISSUES FIXED: 1) Fixed infinite loading screen caused by useEffect dependency conflicts. 2) Fixed HTML parsing - direction now correctly returns 'Buy'/'Sell' with proper capitalization. 3) Verified API parsing works correctly (3 trades: EURUSD Buy -71.66, XAUUSD Buy -64.40, XAUUSD Sell +101.50, total P&L: -34.56). ⚠️ PENDING UI VERIFICATION: Need to test trade colors (Buy=green, Sell=red) and direction filters in Operations table through complete end-to-end workflow."
 
 backend:
   - task: "Frontend Loading Bug Fix"
