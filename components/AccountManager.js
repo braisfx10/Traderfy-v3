@@ -52,7 +52,7 @@ const AccountManager = ({ user, onAccountsChange }) => {
     if (user?.id) {
       loadAccounts()
     }
-  }, [user])
+  }, [user?.id])
 
   const loadAccounts = async () => {
     try {
