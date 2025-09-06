@@ -1646,14 +1646,33 @@ export default function TraderfyApp() {
                           </div>
                         )}
                         
-                        {summary.profitFactor && (
-                          <div className="bg-gradient-to-br from-purple-900/40 to-cyan-800/30 p-4 rounded-lg border border-purple-500/30 hover:from-purple-800/50 hover:to-cyan-700/40 transition-all duration-300">
-                            <div className="text-sm text-purple-300">Profit Factor</div>
-                            <div className="text-xl font-bold gradient-traderfy-text glow-text-cyan">
-                              {summary.profitFactor}
+                        {(() => {
+                          // Calcular valoración de trading para esta tarjeta
+                          const accountTrades = trades.filter(t => t.account_id === selectedAccount.id);
+                          if (accountTrades.length === 0) return null;
+                          
+                          const initialBalance = summary.deposit || summary.initialBalance || 25000;
+                          const currentBalance = summary.balance || initialBalance;
+                          const finalProfitPercent = ((currentBalance - initialBalance) / initialBalance) * 100;
+                          const winRate = accountTrades.length > 0 ? ((accountTrades.filter(t => t.pnl > 0).length / accountTrades.length) * 100) : 0;
+                          
+                          // Usar las mismas funciones de cálculo
+                          const beneficioScore = finalProfitPercent < 4 ? 0 : 
+                                               finalProfitPercent < 10 ? (5 + ((finalProfitPercent - 4) / 6) * 3) : 10;
+                          const drawdownScore = 3.0; // Simplificado para esta vista
+                          const winRateScore = winRate < 30 ? 2 : 
+                                             winRate < 70 ? (2 + ((winRate - 30) / 40) * 7) : 9 + ((winRate - 70) / 30);
+                          const tradingScore = (beneficioScore * 0.4) + (drawdownScore * 0.4) + (winRateScore * 0.2);
+                          
+                          return (
+                            <div className="bg-gradient-to-br from-purple-900/40 to-cyan-800/30 p-4 rounded-lg border border-purple-500/30 hover:from-purple-800/50 hover:to-cyan-700/40 transition-all duration-300">
+                              <div className="text-sm text-purple-300">Valoración de Trading</div>
+                              <div className="text-xl font-bold gradient-traderfy-text glow-text-cyan">
+                                {tradingScore.toFixed(1)}/10
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          );
+                        })()}
                       </div>
                     </CardContent>
                   </Card>
