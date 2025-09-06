@@ -1565,66 +1565,112 @@ export default function TraderfyApp() {
               title={`Resumen de ${selectedAccount.name}`} 
             />
             
-            {/* Mostrar datos de resumen de cuenta si están disponibles */}
-            {(() => {
-              const accountTrades = trades.filter(t => t.account_id === selectedAccount.id);
-              if (accountTrades.length > 0 && accountTrades[0].summary) {
-                const summary = accountTrades[0].summary;
-                return (
-                  <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
-                    <CardHeader>
-                      <CardTitle className="text-white flex items-center gap-2">
-                        <Activity className="w-5 h-5 text-purple-400" />
-                        Resumen de Cuenta - MetaTrader
-                      </CardTitle>
-                      <CardDescription className="text-purple-200/70">
-                        Datos extraídos del reporte oficial
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        {/* Max. Drawdown Diario */}
-                        <div className="bg-gradient-to-br from-red-900/40 to-pink-800/30 p-4 rounded-lg border border-red-500/30 hover:from-red-800/50 hover:to-pink-700/40 transition-all duration-300">
-                          <div className="text-sm text-red-300">Max. Drawdown Diario (%)</div>
-                          <div className="text-xl font-bold text-red-400 glow-text-purple">
-                            {selectedAccount.propfirmRules?.maxDailyDrawdown || 'N/A'}%
-                          </div>
-                        </div>
-
-                        {/* Máx. Drawdown Total */}
-                        <div className="bg-gradient-to-br from-orange-900/40 to-red-800/30 p-4 rounded-lg border border-orange-500/30 hover:from-orange-800/50 hover:to-red-700/40 transition-all duration-300">
-                          <div className="text-sm text-orange-300">Máx. Drawdown Total (%)</div>
-                          <div className="text-xl font-bold text-orange-400 glow-text-cyan">
-                            {selectedAccount.propfirmRules?.maxTotalDrawdown || 'N/A'}%
-                          </div>
-                        </div>
-
-                        {/* Objetivo de Ganancias */}
-                        <div className="bg-gradient-to-br from-green-900/40 to-emerald-800/30 p-4 rounded-lg border border-green-500/30 hover:from-green-800/50 hover:to-emerald-700/40 transition-all duration-300">
-                          <div className="text-sm text-green-300">Objetivo de Ganancias (%)</div>
-                          <div className="text-xl font-bold text-green-400 glow-text-cyan">
-                            {selectedAccount.propfirmRules?.profitTarget || 'N/A'}%
-                          </div>
-                        </div>
-
-                        {/* Operar Noticias */}
-                        <div className="bg-gradient-to-br from-blue-900/40 to-indigo-800/30 p-4 rounded-lg border border-blue-500/30 hover:from-blue-800/50 hover:to-indigo-700/40 transition-all duration-300">
-                          <div className="text-sm text-blue-300">Operar Noticias</div>
-                          <div className={`text-xl font-bold ${
-                            selectedAccount.propfirmRules?.tradingNews === 'Si' 
-                              ? 'text-green-400 glow-text-cyan' 
-                              : 'text-red-400 glow-text-purple'
-                          }`}>
-                            {selectedAccount.propfirmRules?.tradingNews || 'No'}
-                          </div>
-                        </div>
+            {/* Tarjetas de Normas de Trading y Reglas de Propfirm lado a lado */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              
+              {/* Tarjeta: Normas de Trading */}
+              <Card className="bg-gradient-to-br from-blue-900/20 via-indigo-900/10 to-cyan-900/20 border-blue-500/30">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <AlertTriangle className="w-5 h-5 text-blue-400" />
+                    Normas de Trading
+                  </CardTitle>
+                  <CardDescription className="text-blue-200/70">
+                    Reglas configuradas para esta cuenta
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Máx. Trades por Día */}
+                    <div className="bg-gradient-to-br from-blue-900/40 to-indigo-800/30 p-4 rounded-lg border border-blue-500/30 hover:from-blue-800/50 hover:to-indigo-700/40 transition-all duration-300">
+                      <div className="text-sm text-blue-300">Máx. Trades por Día</div>
+                      <div className="text-xl font-bold text-blue-400 glow-text-cyan">
+                        {selectedAccount.rules?.maxTradesPerDay || 'N/A'}
                       </div>
-                    </CardContent>
-                  </Card>
-                );
-              }
-              return null;
-            })()}
+                    </div>
+
+                    {/* Pérdida Máx. Diaria */}
+                    <div className="bg-gradient-to-br from-red-900/40 to-pink-800/30 p-4 rounded-lg border border-red-500/30 hover:from-red-800/50 hover:to-pink-700/40 transition-all duration-300">
+                      <div className="text-sm text-red-300">Pérdida Máx. Diaria (%)</div>
+                      <div className="text-xl font-bold text-red-400 glow-text-purple">
+                        {selectedAccount.rules?.maxDailyLoss || 'N/A'}%
+                      </div>
+                    </div>
+
+                    {/* Riesgo Máx. por Operación */}
+                    <div className="bg-gradient-to-br from-orange-900/40 to-red-800/30 p-4 rounded-lg border border-orange-500/30 hover:from-orange-800/50 hover:to-red-700/40 transition-all duration-300">
+                      <div className="text-sm text-orange-300">Riesgo Máx. por Operación (%)</div>
+                      <div className="text-xl font-bold text-orange-400 glow-text-cyan">
+                        {selectedAccount.rules?.maxRiskPerTrade || 'N/A'}%
+                      </div>
+                    </div>
+
+                    {/* Horario Operativo */}
+                    <div className="bg-gradient-to-br from-purple-900/40 to-violet-800/30 p-4 rounded-lg border border-purple-500/30 hover:from-purple-800/50 hover:to-violet-700/40 transition-all duration-300">
+                      <div className="text-sm text-purple-300">Horario Operativo</div>
+                      <div className="text-xl font-bold text-purple-400 glow-text-cyan">
+                        {selectedAccount.rules?.tradingHours?.start && selectedAccount.rules?.tradingHours?.end 
+                          ? `${selectedAccount.rules.tradingHours.start} - ${selectedAccount.rules.tradingHours.end}`
+                          : 'N/A'
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Tarjeta: Reglas de Propfirm */}
+              <Card className="bg-gradient-to-br from-green-900/20 via-emerald-900/10 to-teal-900/20 border-green-500/30">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Activity className="w-5 h-5 text-green-400" />
+                    Reglas de Propfirm
+                  </CardTitle>
+                  <CardDescription className="text-green-200/70">
+                    Configuración específica de la prop firm
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Max. Drawdown Diario */}
+                    <div className="bg-gradient-to-br from-red-900/40 to-pink-800/30 p-4 rounded-lg border border-red-500/30 hover:from-red-800/50 hover:to-pink-700/40 transition-all duration-300">
+                      <div className="text-sm text-red-300">Max. Drawdown Diario (%)</div>
+                      <div className="text-xl font-bold text-red-400 glow-text-purple">
+                        {selectedAccount.propfirmRules?.maxDailyDrawdown || 'N/A'}%
+                      </div>
+                    </div>
+
+                    {/* Máx. Drawdown Total */}
+                    <div className="bg-gradient-to-br from-orange-900/40 to-red-800/30 p-4 rounded-lg border border-orange-500/30 hover:from-orange-800/50 hover:to-red-700/40 transition-all duration-300">
+                      <div className="text-sm text-orange-300">Máx. Drawdown Total (%)</div>
+                      <div className="text-xl font-bold text-orange-400 glow-text-cyan">
+                        {selectedAccount.propfirmRules?.maxTotalDrawdown || 'N/A'}%
+                      </div>
+                    </div>
+
+                    {/* Objetivo de Ganancias */}
+                    <div className="bg-gradient-to-br from-green-900/40 to-emerald-800/30 p-4 rounded-lg border border-green-500/30 hover:from-green-800/50 hover:to-emerald-700/40 transition-all duration-300">
+                      <div className="text-sm text-green-300">Objetivo de Ganancias (%)</div>
+                      <div className="text-xl font-bold text-green-400 glow-text-cyan">
+                        {selectedAccount.propfirmRules?.profitTarget || 'N/A'}%
+                      </div>
+                    </div>
+
+                    {/* Operar Noticias */}
+                    <div className="bg-gradient-to-br from-blue-900/40 to-indigo-800/30 p-4 rounded-lg border border-blue-500/30 hover:from-blue-800/50 hover:to-indigo-700/40 transition-all duration-300">
+                      <div className="text-sm text-blue-300">Operar Noticias</div>
+                      <div className={`text-xl font-bold ${
+                        selectedAccount.propfirmRules?.tradingNews === 'Si' 
+                          ? 'text-green-400 glow-text-cyan' 
+                          : 'text-red-400 glow-text-purple'
+                      }`}>
+                        {selectedAccount.propfirmRules?.tradingNews || 'No'}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
             
             {/* Gráficos de Panel de Cuenta - Resumen */}
             {(() => {
