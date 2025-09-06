@@ -351,10 +351,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "New Valoración Formula Implementation"
-    - "Withdraw Detection Logic"
-    - "Improved Chart Data Processing"
-    - "Chart Mathematical Accuracy"
+    - "Trade Display Colors and Filters"
+    - "HTML Upload Component"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
