@@ -1409,11 +1409,17 @@ export default function TraderfyApp() {
 
   // Solución simple y definitiva para evitar bucles infinitos
   useEffect(() => {
+    console.log('useEffect triggered:', { authLoading, user: !!user, demoMode, supabase: !!supabase })
+    
     // Solo ejecutar cuando authLoading haya terminado
-    if (authLoading) return;
+    if (authLoading) {
+      console.log('Waiting for authLoading to finish...')
+      return;
+    }
     
     // Configuración inicial solo una vez
     if (!supabase) {
+      console.log('Initializing demo mode...')
       // Inicializar con lista de cuentas vacía - los usuarios pueden crear sus propias cuentas
       setAccounts([])
       
@@ -1424,6 +1430,7 @@ export default function TraderfyApp() {
     }
     
     // Establecer loading como false inmediatamente después de authLoading
+    console.log('Setting loading to false')
     setLoading(false)
     
     // Mostrar modal de auth solo si es necesario
