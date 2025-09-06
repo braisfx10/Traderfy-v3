@@ -1621,7 +1621,7 @@ export default function TraderfyApp() {
                         
                         {summary.balance && (
                           <div className="bg-gradient-to-br from-indigo-900/40 to-purple-800/30 p-4 rounded-lg border border-indigo-500/30 hover:from-indigo-800/50 hover:to-purple-700/40 transition-all duration-300">
-                            <div className="text-sm text-indigo-300">Saldo Final</div>
+                            <div className="text-sm text-indigo-300">Saldo Actual</div>
                             <div className="text-xl font-bold text-indigo-400 glow-text-cyan">
                               ${summary.balance.toLocaleString()}
                             </div>
