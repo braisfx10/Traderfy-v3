@@ -331,6 +331,18 @@ frontend:
         - agent: "testing"
         - comment: "Frontend testing not performed - focusing on backend parser functionality"
 
+  - task: "Trade Display Colors and Filters"
+    implemented: true
+    working: "NA"
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "USER REPORTED ISSUES: 1) Buy trades should appear in GREEN but both Buy/Sell appear in RED 2) Direction filters not working correctly. Need to test with test-report.html (3 trades: 2 Buy, 1 Sell, total P&L: -34.56)"
+
 metadata:
   created_by: "testing_agent"
   version: "1.0"
