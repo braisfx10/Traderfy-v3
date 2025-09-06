@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Playwright - Crear Cuenta y Probar Funcionalidad</title>
+    <script>
+        // Script para inyectar datos directamente en la aplicación y probar los colores
+        function testApp() {
+            // Simular la creación de una cuenta y datos
+            const testAccount = { id: 'test-123', name: 'Cuenta de Prueba', tag: 'Demo', user_id: 'demo' };
+            const testTrades = [
+                {
+                    id: 'trade-1',
+                    symbol: 'EURUSD',
+                    direction: 'Buy',
+                    close_time: '2025-07-30 13:13:02',
+                    entry_price: 1.14748,
+                    close_price: 1.14640,
+                    lots: 0.65,
+                    pnl: -71.66,
+                    account_id: 'test-123',
+                    user_id: 'demo'
+                },
+                {
+                    id: 'trade-2',
+                    symbol: 'XAUUSD',
+                    direction: 'Buy',
+                    close_time: '2025-07-30 13:55:16',
+                    entry_price: 3304.20,
+                    close_price: 3300.98,
+                    lots: 2.00,
+                    pnl: -64.40,
+                    account_id: 'test-123',
+                    user_id: 'demo'
+                },
+                {
+                    id: 'trade-3',
+                    symbol: 'XAUUSD',
+                    direction: 'Sell',
+                    close_time: '2025-07-31 10:17:59',
+                    entry_price: 3306.79,
+                    close_price: 3304.76,
+                    lots: 5.00,
+                    pnl: 101.50,
+                    account_id: 'test-123',
+                    user_id: 'demo'
+                }
+            ];
+
+            console.log("Test data prepared:", { testAccount, testTrades });
+            
+            // Intentar acceder al estado de React para inyectar datos (si fuera posible)
+            return { testAccount, testTrades };
+        }
+        
+        window.testApp = testApp;
+    </script>
+</head>
+<body>
+    <h1>Test Helper</h1>
+    <p>Este archivo ayuda a probar la funcionalidad de la aplicación</p>
+</body>
+</html>
