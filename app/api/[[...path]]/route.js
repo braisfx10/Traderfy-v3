@@ -339,7 +339,7 @@ async function handleRoute(request, { params }) {
       try {
         // Importar y usar el parser HTML
         const { parseHTMLReport } = await import('../../../lib/htmlParser')
-        const parsedData = parseHTMLReport(htmlContent)
+        const parsedData = await parseHTMLReport(htmlContent)
 
         // Si Supabase está configurado, guardar en la base de datos
         if (supabase) {
