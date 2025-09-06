@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "PARTIALLY RESOLVED - ✅ MAIN ISSUES FIXED: 1) Fixed infinite loading screen caused by useEffect dependency conflicts. 2) Fixed HTML parsing - direction now correctly returns 'Buy'/'Sell' with proper capitalization. 3) Verified API parsing works correctly (3 trades: EURUSD Buy -71.66, XAUUSD Buy -64.40, XAUUSD Sell +101.50, total P&L: -34.56). ⚠️ PENDING UI VERIFICATION: Need to test trade colors (Buy=green, Sell=red) and direction filters in Operations table through complete end-to-end workflow."
+user_problem_statement: "FIXED MAJOR ISSUES - ✅ PARSER FILTERING: Added filtering to exclude 'Depósito', 'Retirada', 'Deposit', 'Withdrawal' and other non-trading transactions from being treated as trades. ✅ TARJETA ACTUALIZADA: Modified 'Resumen de Cuenta - MetaTrader' card fields to show: 'Depósito Inicial', 'Saldo Actual', 'Withdraw Total', 'Valoración de Trading'. ✅ NO DUPLICATES: Parser correctly returns only real trades without duplicating operations. ⚠️ PENDING: Need to test full UI flow to ensure colors (Buy=green, Sell=red) and filters work correctly in Operations table."
 
 backend:
   - task: "Frontend Loading Bug Fix"
