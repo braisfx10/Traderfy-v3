@@ -1,0 +1,939 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224">
+<html xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:ms="urn:schemas-microsoft-com:xslt" xmlns:dt="urn:schemas-microsoft-com:datatypes" xmlns:ext="urn:xstl-ext">
+<head>
+    <META http-equiv="Content-Type" content="text/html; charset=utf-16">
+        <title>
+            cT
+            _
+            7012643
+            _
+            2025-8-31
+        </title>
+        <style type="text/css">
+        body {
+            color: #000000;
+            background-color: #FFFFFF;
+        }
+
+        .caption-style {
+            font-size: xx-large;
+            font-weight: bold;
+            margin-top: 60px;
+        }
+
+        .company-name-style {
+            font-size: x-large;
+            margin-top: 60px;
+        }
+
+        .date-style {
+            font-size: x-large;
+            margin-top: 5px;
+        }
+
+        .invisible-totals {
+            color: white;
+        }
+
+        .default-text-style {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: small;
+        }
+
+        .summary-style { text-align: right; font-weight: bold; }
+
+        .title-style { font-size: x-large; height: 50px; background: #FFF;}
+
+        .cell-header {
+            border-bottom: 2px solid black;
+            text-align: center;
+        }
+
+        .cell-text {
+            border-bottom: 1px solid black;
+            text-align: center;
+        }
+
+        .totals-title { 
+			color: #FFFFFF;  
+			text-align: left; 
+		}
+
+        .total-cell
+        {
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        .balance-style {
+            text-align: left;
+            font-size: x-large;
+            vertical-align: bottom;
+			font-weight: bold;
+        }
+
+        .dataTable tr:nth-child(even) { background: #FFF; }
+        .dataTable tr:nth-child(odd) { background: #E0E0E0; }
+
+        .dataTable td:first-child { width: 1px }
+        .dataTable td:nth-child(2) { width: 1px }
+        </style>
+    </head>
+    <body style="margin: 0px 25px 0px 25px">
+        <table class="default-text-style">
+            <tr>
+                <td>
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                <div class="caption-style">
+                                    Extracto de Cuenta
+                                </div>
+
+                                <br />
+                            </td>
+                            <td align="right"
+                            valign="top">
+                            <div class="company-name-style"
+                            style="margin-top: 69px">
+                            PropFirmsTech
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- Header -->
+    <tr align="left">
+        <td>
+            <table style="width: 100%; margin-top: 30px">
+                <tr>
+                    <td style="width: auto">
+                        Cuenta :
+                    </td>
+                    <td style="width: 70%">
+                        <strong>
+                            7012643
+                        </strong>
+                    </td>
+                    <td class="summary-style"
+                    rowspan="2"
+                    valign="top">
+                    <strong>
+                        31/08/2025 18:21:39.565, UTC +0
+                    </strong>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: auto">
+                    Divisa
+                    :
+                </td>
+                <td style="width: 70%">
+                    <strong>
+                        USD
+                    </strong>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<!-- Render tables-->
+    <tr align="left">
+        <td>
+            <table class="dataTable" style="width: 100%; margin-top: 30px;"
+                   cellspacing="0"
+                   cellpadding="3">
+                <tr>
+                    <td colspan="13"
+                        class="title-style"
+                        valign="top">
+                        <strong>Historial</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="cell-header invisible-totals">Totales</td>
+                        <td class="cell-header"><strong>Símbolo</strong></td>
+                        <td class="cell-header"><strong>Dirección de apertura</strong></td>
+                        <td class="cell-header"><strong>Hora de cierre (UTC+0)</strong></td>
+                        <td class="cell-header"><strong>Precio de entrada</strong></td>
+                        <td class="cell-header"><strong>Precio de cierre</strong></td>
+                        <td class="cell-header"><strong>Cantidad de Cierre</strong></td>
+                        <td class="cell-header"><strong>USD neto</strong></td>
+                        <td class="cell-header"><strong>Saldo USD</strong></td>
+                </tr>
+
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>EURUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>30/07/2025 13:13:02.678</nobr></td>
+                            <td class="cell-text"><nobr>1.14748</nobr></td>
+                            <td class="cell-text"><nobr>1.14640</nobr></td>
+                            <td class="cell-text"><nobr>0.65 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-71.66</nobr></td>
+                            <td class="cell-text"><nobr>14 928.34</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>30/07/2025 13:55:16.996</nobr></td>
+                            <td class="cell-text"><nobr>3304.20</nobr></td>
+                            <td class="cell-text"><nobr>3300.98</nobr></td>
+                            <td class="cell-text"><nobr>2.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-64.40</nobr></td>
+                            <td class="cell-text"><nobr>14 863.94</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>30/07/2025 15:20:01.976</nobr></td>
+                            <td class="cell-text"><nobr>3303.20</nobr></td>
+                            <td class="cell-text"><nobr>3298.24</nobr></td>
+                            <td class="cell-text"><nobr>2.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-99.20</nobr></td>
+                            <td class="cell-text"><nobr>14 764.74</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>30/07/2025 16:18:05.124</nobr></td>
+                            <td class="cell-text"><nobr>3291.37</nobr></td>
+                            <td class="cell-text"><nobr>3292.97</nobr></td>
+                            <td class="cell-text"><nobr>3.30 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>52.80</nobr></td>
+                            <td class="cell-text"><nobr>14 817.54</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>GBPUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>31/07/2025 09:07:02.107</nobr></td>
+                            <td class="cell-text"><nobr>1.32483</nobr></td>
+                            <td class="cell-text"><nobr>1.32416</nobr></td>
+                            <td class="cell-text"><nobr>2.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-138.50</nobr></td>
+                            <td class="cell-text"><nobr>14 679.04</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>31/07/2025 10:17:59.922</nobr></td>
+                            <td class="cell-text"><nobr>3306.79</nobr></td>
+                            <td class="cell-text"><nobr>3304.76</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-101.50</nobr></td>
+                            <td class="cell-text"><nobr>14 577.54</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>31/07/2025 11:36:20.218</nobr></td>
+                            <td class="cell-text"><nobr>3300.02</nobr></td>
+                            <td class="cell-text"><nobr>3306.38</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>318.00</nobr></td>
+                            <td class="cell-text"><nobr>14 895.54</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>01/08/2025 07:19:33.684</nobr></td>
+                            <td class="cell-text"><nobr>3290.48</nobr></td>
+                            <td class="cell-text"><nobr>3290.68</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>10.00</nobr></td>
+                            <td class="cell-text"><nobr>14 905.54</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>01/08/2025 10:00:17.212</nobr></td>
+                            <td class="cell-text"><nobr>3294.14</nobr></td>
+                            <td class="cell-text"><nobr>3295.08</nobr></td>
+                            <td class="cell-text"><nobr>7.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>65.80</nobr></td>
+                            <td class="cell-text"><nobr>14 971.34</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Sell</nobr></td>
+                            <td class="cell-text"><nobr>05/08/2025 13:46:19.166</nobr></td>
+                            <td class="cell-text"><nobr>3377.35</nobr></td>
+                            <td class="cell-text"><nobr>3377.13</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>11.00</nobr></td>
+                            <td class="cell-text"><nobr>14 982.34</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Sell</nobr></td>
+                            <td class="cell-text"><nobr>05/08/2025 13:54:15.621</nobr></td>
+                            <td class="cell-text"><nobr>3376.55</nobr></td>
+                            <td class="cell-text"><nobr>3376.04</nobr></td>
+                            <td class="cell-text"><nobr>10.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>51.00</nobr></td>
+                            <td class="cell-text"><nobr>15 033.34</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>05/08/2025 14:07:32.161</nobr></td>
+                            <td class="cell-text"><nobr>3375.00</nobr></td>
+                            <td class="cell-text"><nobr>3376.26</nobr></td>
+                            <td class="cell-text"><nobr>8.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>100.80</nobr></td>
+                            <td class="cell-text"><nobr>15 134.14</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>05/08/2025 14:23:19.838</nobr></td>
+                            <td class="cell-text"><nobr>3375.26</nobr></td>
+                            <td class="cell-text"><nobr>3377.75</nobr></td>
+                            <td class="cell-text"><nobr>6.50 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>161.85</nobr></td>
+                            <td class="cell-text"><nobr>15 295.99</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>06/08/2025 07:03:00.428</nobr></td>
+                            <td class="cell-text"><nobr>3372.94</nobr></td>
+                            <td class="cell-text"><nobr>3373.85</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>45.50</nobr></td>
+                            <td class="cell-text"><nobr>15 341.49</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Sell</nobr></td>
+                            <td class="cell-text"><nobr>06/08/2025 13:34:32.891</nobr></td>
+                            <td class="cell-text"><nobr>3369.29</nobr></td>
+                            <td class="cell-text"><nobr>3367.79</nobr></td>
+                            <td class="cell-text"><nobr>5.50 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>82.50</nobr></td>
+                            <td class="cell-text"><nobr>15 423.99</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>EURUSD</nobr></td>
+                            <td class="cell-text"><nobr>Sell</nobr></td>
+                            <td class="cell-text"><nobr>07/08/2025 08:41:48.471</nobr></td>
+                            <td class="cell-text"><nobr>1.16851</nobr></td>
+                            <td class="cell-text"><nobr>1.16846</nobr></td>
+                            <td class="cell-text"><nobr>2.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>5.50</nobr></td>
+                            <td class="cell-text"><nobr>15 429.49</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>07/08/2025 10:52:34.301</nobr></td>
+                            <td class="cell-text"><nobr>3381.13</nobr></td>
+                            <td class="cell-text"><nobr>3372.35</nobr></td>
+                            <td class="cell-text"><nobr>4.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-351.20</nobr></td>
+                            <td class="cell-text"><nobr>15 078.29</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>07/08/2025 12:18:43.072</nobr></td>
+                            <td class="cell-text"><nobr>3378.06</nobr></td>
+                            <td class="cell-text"><nobr>3379.02</nobr></td>
+                            <td class="cell-text"><nobr>4.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>38.40</nobr></td>
+                            <td class="cell-text"><nobr>15 116.69</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>07/08/2025 13:37:41.711</nobr></td>
+                            <td class="cell-text"><nobr>3382.82</nobr></td>
+                            <td class="cell-text"><nobr>3389.58</nobr></td>
+                            <td class="cell-text"><nobr>6.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>405.60</nobr></td>
+                            <td class="cell-text"><nobr>15 522.29</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>08/08/2025 09:17:28.974</nobr></td>
+                            <td class="cell-text"><nobr>3396.37</nobr></td>
+                            <td class="cell-text"><nobr>3399.72</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>167.50</nobr></td>
+                            <td class="cell-text"><nobr>15 689.79</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>11/08/2025 09:53:43.127</nobr></td>
+                            <td class="cell-text"><nobr>3357.19</nobr></td>
+                            <td class="cell-text"><nobr>3354.17</nobr></td>
+                            <td class="cell-text"><nobr>7.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-211.40</nobr></td>
+                            <td class="cell-text"><nobr>15 478.39</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>11/08/2025 10:59:55.909</nobr></td>
+                            <td class="cell-text"><nobr>3358.42</nobr></td>
+                            <td class="cell-text"><nobr>3358.59</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>8.50</nobr></td>
+                            <td class="cell-text"><nobr>15 486.89</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>11/08/2025 11:27:10.126</nobr></td>
+                            <td class="cell-text"><nobr>3355.50</nobr></td>
+                            <td class="cell-text"><nobr>3351.19</nobr></td>
+                            <td class="cell-text"><nobr>7.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-301.70</nobr></td>
+                            <td class="cell-text"><nobr>15 185.19</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>11/08/2025 13:45:19.281</nobr></td>
+                            <td class="cell-text"><nobr>3350.81</nobr></td>
+                            <td class="cell-text"><nobr>3359.29</nobr></td>
+                            <td class="cell-text"><nobr>6.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>508.80</nobr></td>
+                            <td class="cell-text"><nobr>15 693.99</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>12/08/2025 13:12:12.574</nobr></td>
+                            <td class="cell-text"><nobr>3351.45</nobr></td>
+                            <td class="cell-text"><nobr>3343.89</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-378.00</nobr></td>
+                            <td class="cell-text"><nobr>15 315.99</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>12/08/2025 14:12:03.664</nobr></td>
+                            <td class="cell-text"><nobr>3345.83</nobr></td>
+                            <td class="cell-text"><nobr>3338.81</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-351.00</nobr></td>
+                            <td class="cell-text"><nobr>14 964.99</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>13/08/2025 07:42:36.075</nobr></td>
+                            <td class="cell-text"><nobr>3357.47</nobr></td>
+                            <td class="cell-text"><nobr>3358.56</nobr></td>
+                            <td class="cell-text"><nobr>6.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>65.40</nobr></td>
+                            <td class="cell-text"><nobr>15 030.39</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>13/08/2025 11:09:20.482</nobr></td>
+                            <td class="cell-text"><nobr>3365.08</nobr></td>
+                            <td class="cell-text"><nobr>3362.67</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-120.50</nobr></td>
+                            <td class="cell-text"><nobr>14 909.89</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>13/08/2025 12:59:06.485</nobr></td>
+                            <td class="cell-text"><nobr>3356.97</nobr></td>
+                            <td class="cell-text"><nobr>3358.85</nobr></td>
+                            <td class="cell-text"><nobr>6.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>112.80</nobr></td>
+                            <td class="cell-text"><nobr>15 022.69</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>14/08/2025 09:07:26.280</nobr></td>
+                            <td class="cell-text"><nobr>3346.81</nobr></td>
+                            <td class="cell-text"><nobr>3350.87</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>203.00</nobr></td>
+                            <td class="cell-text"><nobr>15 225.69</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Sell</nobr></td>
+                            <td class="cell-text"><nobr>14/08/2025 12:49:04.195</nobr></td>
+                            <td class="cell-text"><nobr>3353.80</nobr></td>
+                            <td class="cell-text"><nobr>3353.49</nobr></td>
+                            <td class="cell-text"><nobr>6.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>18.60</nobr></td>
+                            <td class="cell-text"><nobr>15 244.29</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Sell</nobr></td>
+                            <td class="cell-text"><nobr>14/08/2025 13:22:42.958</nobr></td>
+                            <td class="cell-text"><nobr>3353.23</nobr></td>
+                            <td class="cell-text"><nobr>3351.32</nobr></td>
+                            <td class="cell-text"><nobr>6.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>114.60</nobr></td>
+                            <td class="cell-text"><nobr>15 358.89</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>15/08/2025 11:11:11.838</nobr></td>
+                            <td class="cell-text"><nobr>3337.87</nobr></td>
+                            <td class="cell-text"><nobr>3338.09</nobr></td>
+                            <td class="cell-text"><nobr>8.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>17.60</nobr></td>
+                            <td class="cell-text"><nobr>15 376.49</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>15/08/2025 11:33:27.621</nobr></td>
+                            <td class="cell-text"><nobr>3339.56</nobr></td>
+                            <td class="cell-text"><nobr>3342.18</nobr></td>
+                            <td class="cell-text"><nobr>6.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>157.20</nobr></td>
+                            <td class="cell-text"><nobr>15 533.69</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>15/08/2025 12:41:30.762</nobr></td>
+                            <td class="cell-text"><nobr>3335.05</nobr></td>
+                            <td class="cell-text"><nobr>3343.07</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>401.00</nobr></td>
+                            <td class="cell-text"><nobr>15 934.69</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>18/08/2025 15:53:56.237</nobr></td>
+                            <td class="cell-text"><nobr>3334.27</nobr></td>
+                            <td class="cell-text"><nobr>3334.35</nobr></td>
+                            <td class="cell-text"><nobr>10.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>8.00</nobr></td>
+                            <td class="cell-text"><nobr>15 942.69</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>18/08/2025 17:37:33.285</nobr></td>
+                            <td class="cell-text"><nobr>3332.77</nobr></td>
+                            <td class="cell-text"><nobr>3333.09</nobr></td>
+                            <td class="cell-text"><nobr>12.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>38.40</nobr></td>
+                            <td class="cell-text"><nobr>15 981.09</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>18/08/2025 17:44:13.453</nobr></td>
+                            <td class="cell-text"><nobr>3333.17</nobr></td>
+                            <td class="cell-text"><nobr>3334.25</nobr></td>
+                            <td class="cell-text"><nobr>12.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>129.60</nobr></td>
+                            <td class="cell-text"><nobr>16 110.69</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>18/08/2025 17:57:09.099</nobr></td>
+                            <td class="cell-text"><nobr>3333.63</nobr></td>
+                            <td class="cell-text"><nobr>3334.31</nobr></td>
+                            <td class="cell-text"><nobr>12.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>81.60</nobr></td>
+                            <td class="cell-text"><nobr>16 192.29</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>18/08/2025 19:09:13.598</nobr></td>
+                            <td class="cell-text"><nobr>3334.01</nobr></td>
+                            <td class="cell-text"><nobr>3331.38</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-131.50</nobr></td>
+                            <td class="cell-text"><nobr>16 060.79</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>18/08/2025 19:54:16.739</nobr></td>
+                            <td class="cell-text"><nobr>3331.63</nobr></td>
+                            <td class="cell-text"><nobr>3333.21</nobr></td>
+                            <td class="cell-text"><nobr>2.70 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>42.66</nobr></td>
+                            <td class="cell-text"><nobr>16 103.45</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>19/08/2025 12:15:31.826</nobr></td>
+                            <td class="cell-text"><nobr>3341.31</nobr></td>
+                            <td class="cell-text"><nobr>3336.56</nobr></td>
+                            <td class="cell-text"><nobr>7.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-332.50</nobr></td>
+                            <td class="cell-text"><nobr>15 770.95</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>19/08/2025 13:07:47.718</nobr></td>
+                            <td class="cell-text"><nobr>3338.24</nobr></td>
+                            <td class="cell-text"><nobr>3332.60</nobr></td>
+                            <td class="cell-text"><nobr>8.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>-451.20</nobr></td>
+                            <td class="cell-text"><nobr>15 319.75</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>20/08/2025 11:29:46.537</nobr></td>
+                            <td class="cell-text"><nobr>3326.10</nobr></td>
+                            <td class="cell-text"><nobr>3331.13</nobr></td>
+                            <td class="cell-text"><nobr>9.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>452.70</nobr></td>
+                            <td class="cell-text"><nobr>15 772.45</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>21/08/2025 12:39:53.804</nobr></td>
+                            <td class="cell-text"><nobr>3340.01</nobr></td>
+                            <td class="cell-text"><nobr>3341.46</nobr></td>
+                            <td class="cell-text"><nobr>7.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>101.50</nobr></td>
+                            <td class="cell-text"><nobr>15 873.95</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>21/08/2025 12:44:41.277</nobr></td>
+                            <td class="cell-text"><nobr>3339.86</nobr></td>
+                            <td class="cell-text"><nobr>3340.18</nobr></td>
+                            <td class="cell-text"><nobr>3.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>9.60</nobr></td>
+                            <td class="cell-text"><nobr>15 883.55</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>21/08/2025 13:05:55.299</nobr></td>
+                            <td class="cell-text"><nobr>3338.97</nobr></td>
+                            <td class="cell-text"><nobr>3339.45</nobr></td>
+                            <td class="cell-text"><nobr>4.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>19.20</nobr></td>
+                            <td class="cell-text"><nobr>15 902.75</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>21/08/2025 13:14:59.122</nobr></td>
+                            <td class="cell-text"><nobr>3341.81</nobr></td>
+                            <td class="cell-text"><nobr>3342.29</nobr></td>
+                            <td class="cell-text"><nobr>7.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>33.60</nobr></td>
+                            <td class="cell-text"><nobr>15 936.35</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>21/08/2025 13:15:00.393</nobr></td>
+                            <td class="cell-text"><nobr>3340.59</nobr></td>
+                            <td class="cell-text"><nobr>3342.26</nobr></td>
+                            <td class="cell-text"><nobr>7.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>116.90</nobr></td>
+                            <td class="cell-text"><nobr>16 053.25</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>21/08/2025 14:05:30.146</nobr></td>
+                            <td class="cell-text"><nobr>3339.77</nobr></td>
+                            <td class="cell-text"><nobr>3340.77</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>50.00</nobr></td>
+                            <td class="cell-text"><nobr>16 103.25</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Sell</nobr></td>
+                            <td class="cell-text"><nobr>21/08/2025 14:16:21.968</nobr></td>
+                            <td class="cell-text"><nobr>3345.38</nobr></td>
+                            <td class="cell-text"><nobr>3343.50</nobr></td>
+                            <td class="cell-text"><nobr>6.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>112.80</nobr></td>
+                            <td class="cell-text"><nobr>16 216.05</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>22/08/2025 12:27:33.390</nobr></td>
+                            <td class="cell-text"><nobr>3326.51</nobr></td>
+                            <td class="cell-text"><nobr>3326.79</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>14.00</nobr></td>
+                            <td class="cell-text"><nobr>15 014.00</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>27/08/2025 12:26:04.660</nobr></td>
+                            <td class="cell-text"><nobr>3376.86</nobr></td>
+                            <td class="cell-text"><nobr>3380.68</nobr></td>
+                            <td class="cell-text"><nobr>4.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>152.80</nobr></td>
+                            <td class="cell-text"><nobr>15 166.80</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Sell</nobr></td>
+                            <td class="cell-text"><nobr>28/08/2025 12:53:03.685</nobr></td>
+                            <td class="cell-text"><nobr>3405.41</nobr></td>
+                            <td class="cell-text"><nobr>3398.59</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>341.00</nobr></td>
+                            <td class="cell-text"><nobr>15 507.80</nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>XAUUSD</nobr></td>
+                            <td class="cell-text"><nobr>Buy</nobr></td>
+                            <td class="cell-text"><nobr>29/08/2025 12:47:05.997</nobr></td>
+                            <td class="cell-text"><nobr>3410.19</nobr></td>
+                            <td class="cell-text"><nobr>3415.70</nobr></td>
+                            <td class="cell-text"><nobr>5.00 Lotes</nobr></td>
+                            <td class="cell-text"><nobr>275.50</nobr></td>
+                            <td class="cell-text"><nobr>15 783.30</nobr></td>
+                    </tr>
+                    <tr style="background: #000;">
+                        <td class="totals-title">Totales</td>
+                            <td class="total-cell"></td>
+                            <td class="total-cell"></td>
+                            <td class="total-cell"></td>
+                            <td class="total-cell"></td>
+                            <td class="total-cell"></td>
+                            <td class="total-cell"></td>
+                            <td class="total-cell">1999.35</td>
+                            <td class="total-cell"></td>
+                    </tr>          
+            </table>
+        </td>
+    </tr>     
+    <tr align="left">
+        <td>
+            <table class="dataTable" style="width: 100%; margin-top: 30px;"
+                   cellspacing="0"
+                   cellpadding="3">
+                <tr>
+                    <td colspan="13"
+                        class="title-style"
+                        valign="top">
+                        <strong>Posiciones</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="cell-header invisible-totals">Totales</td>
+                        <td class="cell-header"><strong>Símbolo</strong></td>
+                        <td class="cell-header"><strong>Cantidad</strong></td>
+                        <td class="cell-header"><strong>Dirección</strong></td>
+                        <td class="cell-header"><strong>Precio de entrada</strong></td>
+                        <td class="cell-header"><strong>TP</strong></td>
+                        <td class="cell-header"><strong>SL</strong></td>
+                        <td class="cell-header"><strong>Creado (UTC+0)</strong></td>
+                        <td class="cell-header"><strong>USD neto</strong></td>
+                </tr>
+                    <tr>
+                        <td colspan="9" align="center">- Sin Posiciones -</td>
+                    </tr>
+
+            </table>
+        </td>
+    </tr>     
+    <tr align="left">
+        <td>
+            <table class="dataTable" style="width: 100%; margin-top: 30px;"
+                   cellspacing="0"
+                   cellpadding="3">
+                <tr>
+                    <td colspan="13"
+                        class="title-style"
+                        valign="top">
+                        <strong>Órdenes</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="cell-header invisible-totals">Totales</td>
+                        <td class="cell-header"><strong>Dirección</strong></td>
+                        <td class="cell-header"><strong>Tipo de orden</strong></td>
+                        <td class="cell-header"><strong>Hora de envío (UTC+0)</strong></td>
+                        <td class="cell-header"><strong>Símbolo</strong></td>
+                        <td class="cell-header"><strong>Cantidad actual</strong></td>
+                        <td class="cell-header"><strong>Precio enviado</strong></td>
+                        <td class="cell-header"><strong>Distancia</strong></td>
+                        <td class="cell-header"><strong>TP</strong></td>
+                        <td class="cell-header"><strong>SL</strong></td>
+                </tr>
+                    <tr>
+                        <td colspan="10" align="center">- Sin Órdenes -</td>
+                    </tr>
+
+            </table>
+        </td>
+    </tr>     
+    <tr align="left">
+        <td>
+            <table class="dataTable" style="width: 100%; margin-top: 30px;"
+                   cellspacing="0"
+                   cellpadding="3">
+                <tr>
+                    <td colspan="13"
+                        class="title-style"
+                        valign="top">
+                        <strong>Transacciones</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="cell-header invisible-totals">Totales</td>
+                        <td class="cell-header"><strong>ID</strong></td>
+                        <td class="cell-header"><strong>Hora (UTC+0)</strong></td>
+                        <td class="cell-header"><strong>Tipo</strong></td>
+                        <td class="cell-header"><strong>Cantidad de USD</strong></td>
+                        <td class="cell-header"><strong>Nota</strong></td>
+                </tr>
+
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>TID750282</nobr></td>
+                            <td class="cell-text"><nobr>30/07/2025 10:04:23</nobr></td>
+                            <td class="cell-text"><nobr>Deposit</nobr></td>
+                            <td class="cell-text"><nobr>15 000.00</nobr></td>
+                            <td class="cell-text"><nobr></nobr></td>
+                    </tr>
+                    <tr>
+                        <td class="cell-text"></td>
+                            <td class="cell-text"><nobr>TID780900</nobr></td>
+                            <td class="cell-text"><nobr>21/08/2025 14:16:25</nobr></td>
+                            <td class="cell-text"><nobr>Withdraw</nobr></td>
+                            <td class="cell-text"><nobr>-1 216.05</nobr></td>
+                            <td class="cell-text"><nobr></nobr></td>
+                    </tr>
+            </table>
+        </td>
+    </tr>     
+
+<!--Summary-->
+<tr align="left">
+    <td>
+        <table class="summaryTable" style="width: 100%; margin-top: 30px;"
+        cellspacing="0"
+        cellpadding="3">
+        <tr>
+            <td colspan="13"
+            class="title-style"
+            valign="top"><strong>Resumen</strong></td>
+        </tr>
+        <tr>
+          <td><nobr>Depósito</nobr></td>
+          <td class="summary-style"><nobr>15 000.00</nobr></td>
+          <td style="width:10%"></td>
+          <td><nobr>Capital</nobr></td>
+          <td class="summary-style"><nobr>15 783.30</nobr></td>
+          <td style="width:10%"></td>
+          <td>Margen</td>
+          <td class="summary-style"><nobr>0.00</nobr></td>
+          <td style="width:10%"></td>
+          <td>Saldo</td>
+      </tr>
+      <tr>
+          <td><nobr>Retirada</nobr></td>
+          <td class="summary-style"><nobr>1 216.05</nobr></td>
+          <td style="width:10%"></td>
+          <td><nobr>P&L no deven.</nobr></td>
+          <td class="summary-style"><nobr>0.00</nobr></td>
+          <td style="width:10%"></td>
+          <td><nobr>Margen libre</nobr></td>
+          <td class="summary-style"><nobr>15 783.30</nobr></td>
+          <td style="width:10%"></td>
+          <td class="balance-style" rowspan="2"><nobr>15 783.30</nobr></td>
+      </tr>
+      <tr>
+          <td><nobr>Total neto</nobr></td>
+          <td class="summary-style"><nobr>13 783.95</nobr></td>
+          <td style="width:10%"></td>
+          <td><nobr>P&L devengadas</nobr></td>
+          <td class="summary-style"><nobr>1 999.35</nobr></td>
+          <td style="width:10%"></td>
+          <td><nobr>Nivel de Margen</nobr></td>
+          <td class="summary-style"><nobr></nobr></td>
+      </tr>     
+  </table>
+</td>
+</tr>           
+</table>
+</body>
+</html>
