@@ -1594,9 +1594,9 @@ export default function TraderfyApp() {
                         
                         {summary.realizedPnl && (
                           <div className="bg-gradient-to-br from-purple-900/40 to-pink-800/30 p-4 rounded-lg border border-purple-500/30 hover:from-purple-800/50 hover:to-pink-700/40 transition-all duration-300">
-                            <div className="text-sm text-purple-300">P&L Devengadas</div>
-                            <div className={`text-xl font-bold ${summary.realizedPnl >= 0 ? 'text-green-400 glow-text-cyan' : 'text-red-400 glow-text-purple'}`}>
-                              ${summary.realizedPnl.toLocaleString()}
+                            <div className="text-sm text-purple-300">Withdraw Total</div>
+                            <div className={`text-xl font-bold ${summary.withdrawal >= 0 ? 'text-green-400 glow-text-cyan' : 'text-red-400 glow-text-purple'}`}>
+                              ${summary.withdrawal ? summary.withdrawal.toLocaleString() : '0'}
                             </div>
                           </div>
                         )}
