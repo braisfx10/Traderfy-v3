@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fetch = require('node-fetch');
 
 // Leer el archivo HTML
 const htmlContent = fs.readFileSync('./public/ftt-15k-real.html', 'utf-8');
@@ -10,8 +11,6 @@ const payload = {
 };
 
 // Enviar request
-const fetch = require('node-fetch');
-
 fetch('http://localhost:3000/api/parse-html', {
   method: 'POST',
   headers: {
