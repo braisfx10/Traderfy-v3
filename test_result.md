@@ -389,6 +389,35 @@ agent_communication:
     needs_retesting: false
     status_history:
         - working: false
+  - task: "Filter Non-Trading Transactions"
+    implemented: true
+    working: true
+    file: "/app/lib/unifiedTradingParser.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+        - agent: "main"
+        - comment: "ISSUE: Parser was treating 'Depósito', 'Retirada', 'Total Neto' as trading operations, causing incorrect data in Operations table and affecting metrics"
+        - working: true
+        - agent: "main"
+        - comment: "FIXED: Added filtering in both MT5 and cTrader parsers to exclude non-trading symbols: ['Depósito', 'Retirada', 'Deposit', 'Withdrawal', 'Balance', 'Credit', 'Total Neto', 'Initial Deposit']. Verified with test file: only returns 2 real trades (EURUSD Buy -71.66, XAUUSD Sell +101.50), P&L = 29.84."
+
+  - task: "Update MetaTrader Summary Card"
+    implemented: true
+    working: true
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: false
+        - agent: "main"
+        - comment: "REQUIREMENT: Change 'Resumen de cuenta - MetaTrader' card fields from current labels to: 'Depósito Inicial', 'Saldo Actual', 'Withdraw Total', 'Valoración de Trading'"
+        - working: true
+        - agent: "main"
+        - comment: "COMPLETED: Updated card fields - 'P&L Devengadas' → 'Withdraw Total', 'Saldo Final' → 'Saldo Actual', 'Profit Factor' → 'Valoración de Trading' (calculated using existing tradingScore formula). Card now shows requested metrics."
         - agent: "main"
         - comment: "ISSUE: Application stuck on 'Cargando...' screen after removing example accounts due to useEffect dependency conflicts"
         - working: true
