@@ -149,6 +149,7 @@ const AccountManager = ({ user, onAccountsChange }) => {
           tag: formData.tag,
           labels: formData.selectedLabels,
           rules: formData.rules,
+          propfirmRules: formData.propfirmRules,
           created_at: new Date().toISOString()
         }
         
