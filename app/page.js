@@ -1242,7 +1242,7 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
       }
 
       // Fallback: procesar localmente
-      const parsedData = parseHTMLReport(text)
+      const parsedData = await parseHTMLReport(text)
       
       if (parsedData.trades.length === 0) {
         showToast('No se encontraron operaciones en el archivo', 'error')
