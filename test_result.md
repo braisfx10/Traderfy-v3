@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "SUCCESS - ALL CRITICAL ISSUES RESOLVED: ✅ UNDEFINED ERROR FIXED: Added missing 'await' in parseHTMLReport call (line 1245). UI upload now works without 'undefined is not an object' errors. ✅ DUPLICATE TRADES FIXED: Added historialTableProcessed flag to prevent processing identical tables (0 and 3). Now extracts exactly 55 trades with $1,999.35 profit (not 110 trades with $3,998). ✅ BOTH API & UI WORKING: File upload works correctly via both API endpoint and UI interface. Ready for production use."
+user_problem_statement: "UI CORRECTIONS COMPLETED - ✅ CHALLENGE COLOR: Changed from bright green (#00FF00) to elegant emerald (#10B981) for better palette integration. ✅ RESUMEN SECTION RESTRUCTURED: Split into two side-by-side cards - 'Normas de Trading' (left) with 4 subtiles (2x2): Máx Trades/Día, Pérdida Máx Diaria (%), Riesgo Máx/Operación (%), Horario Operativo. 'Reglas de Propfirm' (right) with 4 subtiles (2x2): Max Drawdown Diario (%), Máx Drawdown Total (%), Objetivo Ganancias (%), Operar Noticias. ✅ TOOLTIP COLOR: Fixed 'Activos Operados' tooltip text color from black to white for better visibility."
 
 backend:
   - task: "Frontend Loading Bug Fix"
