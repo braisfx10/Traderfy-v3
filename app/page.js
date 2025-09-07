@@ -1622,10 +1622,10 @@ export default function TraderfyApp() {
                     <CardHeader>
                       <CardTitle className="text-white flex items-center gap-2">
                         <Wallet className="w-5 h-5 text-purple-400" />
-                        Organización por Etiquetas
+                        No hay cuentas creadas
                       </CardTitle>
                       <CardDescription className="text-purple-200/70">
-                        No hay cuentas creadas aún. Crea tu primera cuenta para empezar.
+                        Crea tu primera cuenta para empezar a organizar tus operaciones de trading.
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
