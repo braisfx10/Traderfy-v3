@@ -146,6 +146,15 @@ const OperationsPanel = ({ trades = [], selectedAccount, selectedTradeForJournal
           )}
         </h2>
         <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => setShowAddTradeModal(true)}
+            className="border-green-500/30 hover:bg-green-500/10 text-green-400 hover:text-green-300"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Añadir operación manual
+          </Button>
           <Button variant="outline" size="sm" className="border-purple-500/30 hover:bg-purple-500/10">
             <Download className="w-4 h-4 mr-2" />
             Exportar
