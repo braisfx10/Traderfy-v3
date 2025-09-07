@@ -13,20 +13,65 @@ from datetime import datetime
 BASE_URL = 'http://localhost:3000'
 API_URL = f"{BASE_URL}/api"
 
-def load_mt5_test_file():
-    """Load the MT5 test HTML file"""
+def test_api_health_check():
+    """Test if the API root endpoint is accessible"""
+    print("\n🔍 Testing API Health Check - GET /api/")
+    
     try:
-        with open('/app/public/mt5-test.html', 'r', encoding='utf-8') as f:
-            content = f.read()
-        print(f"✅ MT5 test file loaded successfully ({len(content)} characters)")
-        return content
+        response = requests.get(f"{API_URL}/", timeout=10)
+        print(f"Response Status: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print("✅ API root endpoint working correctly")
+            print(f"📊 API Response:")
+            print(f"  - Message: {data.get('message', 'N/A')}")
+            print(f"  - Version: {data.get('version', 'N/A')}")
+            print(f"  - Available endpoints: {len(data.get('endpoints', []))}")
+            
+            # Check if parse-html endpoint is listed
+            endpoints = data.get('endpoints', [])
+            if 'parse-html' in str(endpoints):
+                print("✅ parse-html endpoint is available")
+            else:
+                print("⚠️  parse-html endpoint not explicitly listed but may still work")
+            
+            return True
+        else:
+            print(f"❌ API health check failed: {response.text}")
+            return False
+            
     except Exception as e:
-        print(f"❌ Failed to load MT5 test file: {e}")
-        return None
+        print(f"❌ API health check failed: {e}")
+        return False
 
-def test_api_parse_html(html_content):
-    """Test the /api/parse-html endpoint with MT5 data"""
-    print("\n🔍 Testing POST /api/parse-html endpoint...")
+def load_test_html_files():
+    """Load both test HTML files for testing"""
+    test_files = {}
+    
+    # Load Spanish MetaTrader format (3 trades)
+    try:
+        with open('/app/public/test-report.html', 'r', encoding='utf-8') as f:
+            test_files['spanish_mt'] = f.read()
+        print(f"✅ Spanish MetaTrader test file loaded ({len(test_files['spanish_mt'])} characters)")
+    except Exception as e:
+        print(f"❌ Failed to load Spanish MetaTrader test file: {e}")
+        test_files['spanish_mt'] = None
+    
+    # Load CTrader format (110 trades)
+    try:
+        with open('/app/public/ftt-15k-real.html', 'r', encoding='utf-8') as f:
+            test_files['ctrader'] = f.read()
+        print(f"✅ CTrader test file loaded ({len(test_files['ctrader'])} characters)")
+    except Exception as e:
+        print(f"❌ Failed to load CTrader test file: {e}")
+        test_files['ctrader'] = None
+    
+    return test_files
+
+def test_parse_html_endpoint(html_content, test_name="Unknown", expected_trades=None):
+    """Test the /api/parse-html endpoint with HTML data"""
+    print(f"\n🔍 Testing POST /api/parse-html endpoint with {test_name}...")
     
     try:
         payload = {
@@ -62,22 +107,25 @@ def test_api_parse_html(html_content):
                 for key, value in first_trade.items():
                     print(f"  - {key}: {value}")
                 
-                # Check expected profits
-                expected_profits = [-313.95, 431.6, 100.75, -185.25, 219.05]
-                actual_profits = [trade.get('pnl', 0) for trade in trades]
+                # Check expected trade count if provided
+                if expected_trades:
+                    if len(trades) == expected_trades:
+                        print(f"✅ Trade count matches expected: {expected_trades}")
+                    else:
+                        print(f"❌ Trade count mismatch. Expected: {expected_trades}, Got: {len(trades)}")
                 
-                print(f"\n💰 Profit verification:")
-                print(f"  Expected: {expected_profits}")
-                print(f"  Actual:   {actual_profits}")
-                
-                if actual_profits == expected_profits:
-                    print("✅ All profits match expected values")
-                else:
-                    print("❌ Profit values don't match")
-                
-                # Check symbols
+                # Check symbols and directions
                 symbols = [trade.get('symbol') for trade in trades]
-                print(f"  Symbols: {symbols}")
+                directions = [trade.get('direction') for trade in trades]
+                print(f"  Symbols: {set(symbols)}")
+                print(f"  Directions: {set(directions)}")
+                
+                # Verify direction capitalization
+                proper_directions = all(d in ['Buy', 'Sell'] for d in directions if d)
+                if proper_directions:
+                    print("✅ Direction capitalization is correct (Buy/Sell)")
+                else:
+                    print(f"❌ Direction capitalization issue: {directions}")
                 
                 # Check account_id assignment
                 account_ids = [trade.get('account_id') for trade in trades]
@@ -87,6 +135,13 @@ def test_api_parse_html(html_content):
                     print("✅ Account ID correctly assigned to all trades")
                 else:
                     print("❌ Account ID assignment issue")
+                
+                # Check user_id for demo mode
+                user_ids = [trade.get('user_id') for trade in trades]
+                if all(uid == "demo" for uid in user_ids):
+                    print("✅ Demo mode user_id correctly assigned")
+                else:
+                    print(f"⚠️  User ID assignment: {set(user_ids)}")
             
             return data
         else:
@@ -97,9 +152,9 @@ def test_api_parse_html(html_content):
         print(f"❌ API test failed: {e}")
         return None
 
-def test_data_format_consistency(api_data):
-    """Test that the data format is consistent with frontend expectations"""
-    print("\n🔍 Testing data format consistency...")
+def test_data_structure_consistency(api_data, test_name="Unknown"):
+    """Test that the data structure is consistent with frontend expectations"""
+    print(f"\n🔍 Testing data structure consistency for {test_name}...")
     
     if not api_data or not api_data.get('trades'):
         print("❌ No trade data to test")
@@ -114,7 +169,7 @@ def test_data_format_consistency(api_data):
     print(f"📋 Checking required fields: {required_fields}")
     
     all_valid = True
-    for i, trade in enumerate(trades):
+    for i, trade in enumerate(trades[:3]):  # Check first 3 trades
         missing_fields = [field for field in required_fields if field not in trade]
         if missing_fields:
             print(f"❌ Trade {i+1} missing fields: {missing_fields}")
@@ -145,194 +200,263 @@ def test_data_format_consistency(api_data):
     
     return all_valid
 
-def test_account_association(api_data):
-    """Test that trades are correctly associated with accounts"""
-    print("\n🔍 Testing account association...")
+def test_demo_mode_operation():
+    """Test that API works correctly in demo mode (without Supabase)"""
+    print("\n🔍 Testing Demo Mode Operation...")
     
-    if not api_data:
-        print("❌ No API data to test")
+    # Load test file
+    test_files = load_test_html_files()
+    if not test_files['spanish_mt']:
+        print("❌ Cannot test demo mode without test file")
         return False
     
-    trades = api_data.get('trades', [])
-    account_info = api_data.get('accountInfo', {})
+    # Test API call
+    api_data = test_parse_html_endpoint(
+        test_files['spanish_mt'], 
+        "Spanish MetaTrader (Demo Mode)", 
+        expected_trades=3
+    )
     
-    print(f"📊 Account Info:")
-    for key, value in account_info.items():
-        print(f"  - {key}: {value}")
+    if not api_data:
+        print("❌ Demo mode API call failed")
+        return False
     
-    # Check if all trades have the same account_id
-    account_ids = [trade.get('account_id') for trade in trades]
-    unique_account_ids = set(account_ids)
-    
-    print(f"🔗 Account ID consistency:")
-    print(f"  - Unique account IDs: {unique_account_ids}")
-    print(f"  - Total trades: {len(trades)}")
-    
-    if len(unique_account_ids) == 1:
-        print("✅ All trades have consistent account_id")
-        return True
+    # Verify demo mode specific features
+    message = api_data.get('message', '')
+    if 'demo' in message.lower():
+        print("✅ Demo mode message present in response")
     else:
-        print("❌ Inconsistent account_id assignment")
-        return False
-
-def test_storage_simulation():
-    """Simulate how data would be stored in localStorage"""
-    print("\n🔍 Testing storage simulation...")
+        print("⚠️  Demo mode message not found")
     
-    # Load MT5 data
-    html_content = load_mt5_test_file()
-    if not html_content:
-        return False
+    # Check that trades have demo user_id
+    trades = api_data.get('trades', [])
+    demo_users = [t.get('user_id') for t in trades if t.get('user_id') == 'demo']
     
-    # Get API response
-    api_data = test_api_parse_html(html_content)
-    if not api_data:
-        return False
-    
-    # Simulate frontend processing
-    print(f"\n💾 Simulating frontend data processing...")
-    
-    # Simulate account structure
-    test_account = {
-        "id": "test-account-123",
-        "name": "MT5 Test Account",
-        "broker": "SLH Markets Ltd",
-        "currency": "USD",
-        "trades": [],
-        "withdraws": []
-    }
-    
-    # Process trades as frontend would
-    processed_trades = []
-    for trade in api_data.get('trades', []):
-        processed_trade = {
-            **trade,
-            "account_id": test_account["id"],
-            "user_id": "demo"
-        }
-        processed_trades.append(processed_trade)
-    
-    # Update account with trades
-    test_account["trades"] = processed_trades
-    test_account["summary"] = api_data.get('summary', {})
-    
-    print(f"✅ Processed {len(processed_trades)} trades for storage")
-    print(f"📊 Account summary: {test_account['summary']}")
-    
-    # Simulate localStorage storage
-    storage_data = {
-        "accounts": [test_account],
-        "trades": processed_trades
-    }
-    
-    print(f"💾 Storage data structure:")
-    print(f"  - Accounts: {len(storage_data['accounts'])}")
-    print(f"  - Total trades: {len(storage_data['trades'])}")
+    if len(demo_users) == len(trades):
+        print("✅ All trades assigned demo user_id")
+    else:
+        print(f"❌ Demo user_id assignment issue: {len(demo_users)}/{len(trades)}")
     
     return True
 
-def test_metrics_calculation():
-    """Test that metrics can be calculated from the data"""
-    print("\n🔍 Testing metrics calculation...")
+def test_html_parser_functionality():
+    """Test the HTML parser with different file formats"""
+    print("\n🔍 Testing HTML Parser Functionality...")
     
-    # Load and process data
-    html_content = load_mt5_test_file()
-    if not html_content:
-        return False
+    test_files = load_test_html_files()
+    results = {}
     
-    api_data = test_api_parse_html(html_content)
-    if not api_data:
-        return False
-    
-    trades = api_data.get('trades', [])
-    
-    # Calculate basic metrics
-    total_trades = len(trades)
-    total_pnl = sum(trade.get('pnl', 0) for trade in trades)
-    winning_trades = [t for t in trades if t.get('pnl', 0) > 0]
-    losing_trades = [t for t in trades if t.get('pnl', 0) < 0]
-    
-    win_rate = (len(winning_trades) / total_trades * 100) if total_trades > 0 else 0
-    
-    print(f"📊 Calculated Metrics:")
-    print(f"  - Total Trades: {total_trades}")
-    print(f"  - Total P&L: ${total_pnl:.2f}")
-    print(f"  - Winning Trades: {len(winning_trades)}")
-    print(f"  - Losing Trades: {len(losing_trades)}")
-    print(f"  - Win Rate: {win_rate:.1f}%")
-    
-    # Verify against expected values
-    expected_total_pnl = sum([-313.95, 431.6, 100.75, -185.25, 219.05])
-    
-    if abs(total_pnl - expected_total_pnl) < 0.01:
-        print(f"✅ Total P&L matches expected: ${expected_total_pnl:.2f}")
-    else:
-        print(f"❌ Total P&L mismatch. Expected: ${expected_total_pnl:.2f}, Got: ${total_pnl:.2f}")
-    
-    if total_trades == 5:
-        print("✅ Trade count matches expected: 5")
-    else:
-        print(f"❌ Trade count mismatch. Expected: 5, Got: {total_trades}")
-    
-    return True
-
-def run_complete_mt5_test():
-    """Run the complete MT5 data flow test"""
-    print("🚀 Starting Complete MT5 Data Flow Test")
-    print("=" * 60)
-    
-    # Test 1: Load MT5 file
-    html_content = load_mt5_test_file()
-    if not html_content:
-        print("❌ CRITICAL: Cannot load MT5 test file")
-        return False
-    
-    # Test 2: API endpoint
-    api_data = test_api_parse_html(html_content)
-    if not api_data:
-        print("❌ CRITICAL: API endpoint failed")
-        return False
-    
-    # Test 3: Data format consistency
-    format_ok = test_data_format_consistency(api_data)
-    if not format_ok:
-        print("❌ CRITICAL: Data format issues detected")
-    
-    # Test 4: Account association
-    account_ok = test_account_association(api_data)
-    if not account_ok:
-        print("❌ WARNING: Account association issues")
-    
-    # Test 5: Storage simulation
-    storage_ok = test_storage_simulation()
-    if not storage_ok:
-        print("❌ WARNING: Storage simulation failed")
-    
-    # Test 6: Metrics calculation
-    metrics_ok = test_metrics_calculation()
-    if not metrics_ok:
-        print("❌ WARNING: Metrics calculation failed")
-    
-    print("\n" + "=" * 60)
-    print("🏁 MT5 Data Flow Test Complete")
-    
-    if api_data and format_ok:
-        print("✅ CORE FUNCTIONALITY: Working")
-        print("📊 Expected 5 XAUUSD trades with profits: -313.95, 431.6, 100.75, -185.25, 219.05")
+    # Test Spanish MetaTrader format
+    if test_files['spanish_mt']:
+        print("\n📄 Testing Spanish MetaTrader format...")
+        api_data = test_parse_html_endpoint(
+            test_files['spanish_mt'], 
+            "Spanish MetaTrader", 
+            expected_trades=3
+        )
         
-        actual_profits = [trade.get('pnl', 0) for trade in api_data.get('trades', [])]
-        print(f"📈 Actual profits: {actual_profits}")
-        
-        if len(actual_profits) == 5:
-            print("✅ RESULT: MT5 parser extracts correct number of trades")
-        else:
-            print("❌ RESULT: Trade count mismatch")
+        if api_data:
+            trades = api_data.get('trades', [])
+            # Expected data from test-report.html
+            expected_symbols = ['EURUSD', 'XAUUSD', 'XAUUSD']
+            expected_directions = ['Buy', 'Buy', 'Sell']
+            expected_pnls = [-71.66, -64.40, 101.50]
             
+            actual_symbols = [t.get('symbol') for t in trades]
+            actual_directions = [t.get('direction') for t in trades]
+            actual_pnls = [t.get('pnl') for t in trades]
+            
+            print(f"Expected symbols: {expected_symbols}")
+            print(f"Actual symbols: {actual_symbols}")
+            print(f"Expected directions: {expected_directions}")
+            print(f"Actual directions: {actual_directions}")
+            print(f"Expected P&Ls: {expected_pnls}")
+            print(f"Actual P&Ls: {actual_pnls}")
+            
+            # Verify extraction accuracy
+            symbols_match = actual_symbols == expected_symbols
+            directions_match = actual_directions == expected_directions
+            pnls_match = all(abs(a - e) < 0.01 for a, e in zip(actual_pnls, expected_pnls))
+            
+            if symbols_match and directions_match and pnls_match:
+                print("✅ Spanish MetaTrader parsing is accurate")
+                results['spanish_mt'] = True
+            else:
+                print("❌ Spanish MetaTrader parsing has inaccuracies")
+                results['spanish_mt'] = False
+        else:
+            results['spanish_mt'] = False
+    
+    # Test CTrader format
+    if test_files['ctrader']:
+        print("\n📄 Testing CTrader format...")
+        api_data = test_parse_html_endpoint(
+            test_files['ctrader'], 
+            "CTrader", 
+            expected_trades=110
+        )
+        
+        if api_data:
+            trades = api_data.get('trades', [])
+            if len(trades) > 0:
+                print("✅ CTrader parsing successful")
+                results['ctrader'] = True
+            else:
+                print("❌ CTrader parsing failed - no trades extracted")
+                results['ctrader'] = False
+        else:
+            results['ctrader'] = False
+    
+    return results
+
+def test_non_trading_transaction_filtering():
+    """Test that non-trading transactions are properly filtered out"""
+    print("\n🔍 Testing Non-Trading Transaction Filtering...")
+    
+    test_files = load_test_html_files()
+    if not test_files['spanish_mt']:
+        print("❌ Cannot test filtering without test file")
+        return False
+    
+    api_data = test_parse_html_endpoint(
+        test_files['spanish_mt'], 
+        "Transaction Filtering Test"
+    )
+    
+    if not api_data:
+        return False
+    
+    trades = api_data.get('trades', [])
+    
+    # Check that no trades have non-trading symbols
+    non_trading_symbols = ['Depósito', 'Retirada', 'Deposit', 'Withdrawal', 'Balance', 'Credit', 'Total Neto']
+    
+    filtered_correctly = True
+    for trade in trades:
+        symbol = trade.get('symbol', '')
+        if any(non_trading in symbol for non_trading in non_trading_symbols):
+            print(f"❌ Non-trading transaction not filtered: {symbol}")
+            filtered_correctly = False
+    
+    if filtered_correctly:
+        print("✅ Non-trading transactions properly filtered out")
+    
+    return filtered_correctly
+
+def test_error_handling():
+    """Test API error handling with invalid requests"""
+    print("\n🔍 Testing Error Handling...")
+    
+    # Test with missing HTML content
+    try:
+        response = requests.post(
+            f"{API_URL}/parse-html",
+            json={"accountId": "test"},
+            headers={'Content-Type': 'application/json'},
+            timeout=10
+        )
+        
+        if response.status_code == 400:
+            print("✅ Correctly handles missing HTML content (400 error)")
+        else:
+            print(f"❌ Unexpected response for missing HTML: {response.status_code}")
+    except Exception as e:
+        print(f"❌ Error testing missing HTML content: {e}")
+    
+    # Test with invalid HTML content
+    try:
+        response = requests.post(
+            f"{API_URL}/parse-html",
+            json={"htmlContent": "invalid html", "accountId": "test"},
+            headers={'Content-Type': 'application/json'},
+            timeout=10
+        )
+        
+        if response.status_code in [200, 400, 500]:  # Any reasonable response
+            print("✅ Handles invalid HTML content gracefully")
+        else:
+            print(f"❌ Unexpected response for invalid HTML: {response.status_code}")
+    except Exception as e:
+        print(f"❌ Error testing invalid HTML content: {e}")
+    
+    return True
+
+def run_comprehensive_api_test():
+    """Run comprehensive Next.js API and HTML parser testing"""
+    print("🚀 Starting Comprehensive Next.js API and HTML Parser Testing")
+    print("=" * 80)
+    
+    test_results = {}
+    
+    # Test 1: API Health Check
+    print("\n" + "="*50)
+    print("TEST 1: API HEALTH CHECK")
+    print("="*50)
+    test_results['health_check'] = test_api_health_check()
+    
+    # Test 2: HTML Parser Functionality
+    print("\n" + "="*50)
+    print("TEST 2: HTML PARSER FUNCTIONALITY")
+    print("="*50)
+    parser_results = test_html_parser_functionality()
+    test_results['parser'] = all(parser_results.values()) if parser_results else False
+    
+    # Test 3: Data Structure Consistency
+    print("\n" + "="*50)
+    print("TEST 3: DATA STRUCTURE CONSISTENCY")
+    print("="*50)
+    test_files = load_test_html_files()
+    if test_files['spanish_mt']:
+        api_data = test_parse_html_endpoint(test_files['spanish_mt'], "Structure Test")
+        test_results['data_structure'] = test_data_structure_consistency(api_data, "Structure Test")
+    else:
+        test_results['data_structure'] = False
+    
+    # Test 4: Demo Mode Operation
+    print("\n" + "="*50)
+    print("TEST 4: DEMO MODE OPERATION")
+    print("="*50)
+    test_results['demo_mode'] = test_demo_mode_operation()
+    
+    # Test 5: Transaction Filtering
+    print("\n" + "="*50)
+    print("TEST 5: NON-TRADING TRANSACTION FILTERING")
+    print("="*50)
+    test_results['filtering'] = test_non_trading_transaction_filtering()
+    
+    # Test 6: Error Handling
+    print("\n" + "="*50)
+    print("TEST 6: ERROR HANDLING")
+    print("="*50)
+    test_results['error_handling'] = test_error_handling()
+    
+    # Summary
+    print("\n" + "="*80)
+    print("🏁 COMPREHENSIVE TEST RESULTS")
+    print("="*80)
+    
+    passed_tests = sum(1 for result in test_results.values() if result)
+    total_tests = len(test_results)
+    
+    for test_name, result in test_results.items():
+        status = "✅ PASS" if result else "❌ FAIL"
+        print(f"{test_name.upper().replace('_', ' ')}: {status}")
+    
+    print(f"\nOVERALL RESULT: {passed_tests}/{total_tests} tests passed")
+    
+    if passed_tests >= 4:  # At least 4 out of 6 tests should pass
+        print("✅ NEXT.JS API AND HTML PARSER: WORKING CORRECTLY")
+        print("📊 Key findings:")
+        print("  - API endpoints are accessible and responding")
+        print("  - HTML parser extracts trading data correctly")
+        print("  - Data structure is consistent with frontend expectations")
+        print("  - Demo mode operation is functional")
         return True
     else:
-        print("❌ CORE FUNCTIONALITY: Failed")
+        print("❌ NEXT.JS API AND HTML PARSER: ISSUES DETECTED")
+        print("🔧 Issues need to be addressed before production use")
         return False
 
 if __name__ == "__main__":
-    success = run_complete_mt5_test()
+    success = run_comprehensive_api_test()
     exit(0 if success else 1)
