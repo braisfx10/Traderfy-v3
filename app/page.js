@@ -357,6 +357,100 @@ const OperationsPanel = ({ trades = [], selectedAccount, selectedTradeForJournal
           </div>
         </div>
       )}
+
+      {/* Funciones para manejar operaciones */}
+      {(() => {
+        const handleAddTrade = async (tradeData) => {
+          try {
+            // Guardar en localStorage para modo demo
+            const existingTrades = JSON.parse(localStorage.getItem('demo_trades') || '[]')
+            existingTrades.push(tradeData)
+            localStorage.setItem('demo_trades', JSON.stringify(existingTrades))
+            
+            // Llamar callback para actualizar la UI
+            if (onUpdateTrades) {
+              onUpdateTrades(existingTrades)
+            }
+            
+            // Recargar página para actualizar métricas
+            window.location.reload()
+          } catch (error) {
+            console.error('Error al añadir operación:', error)
+          }
+        }
+
+        const handleEditTrade = async (tradeData) => {
+          try {
+            // Actualizar en localStorage para modo demo
+            const existingTrades = JSON.parse(localStorage.getItem('demo_trades') || '[]')
+            const updatedTrades = existingTrades.map(t => 
+              t.id === tradeData.id ? tradeData : t
+            )
+            localStorage.setItem('demo_trades', JSON.stringify(updatedTrades))
+            
+            // Llamar callback para actualizar la UI
+            if (onUpdateTrades) {
+              onUpdateTrades(updatedTrades)
+            }
+            
+            // Recargar página para actualizar métricas
+            window.location.reload()
+          } catch (error) {
+            console.error('Error al editar operación:', error)
+          }
+        }
+
+        const handleDeleteTrade = async () => {
+          try {
+            // Eliminar de localStorage para modo demo
+            const existingTrades = JSON.parse(localStorage.getItem('demo_trades') || '[]')
+            const updatedTrades = existingTrades.filter(t => t.id !== deletingTrade.id)
+            localStorage.setItem('demo_trades', JSON.stringify(updatedTrades))
+            
+            // Llamar callback para actualizar la UI
+            if (onUpdateTrades) {
+              onUpdateTrades(updatedTrades)
+            }
+            
+            // Cerrar modal
+            setShowDeleteConfirm(false)
+            setDeletingTrade(null)
+            
+            // Recargar página para actualizar métricas
+            window.location.reload()
+          } catch (error) {
+            console.error('Error al eliminar operación:', error)
+          }
+        }
+
+        return (
+          <>
+            {/* Modal para Añadir/Editar Operación */}
+            <TradeModal
+              isOpen={showAddTradeModal || showEditTradeModal}
+              onClose={() => {
+                setShowAddTradeModal(false)
+                setShowEditTradeModal(false)
+                setEditingTrade(null)
+              }}
+              onSubmit={showEditTradeModal ? handleEditTrade : handleAddTrade}
+              trade={editingTrade}
+              selectedAccount={selectedAccount}
+            />
+
+            {/* Modal de Confirmación de Eliminación */}
+            <DeleteConfirmModal
+              isOpen={showDeleteConfirm}
+              onClose={() => {
+                setShowDeleteConfirm(false)
+                setDeletingTrade(null)
+              }}
+              onConfirm={handleDeleteTrade}
+              trade={deletingTrade}
+            />
+          </>
+        )
+      })()}
     </div>
   )
 }
