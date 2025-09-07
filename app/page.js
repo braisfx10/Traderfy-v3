@@ -1435,6 +1435,7 @@ export default function TraderfyApp() {
   const [toast, setToast] = useState(null)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [selectedTradeForJournal, setSelectedTradeForJournal] = useState(null)
+  const [viewMode, setViewMode] = useState('cards') // Estado para cambiar vista en etiquetas
   
   const {
     selectedAccount,
