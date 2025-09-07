@@ -3498,6 +3498,7 @@ export default function TraderfyApp() {
           setSelectedAccount={setSelectedAccount}
           currentView={currentView}
           setCurrentView={setCurrentView}
+          handleViewChange={handleViewChange}
           onLogout={handleLogout}
           user={user}
           demoMode={demoMode}
