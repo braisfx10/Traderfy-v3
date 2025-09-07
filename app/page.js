@@ -1997,7 +1997,7 @@ export default function TraderfyApp() {
                   
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     
-                    {/* Activos Operados */}}
+                    {/* Activos Operados */}
                     <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
                       <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
