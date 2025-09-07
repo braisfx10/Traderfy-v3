@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Complete MT5 Data Flow Testing
-Tests the entire pipeline from MT5 HTML file to API response
+Next.js API Endpoints and HTML Parser Testing
+Tests the API endpoints and HTML parsing functionality after supervisor configuration fix
 """
 
 import requests
@@ -9,8 +9,8 @@ import json
 import os
 from datetime import datetime
 
-# Configuration
-BASE_URL = os.getenv('NEXT_PUBLIC_BASE_URL', 'http://localhost:3000')
+# Configuration - Use localhost for internal testing
+BASE_URL = 'http://localhost:3000'
 API_URL = f"{BASE_URL}/api"
 
 def load_mt5_test_file():
