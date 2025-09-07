@@ -1961,7 +1961,7 @@ export default function TraderfyApp() {
                     </Card>
                     
                     {/* Activos Operados */}
-                    <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-blue-900/20 border-purple-500/30">
+                    <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
                       <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
                           <Target className="w-5 h-5 text-purple-400" />
