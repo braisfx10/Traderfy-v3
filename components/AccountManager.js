@@ -542,9 +542,10 @@ const AccountManager = ({ user, onAccountsChange }) => {
                       propfirmRules: { ...prev.propfirmRules, tradingNews: e.target.value }
                     }))}
                     className="w-full p-2 bg-gradient-to-r from-slate-800 to-slate-700 border border-blue-500/50 rounded text-white"
+                    style={{ color: '#ffffff', backgroundColor: '#1e293b' }}
                   >
-                    <option value="No">No</option>
-                    <option value="Si">Si</option>
+                    <option value="No" style={{ color: '#ffffff', backgroundColor: '#1e293b' }}>No</option>
+                    <option value="Si" style={{ color: '#ffffff', backgroundColor: '#1e293b' }}>Si</option>
                   </select>
                 </div>
 
