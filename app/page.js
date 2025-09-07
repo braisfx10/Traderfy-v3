@@ -2642,6 +2642,7 @@ export default function TraderfyApp() {
           selectedAccount={selectedAccount}
           selectedTradeForJournal={selectedTradeForJournal}
           setSelectedTradeForJournal={setSelectedTradeForJournal}
+          onUpdateTrades={setTrades}
         />
       
       case 'panel-analysis':
