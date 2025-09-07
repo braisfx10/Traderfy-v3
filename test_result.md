@@ -236,6 +236,9 @@ backend:
         - working: true
         - agent: "testing"
         - comment: "TESTED: Account ID assignment working correctly. Fixed issue in API where account_id was not being assigned in demo mode. Now all trades receive the correct account_id from the request. Frontend HTMLUploader passes selectedAccount.id correctly. All trades also get user_id: 'demo' in demo mode."
+        - working: true
+        - agent: "testing"
+        - comment: "RE-VERIFIED POST-SUPERVISOR FIX: Account ID assignment working flawlessly. All trades correctly receive account_id from request payload (test-account-123 in tests). Demo mode assigns user_id: 'demo' to all trades consistently. No trades missing account_id or user_id fields. Assignment logic in API route working correctly for both Supabase and demo modes."
 
   - task: "ProfitScore/BeneficioScore Fix"
     implemented: true
