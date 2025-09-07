@@ -417,7 +417,7 @@ const Sidebar = ({
               
               {/* Mostrar etiquetas personalizadas si existen, sino mostrar tipos de cuenta */}
               {(() => {
-                // Obtener etiquetas únicas de las cuentas existentes
+                // Obtener etiquetas personalizadas únicas de las cuentas existentes
                 const customTags = [...new Set(accounts
                   .map(account => account.customTag)
                   .filter(tag => tag && tag.trim() !== '')
@@ -425,28 +425,35 @@ const Sidebar = ({
                 
                 // Si hay etiquetas personalizadas, mostrarlas
                 if (customTags.length > 0) {
-                  return customTags.map((tag) => (
-                    <Button
-                      key={tag}
-                      variant="ghost"
-                      className={`w-full justify-start gap-2 sidebar-item transition-all duration-300 ${
-                        currentView === `tag-${tag}` 
-                          ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border-l-2 border-cyan-400 glow-cyan' 
-                          : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/10 hover:to-purple-500/10'
-                      }`}
-                      onClick={() => handleViewChange(`tag-${tag}`)}
-                    >
-                      <div className="flex items-center justify-between w-full">
-                        <span className="font-medium">{tag}</span>
-                        <span className="text-xs text-gray-400">
-                          {accounts.filter(account => account.customTag === tag).length}
-                        </span>
-                      </div>
-                    </Button>
-                  ));
+                  return customTags.map((tag) => {
+                    const tagAccounts = accounts.filter(account => account.customTag === tag);
+                    return (
+                      <Button
+                        key={tag}
+                        variant="ghost"
+                        className={`w-full justify-start gap-2 sidebar-item transition-all duration-300 ${
+                          currentView === `tag-${tag}` 
+                            ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border-l-2 border-cyan-400 glow-cyan' 
+                            : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/10 hover:to-purple-500/10'
+                        }`}
+                        onClick={() => handleViewChange(`tag-${tag}`)}
+                      >
+                        <div className="flex items-center justify-between w-full">
+                          <span className="font-medium">{tag}</span>
+                          <span className="text-xs text-gray-400 bg-gray-700/50 px-2 py-1 rounded">
+                            {tagAccounts.length}
+                          </span>
+                        </div>
+                      </Button>
+                    );
+                  });
                 }
                 
-                // Si no hay etiquetas personalizadas, mostrar tipos de cuenta
+                // Si no hay etiquetas personalizadas, mostrar tipos de cuenta solamente si hay cuentas
+                if (accounts.length === 0) {
+                  return null; // No mostrar nada si no hay cuentas
+                }
+                
                 const accountTypes = ['Live', 'Funded', 'Challenge', 'Demo'];
                 return accountTypes.map((type) => {
                   const typeAccounts = accounts.filter(account => account.tag === type);
