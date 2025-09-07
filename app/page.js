@@ -417,31 +417,39 @@ const Sidebar = ({
               
               {/* Mostrar etiquetas personalizadas si existen, sino mostrar tipos de cuenta */}
               {(() => {
-                // Obtener etiquetas personalizadas únicas de las cuentas existentes
-                const customTags = [...new Set(accounts
-                  .map(account => account.customTag)
-                  .filter(tag => tag && tag.trim() !== '')
-                )];
+                // Obtener etiquetas únicas de las cuentas existentes
+                const allLabels = accounts
+                  .filter(account => account.labels && account.labels.length > 0)
+                  .flatMap(account => account.labels);
+                
+                const uniqueLabels = allLabels.reduce((acc, label) => {
+                  if (!acc.find(l => l.id === label.id)) {
+                    acc.push(label);
+                  }
+                  return acc;
+                }, []);
                 
                 // Si hay etiquetas personalizadas, mostrarlas
-                if (customTags.length > 0) {
-                  return customTags.map((tag) => {
-                    const tagAccounts = accounts.filter(account => account.customTag === tag);
+                if (uniqueLabels.length > 0) {
+                  return uniqueLabels.map((label) => {
+                    const labelAccounts = accounts.filter(account => 
+                      account.labels && account.labels.some(l => l.id === label.id)
+                    );
                     return (
                       <Button
-                        key={tag}
+                        key={label.id}
                         variant="ghost"
                         className={`w-full justify-start gap-2 sidebar-item transition-all duration-300 ${
-                          currentView === `tag-${tag}` 
+                          currentView === `label-${label.id}` 
                             ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border-l-2 border-cyan-400 glow-cyan' 
                             : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/10 hover:to-purple-500/10'
                         }`}
-                        onClick={() => handleViewChange(`tag-${tag}`)}
+                        onClick={() => handleViewChange(`label-${label.id}`)}
                       >
                         <div className="flex items-center justify-between w-full">
-                          <span className="font-medium">{tag}</span>
+                          <span className="font-medium">{label.name}</span>
                           <span className="text-xs text-gray-400 bg-gray-700/50 px-2 py-1 rounded">
-                            {tagAccounts.length}
+                            {labelAccounts.length}
                           </span>
                         </div>
                       </Button>
