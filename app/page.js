@@ -3109,69 +3109,313 @@ export default function TraderfyApp() {
             account.labels && account.labels.some(l => l.id === labelId)
           );
           
-          // Obtener el nombre de la etiqueta
-          const labelName = labelAccounts.length > 0 && labelAccounts[0].labels 
-            ? labelAccounts[0].labels.find(l => l.id === labelId)?.name || 'Etiqueta'
-            : 'Etiqueta';
+          // Obtener el nombre y color de la etiqueta
+          const labelData = labelAccounts.length > 0 && labelAccounts[0].labels 
+            ? labelAccounts[0].labels.find(l => l.id === labelId)
+            : null;
+          const labelName = labelData?.name || 'Etiqueta';
+          const labelColor = labelData?.color || '#A020F0';
           
           return (
             <div className="space-y-6">
-              <MetricsCards 
-                trades={trades.filter(t => labelAccounts.some(acc => acc.id === t.account_id))} 
-                title={`Cuentas con Etiqueta: ${labelName}`} 
-                accounts={labelAccounts} 
-                onAccountSelect={handleAccountSelect} 
-              />
+              {/* Cabecera de la etiqueta con color personalizado */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <h1 className="text-3xl font-bold flex items-center gap-3">
+                    <div 
+                      className="w-4 h-4 rounded-full"
+                      style={{ backgroundColor: labelColor }}
+                    ></div>
+                    <span style={{ color: labelColor }}>{labelName}</span>
+                  </h1>
+                  <p className="text-gray-400 text-sm mt-1" style={{ color: `${labelColor}80` }}>
+                    {labelAccounts.length} cuenta{labelAccounts.length !== 1 ? 's' : ''} en esta etiqueta
+                  </p>
+                </div>
+                <Button
+                  onClick={() => handleViewChange('accounts-summary')}
+                  variant="outline"
+                  className="text-gray-300 hover:text-white"
+                >
+                  ← Todas las cuentas
+                </Button>
+              </div>
+
+              {/* Métricas rápidas de la etiqueta (mismo estilo que Resumen Total) */}
+              {(() => {
+                const labelTrades = trades.filter(t => labelAccounts.some(acc => acc.id === t.account_id));
+                const totalTrades = labelTrades.length;
+                const winningTrades = labelTrades.filter(t => parseFloat(t.pnl) > 0);
+                const losingTrades = labelTrades.filter(t => parseFloat(t.pnl) < 0);
+                const winRate = totalTrades > 0 ? (winningTrades.length / totalTrades) * 100 : 0;
+                const totalPnL = labelTrades.reduce((sum, t) => sum + parseFloat(t.pnl), 0);
+                const avgWin = winningTrades.length > 0 ? winningTrades.reduce((sum, t) => sum + parseFloat(t.pnl), 0) / winningTrades.length : 0;
+                const avgLoss = losingTrades.length > 0 ? Math.abs(losingTrades.reduce((sum, t) => sum + parseFloat(t.pnl), 0)) / losingTrades.length : 0;
+                const profitFactor = avgLoss > 0 ? Math.abs(avgWin / avgLoss) : 0;
+                const bestTrade = labelTrades.length > 0 ? Math.max(...labelTrades.map(t => parseFloat(t.pnl))) : 0;
+                const worstTrade = labelTrades.length > 0 ? Math.min(...labelTrades.map(t => parseFloat(t.pnl))) : 0;
+
+                return (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {/* Total Trades */}
+                    <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-purple-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-white text-sm flex items-center gap-2">
+                          <BarChart3 className="w-4 h-4 text-purple-400" />
+                          Total Trades
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold text-purple-400 glow-text-purple">
+                          {totalTrades}
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          Total de operaciones
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Win Rate */}
+                    <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-cyan-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-white text-sm flex items-center gap-2">
+                          <TrendingUp className="w-4 h-4 text-cyan-400" />
+                          Win Rate
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold text-cyan-400 glow-text-cyan">
+                          {winRate.toFixed(1)}%
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          {winningTrades.length}/{totalTrades}
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Total P&L */}
+                    <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-green-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-white text-sm flex items-center gap-2">
+                          <DollarSign className="w-4 h-4 text-green-400" />
+                          Total P&L
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className={`text-2xl font-bold ${totalPnL >= 0 ? 'text-green-400 glow-text-green' : 'text-red-400 glow-text-red'}`}>
+                          ${totalPnL.toFixed(2)}
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          Beneficio total
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Profit Factor */}
+                    <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-indigo-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-white text-sm flex items-center gap-2">
+                          <Target className="w-4 h-4 text-indigo-400" />
+                          Profit Factor
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold text-indigo-400 glow-text-purple">
+                          {profitFactor.toFixed(2)}
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          Ratio ganancia/pérdida
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Ganancia Media */}
+                    <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-green-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-white text-sm flex items-center gap-2">
+                          <TrendingUp className="w-4 h-4 text-green-400" />
+                          Ganancia Media
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold text-green-400 glow-text-green">
+                          ${avgWin.toFixed(2)}
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          Por trade ganador
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Pérdida Media */}
+                    <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-red-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-white text-sm flex items-center gap-2">
+                          <TrendingDown className="w-4 h-4 text-red-400" />
+                          Pérdida Media
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold text-red-400 glow-text-red">
+                          -${avgLoss.toFixed(2)}
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          Por trade perdedor
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Mejor Trade */}
+                    <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-yellow-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-white text-sm flex items-center gap-2">
+                          <Award className="w-4 h-4 text-yellow-400" />
+                          Mejor Trade
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold text-yellow-400 glow-text-yellow">
+                          ${bestTrade.toFixed(2)}
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          Mayor ganancia
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Peor Trade */}
+                    <Card className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-red-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-white text-sm flex items-center gap-2">
+                          <X className="w-4 h-4 text-red-400" />
+                          Peor Trade
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold text-red-400 glow-text-red">
+                          ${worstTrade.toFixed(2)}
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          Mayor pérdida
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                );
+              })()}
               
               {/* Lista de cuentas de esta etiqueta */}
-              <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <Wallet className="w-5 h-5 text-purple-400" />
-                    Cuentas en "{labelName}"
-                  </CardTitle>
-                  <CardDescription className="text-purple-200/70">
-                    {labelAccounts.length} cuenta{labelAccounts.length !== 1 ? 's' : ''} en esta etiqueta
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {labelAccounts.map((account) => (
-                      <Card 
-                        key={account.id} 
-                        className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-purple-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300 hover:scale-105 cursor-pointer"
-                        onClick={() => handleAccountSelect(account)}
-                      >
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-white text-lg flex items-center justify-between">
-                            <span>{account.name}</span>
-                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                              account.tag === 'Live' ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-500/30' :
-                              account.tag === 'Demo' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
-                              account.tag === 'Challenge' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
-                              'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                            }`}>
-                              {account.tag}
-                            </span>
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="text-gray-400">Trades:</span>
-                            <span className="text-white">{trades.filter(t => t.account_id === account.id).length}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-gray-400">P&L Total:</span>
-                            <span className={trades.filter(t => t.account_id === account.id).reduce((sum, t) => sum + parseFloat(t.pnl), 0) >= 0 ? 'text-green-400' : 'text-red-400'}>
-                              ${trades.filter(t => t.account_id === account.id).reduce((sum, t) => sum + parseFloat(t.pnl), 0).toFixed(2)}
-                            </span>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              {(() => {
+                const [viewMode, setViewMode] = useState('cards'); // Estado para cambiar vista
+                
+                return (
+                  <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-white flex items-center gap-2">
+                          <Wallet className="w-5 h-5" style={{ color: labelColor }} />
+                          <span style={{ color: labelColor }}>Cuentas en "{labelName}"</span>
+                        </CardTitle>
+                        <div className="flex gap-2">
+                          <Button
+                            variant={viewMode === 'cards' ? 'default' : 'outline'}
+                            size="sm"
+                            onClick={() => setViewMode('cards')}
+                            className="text-xs"
+                          >
+                            Cards
+                          </Button>
+                          <Button
+                            variant={viewMode === 'list' ? 'default' : 'outline'}
+                            size="sm"
+                            onClick={() => setViewMode('list')}
+                            className="text-xs"
+                          >
+                            Lista
+                          </Button>
+                        </div>
+                      </div>
+                      <CardDescription className="text-purple-200/70">
+                        <span style={{ color: `${labelColor}80` }}>
+                          {labelAccounts.length} cuenta{labelAccounts.length !== 1 ? 's' : ''} en esta etiqueta
+                        </span>
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {viewMode === 'cards' ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {labelAccounts.map((account) => (
+                            <Card 
+                              key={account.id} 
+                              className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-purple-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300 hover:scale-105 cursor-pointer"
+                              onClick={() => handleAccountSelect(account)}
+                            >
+                              <CardHeader className="pb-2">
+                                <CardTitle className="text-lg flex items-center justify-between">
+                                  <span style={{ color: labelColor }}>{account.name}</span>
+                                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                                    account.tag === 'Live' ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-500/30' :
+                                    account.tag === 'Demo' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
+                                    account.tag === 'Challenge' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
+                                    'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                                  }`}>
+                                    {account.tag}
+                                  </span>
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-400">Trades:</span>
+                                  <span className="text-white">{trades.filter(t => t.account_id === account.id).length}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-400">P&L Total:</span>
+                                  <span className={trades.filter(t => t.account_id === account.id).reduce((sum, t) => sum + parseFloat(t.pnl), 0) >= 0 ? 'text-green-400' : 'text-red-400'}>
+                                    ${trades.filter(t => t.account_id === account.id).reduce((sum, t) => sum + parseFloat(t.pnl), 0).toFixed(2)}
+                                  </span>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          {labelAccounts.map((account) => (
+                            <div 
+                              key={account.id}
+                              className="flex items-center justify-between p-4 bg-slate-800/60 hover:bg-slate-700/60 rounded-lg border border-purple-500/30 cursor-pointer transition-all duration-300"
+                              onClick={() => handleAccountSelect(account)}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div 
+                                  className="w-3 h-3 rounded-full"
+                                  style={{ backgroundColor: labelColor }}
+                                ></div>
+                                <div>
+                                  <h4 style={{ color: labelColor }} className="font-medium">{account.name}</h4>
+                                  <p className="text-sm text-gray-400">{account.tag}</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-6">
+                                <div className="text-sm">
+                                  <span className="text-gray-400">Trades: </span>
+                                  <span className="text-white">{trades.filter(t => t.account_id === account.id).length}</span>
+                                </div>
+                                <div className="text-sm">
+                                  <span className="text-gray-400">P&L: </span>
+                                  <span className={trades.filter(t => t.account_id === account.id).reduce((sum, t) => sum + parseFloat(t.pnl), 0) >= 0 ? 'text-green-400' : 'text-red-400'}>
+                                    ${trades.filter(t => t.account_id === account.id).reduce((sum, t) => sum + parseFloat(t.pnl), 0).toFixed(2)}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                );
+              })()}
             </div>
           );
         }
