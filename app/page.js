@@ -1458,6 +1458,13 @@ export default function TraderfyApp() {
     setTimeout(() => setToast(null), 5000)
   }
 
+  const handleViewChange = (view) => {
+    setCurrentView(view)
+    if (window.innerWidth < 768) {
+      setIsCollapsed(true)
+    }
+  }
+
   const handleAccountSelect = (account) => {
     setSelectedAccount(account)
     setCurrentView('panel-summary')
