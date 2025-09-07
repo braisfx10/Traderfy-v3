@@ -121,6 +121,9 @@ const OperationsPanel = ({ trades = [], selectedAccount, selectedTradeForJournal
     )
   }
 
+  // Ordenar por fecha más nueva primero
+  filteredTrades = filteredTrades.sort((a, b) => new Date(b.close_time) - new Date(a.close_time))
+
   const paginatedTrades = filteredTrades.slice(
     currentPage * tradesPerPage,
     (currentPage + 1) * tradesPerPage
