@@ -331,6 +331,7 @@ const Sidebar = ({
   setSelectedAccount,
   currentView,
   setCurrentView,
+  handleViewChange,
   onLogout,
   user,
   demoMode
