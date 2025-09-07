@@ -367,11 +367,12 @@ const AccountManager = ({ user, onAccountsChange }) => {
                   value={formData.tag}
                   onChange={(e) => setFormData(prev => ({ ...prev, tag: e.target.value }))}
                   className="w-full p-2 bg-gradient-to-r from-slate-800 to-slate-700 border border-cyan-500/50 rounded text-white"
+                  style={{ color: '#ffffff', backgroundColor: '#1e293b' }}
                 >
-                  <option value="Demo">Demo</option>
-                  <option value="Live">Live</option>
-                  <option value="Funded">Funded</option>
-                  <option value="Challenge">Challenge</option>
+                  <option value="Demo" style={{ color: '#ffffff', backgroundColor: '#1e293b' }}>Demo</option>
+                  <option value="Live" style={{ color: '#ffffff', backgroundColor: '#1e293b' }}>Live</option>
+                  <option value="Funded" style={{ color: '#ffffff', backgroundColor: '#1e293b' }}>Funded</option>
+                  <option value="Challenge" style={{ color: '#ffffff', backgroundColor: '#1e293b' }}>Challenge</option>
                 </select>
               </div>
             </div>
