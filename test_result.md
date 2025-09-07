@@ -346,6 +346,21 @@ frontend:
         - agent: "testing"
         - comment: "ANALYSIS COMPLETE: Code examination shows trade colors are correctly implemented (lines 248 & 936). Buy trades use 'bg-green-600/80' and Sell trades use 'bg-red-600/80'. However, UI testing was limited due to account creation workflow complexity. The reported issue may be related to CSS class loading or Tailwind configuration. Direction filters are implemented in OperationsPanel component (lines 107-109) and should work correctly. RECOMMENDATION: Main agent should verify Tailwind CSS classes are properly compiled and test the actual HTML upload workflow."
 
+  - task: "Application Loading Issue Resolution"
+    implemented: true
+    working: true
+    file: "/etc/supervisor/conf.d/supervisord.conf, /app/app/page.js, /app/components/AuthProvider.js"
+    stuck_count: 0
+    priority: "critical"
+    needs_retesting: false
+    status_history:
+        - working: false
+        - agent: "main"
+        - comment: "CRITICAL ISSUE: Application stuck on 'Cargando...' loading screen after recent UI modifications for Prop Firm Rules and Normas de Trading cards"
+        - working: true
+        - agent: "main" 
+        - comment: "RESOLVED: Fixed supervisor configuration issue - changed from separate backend/frontend services to single Next.js service. Updated supervisord.conf to run 'yarn dev' from /app directory instead of non-existent /app/backend and /app/frontend. Application now loads correctly showing main dashboard with all UI elements functioning. AuthProvider correctly handles Supabase not configured scenario and sets loading=false for demo mode."
+
 metadata:
   created_by: "testing_agent"
   version: "1.0"
