@@ -396,8 +396,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Trade Display Colors and Filters"
-    - "HTML Upload Component"
+    - "Post-Supervisor Fix API Testing"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
