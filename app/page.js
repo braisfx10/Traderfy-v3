@@ -1658,19 +1658,26 @@ export default function TraderfyApp() {
                     </CardTitle>
                     <CardDescription className="text-purple-200/70">
                       {(() => {
-                        const customTagsCount = [...new Set(accounts
-                          .map(account => account.customTag)
-                          .filter(tag => tag && tag.trim() !== '')
-                        )].length;
+                        // Obtener etiquetas únicas
+                        const allLabels = accounts
+                          .filter(account => account.labels && account.labels.length > 0)
+                          .flatMap(account => account.labels);
+                        
+                        const uniqueLabels = allLabels.reduce((acc, label) => {
+                          if (!acc.find(l => l.id === label.id)) {
+                            acc.push(label);
+                          }
+                          return acc;
+                        }, []);
                         
                         const accountTypesCount = ['Live', 'Funded', 'Challenge', 'Demo']
                           .filter(type => accounts.some(account => account.tag === type))
                           .length;
                           
-                        if (customTagsCount > 0 && accountTypesCount > 0) {
-                          return `${customTagsCount} etiqueta${customTagsCount !== 1 ? 's' : ''} personalizada${customTagsCount !== 1 ? 's' : ''} y ${accountTypesCount} tipo${accountTypesCount !== 1 ? 's' : ''} de cuenta`;
-                        } else if (customTagsCount > 0) {
-                          return `${customTagsCount} etiqueta${customTagsCount !== 1 ? 's' : ''} personalizada${customTagsCount !== 1 ? 's' : ''}`;
+                        if (uniqueLabels.length > 0 && accountTypesCount > 0) {
+                          return `${uniqueLabels.length} etiqueta${uniqueLabels.length !== 1 ? 's' : ''} personalizada${uniqueLabels.length !== 1 ? 's' : ''} y ${accountTypesCount} tipo${accountTypesCount !== 1 ? 's' : ''} de cuenta`;
+                        } else if (uniqueLabels.length > 0) {
+                          return `${uniqueLabels.length} etiqueta${uniqueLabels.length !== 1 ? 's' : ''} personalizada${uniqueLabels.length !== 1 ? 's' : ''}`;
                         } else {
                           return `${accountTypesCount} tipo${accountTypesCount !== 1 ? 's' : ''} de cuenta con cuentas activas`;
                         }
