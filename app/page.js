@@ -1688,27 +1688,43 @@ export default function TraderfyApp() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {/* Mostrar primero las etiquetas personalizadas */}
                       {(() => {
-                        const customTags = [...new Set(accounts
-                          .map(account => account.customTag)
-                          .filter(tag => tag && tag.trim() !== '')
-                        )];
+                        // Obtener etiquetas únicas
+                        const allLabels = accounts
+                          .filter(account => account.labels && account.labels.length > 0)
+                          .flatMap(account => account.labels);
                         
-                        const customTagCards = customTags.map((tag) => {
-                          const tagAccounts = accounts.filter(account => account.customTag === tag);
-                          const groupTrades = trades.filter(t => tagAccounts.some(acc => acc.id === t.account_id));
+                        const uniqueLabels = allLabels.reduce((acc, label) => {
+                          if (!acc.find(l => l.id === label.id)) {
+                            acc.push(label);
+                          }
+                          return acc;
+                        }, []);
+                        
+                        const customLabelCards = uniqueLabels.map((label) => {
+                          const labelAccounts = accounts.filter(account => 
+                            account.labels && account.labels.some(l => l.id === label.id)
+                          );
+                          const groupTrades = trades.filter(t => labelAccounts.some(acc => acc.id === t.account_id));
                           const totalPnL = groupTrades.reduce((sum, t) => sum + parseFloat(t.pnl), 0);
                           
                           return (
                             <Card 
-                              key={`custom-${tag}`} 
+                              key={`label-${label.id}`} 
                               className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-purple-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300 hover:scale-105 cursor-pointer"
-                              onClick={() => handleViewChange(`tag-${tag}`)}
+                              onClick={() => handleViewChange(`label-${label.id}`)}
                             >
                               <CardHeader className="pb-2">
                                 <CardTitle className="text-white text-lg flex items-center justify-between">
-                                  <span>{tag}</span>
-                                  <span className="text-xs px-2 py-1 rounded-full font-medium bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
-                                    {tagAccounts.length}
+                                  <span>{label.name}</span>
+                                  <span 
+                                    className="text-xs px-2 py-1 rounded-full font-medium border"
+                                    style={{ 
+                                      backgroundColor: `${label.color}20`, 
+                                      color: label.color, 
+                                      borderColor: `${label.color}50` 
+                                    }}
+                                  >
+                                    {labelAccounts.length}
                                   </span>
                                 </CardTitle>
                                 <CardDescription className="text-xs text-gray-400">
@@ -1718,7 +1734,7 @@ export default function TraderfyApp() {
                               <CardContent className="space-y-2">
                                 <div className="flex justify-between">
                                   <span className="text-gray-400">Número de cuentas:</span>
-                                  <span className="text-purple-400 font-bold">{tagAccounts.length}</span>
+                                  <span className="text-purple-400 font-bold">{labelAccounts.length}</span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-gray-400">P&L Total:</span>
@@ -1786,7 +1802,7 @@ export default function TraderfyApp() {
                           );
                         }).filter(Boolean);
                         
-                        return [...customTagCards, ...typeCards];
+                        return [...customLabelCards, ...typeCards];
                       })()}
                     </div>
                   </CardContent>
