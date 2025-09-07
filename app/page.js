@@ -1646,56 +1646,133 @@ export default function TraderfyApp() {
                   <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">
                       <Wallet className="w-5 h-5 text-purple-400" />
-                      {customTags.length > 0 ? 'Organización por Etiquetas' : 'Organización por Tipos de Cuenta'}
+                      Organización de Cuentas
                     </CardTitle>
                     <CardDescription className="text-purple-200/70">
-                      {tagGroups.length} {customTags.length > 0 ? 'etiqueta' : 'tipo'}{tagGroups.length !== 1 ? 's' : ''} con cuentas activas
+                      {(() => {
+                        const customTagsCount = [...new Set(accounts
+                          .map(account => account.customTag)
+                          .filter(tag => tag && tag.trim() !== '')
+                        )].length;
+                        
+                        const accountTypesCount = ['Live', 'Funded', 'Challenge', 'Demo']
+                          .filter(type => accounts.some(account => account.tag === type))
+                          .length;
+                          
+                        if (customTagsCount > 0 && accountTypesCount > 0) {
+                          return `${customTagsCount} etiqueta${customTagsCount !== 1 ? 's' : ''} personalizada${customTagsCount !== 1 ? 's' : ''} y ${accountTypesCount} tipo${accountTypesCount !== 1 ? 's' : ''} de cuenta`;
+                        } else if (customTagsCount > 0) {
+                          return `${customTagsCount} etiqueta${customTagsCount !== 1 ? 's' : ''} personalizada${customTagsCount !== 1 ? 's' : ''}`;
+                        } else {
+                          return `${accountTypesCount} tipo${accountTypesCount !== 1 ? 's' : ''} de cuenta con cuentas activas`;
+                        }
+                      })()}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {tagGroups.map((group) => {
-                        const groupTrades = trades.filter(t => group.accounts.some(acc => acc.id === t.account_id));
-                        const totalPnL = groupTrades.reduce((sum, t) => sum + parseFloat(t.pnl), 0);
+                      {/* Mostrar primero las etiquetas personalizadas */}
+                      {(() => {
+                        const customTags = [...new Set(accounts
+                          .map(account => account.customTag)
+                          .filter(tag => tag && tag.trim() !== '')
+                        )];
                         
-                        return (
-                          <Card 
-                            key={group.name} 
-                            className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-purple-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300 hover:scale-105 cursor-pointer"
-                            onClick={() => handleViewChange(group.isCustom ? `tag-${group.name}` : `type-${group.name}`)}
-                          >
-                            <CardHeader className="pb-2">
-                              <CardTitle className="text-white text-lg flex items-center justify-between">
-                                <span>{group.name}</span>
-                                <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                                  group.name === 'Live' ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-500/30' :
-                                  group.name === 'Demo' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
-                                  group.name === 'Challenge' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
-                                  'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                                }`}>
-                                  {group.accounts.length}
-                                </span>
-                              </CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-2">
-                              <div className="flex justify-between">
-                                <span className="text-gray-400">Número de cuentas:</span>
-                                <span className="text-purple-400 font-bold">{group.accounts.length}</span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-400">P&L Total:</span>
-                                <span className={`font-bold ${totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                                  ${totalPnL.toFixed(2)}
-                                </span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-gray-400">Total Trades:</span>
-                                <span className="text-white">{groupTrades.length}</span>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        );
-                      })}
+                        const customTagCards = customTags.map((tag) => {
+                          const tagAccounts = accounts.filter(account => account.customTag === tag);
+                          const groupTrades = trades.filter(t => tagAccounts.some(acc => acc.id === t.account_id));
+                          const totalPnL = groupTrades.reduce((sum, t) => sum + parseFloat(t.pnl), 0);
+                          
+                          return (
+                            <Card 
+                              key={`custom-${tag}`} 
+                              className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-purple-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300 hover:scale-105 cursor-pointer"
+                              onClick={() => handleViewChange(`tag-${tag}`)}
+                            >
+                              <CardHeader className="pb-2">
+                                <CardTitle className="text-white text-lg flex items-center justify-between">
+                                  <span>{tag}</span>
+                                  <span className="text-xs px-2 py-1 rounded-full font-medium bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                                    {tagAccounts.length}
+                                  </span>
+                                </CardTitle>
+                                <CardDescription className="text-xs text-gray-400">
+                                  Etiqueta personalizada
+                                </CardDescription>
+                              </CardHeader>
+                              <CardContent className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-400">Número de cuentas:</span>
+                                  <span className="text-purple-400 font-bold">{tagAccounts.length}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-400">P&L Total:</span>
+                                  <span className={`font-bold ${totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                    ${totalPnL.toFixed(2)}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-400">Total Trades:</span>
+                                  <span className="text-white">{groupTrades.length}</span>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          );
+                        });
+                        
+                        // Luego mostrar los tipos de cuenta
+                        const accountTypes = ['Live', 'Funded', 'Challenge', 'Demo'];
+                        const typeCards = accountTypes.map((type) => {
+                          const typeAccounts = accounts.filter(account => account.tag === type);
+                          if (typeAccounts.length === 0) return null;
+                          
+                          const groupTrades = trades.filter(t => typeAccounts.some(acc => acc.id === t.account_id));
+                          const totalPnL = groupTrades.reduce((sum, t) => sum + parseFloat(t.pnl), 0);
+                          
+                          return (
+                            <Card 
+                              key={`type-${type}`} 
+                              className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-purple-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300 hover:scale-105 cursor-pointer"
+                              onClick={() => handleViewChange(`type-${type}`)}
+                            >
+                              <CardHeader className="pb-2">
+                                <CardTitle className="text-white text-lg flex items-center justify-between">
+                                  <span>{type}</span>
+                                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                                    type === 'Live' ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-500/30' :
+                                    type === 'Demo' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
+                                    type === 'Challenge' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
+                                    'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                                  }`}>
+                                    {typeAccounts.length}
+                                  </span>
+                                </CardTitle>
+                                <CardDescription className="text-xs text-gray-400">
+                                  Tipo de cuenta
+                                </CardDescription>
+                              </CardHeader>
+                              <CardContent className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-gray-400">Número de cuentas:</span>
+                                  <span className="text-purple-400 font-bold">{typeAccounts.length}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-400">P&L Total:</span>
+                                  <span className={`font-bold ${totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                    ${totalPnL.toFixed(2)}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-gray-400">Total Trades:</span>
+                                  <span className="text-white">{groupTrades.length}</span>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          );
+                        }).filter(Boolean);
+                        
+                        return [...customTagCards, ...typeCards];
+                      })()}
                     </div>
                   </CardContent>
                 </Card>
