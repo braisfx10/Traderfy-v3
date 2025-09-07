@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
     // Verificar si Supabase está configurado
     if (!supabase) {
       console.log('Supabase no configurado - funcionando en modo demo')
+      console.log('AuthProvider: Setting loading to false')
       setLoading(false)
       return
     }
