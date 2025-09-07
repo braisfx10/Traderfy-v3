@@ -2471,6 +2471,233 @@ export default function TraderfyApp() {
                 })()}
               </CardContent>
             </Card>
+
+            {/* Sección de Evoluciones - Movidas desde Resumen */}
+            {(() => {
+              const accountTrades = selectedAccount 
+                ? trades.filter(t => t.account_id === selectedAccount.id)
+                : trades
+              
+              if (accountTrades.length === 0) {
+                return <div className="text-gray-400">No hay datos disponibles para mostrar evoluciones</div>
+              }
+
+              // Obtener balance inicial
+              const initialBalance = selectedAccount?.summary?.deposit || 
+                                   selectedAccount?.summary?.capital ||
+                                   selectedAccount?.summary?.balance ||
+                                   10000;
+
+              // Procesar trades para evolución
+              const processedTrades = accountTrades.map(trade => {
+                return {
+                  ...trade,
+                  pnl: parseFloat(trade.pnl) || 0,
+                  isWithdraw: parseFloat(trade.pnl) < -500,
+                  hasWithdrawOnSameDate: false,
+                  close_time: new Date(trade.close_time)
+                };
+              });
+
+              // Preparar datos para gráfico de evolución de beneficio
+              const tradesByDate = {};
+              processedTrades.forEach(trade => {
+                const dateKey = trade.close_time.toDateString();
+                if (!tradesByDate[dateKey]) {
+                  tradesByDate[dateKey] = [];
+                }
+                tradesByDate[dateKey].push(trade);
+              });
+              
+              const sortedDates = Object.keys(tradesByDate).sort((a, b) => new Date(a) - new Date(b));
+              let cumulativePnL = 0;
+              let cumulativeWithdraws = 0;
+
+              const evolutionData = sortedDates.map(dateKey => {
+                const dayTrades = tradesByDate[dateKey];
+                const dayPnL = dayTrades.reduce((sum, trade) => sum + trade.pnl, 0);
+                const dayWithdraws = dayTrades.filter(t => t.isWithdraw).reduce((sum, t) => sum + Math.abs(t.pnl), 0);
+                
+                cumulativePnL += dayPnL;
+                cumulativeWithdraws += dayWithdraws;
+                
+                const profitWithoutWithdraws = cumulativePnL + cumulativeWithdraws;
+                const profitPercent = ((profitWithoutWithdraws / initialBalance) * 100);
+                
+                return {
+                  date: new Date(dateKey).toLocaleDateString(),
+                  profitPercent: profitPercent,
+                  pnlDollars: profitWithoutWithdraws,
+                  hasWithdrawOnSameDate: dayWithdraws > 0
+                };
+              });
+
+              // Preparar datos para drawdown
+              let peak = initialBalance;
+              const drawdownData = evolutionData.map(point => {
+                const currentBalance = initialBalance + point.pnlDollars;
+                if (currentBalance > peak) {
+                  peak = currentBalance;
+                }
+                const drawdownPercent = peak > 0 ? ((peak - currentBalance) / initialBalance) * 100 * -1 : 0;
+                
+                return {
+                  date: point.date,
+                  drawdownPercent: drawdownPercent,
+                  balance: currentBalance,
+                  peak: peak,
+                  hasWithdraws: point.hasWithdrawOnSameDate
+                };
+              });
+
+              return (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                  {/* Evolución de Beneficio en Porcentaje */}
+                  <Card className="bg-gradient-to-br from-green-900/20 via-emerald-900/10 to-cyan-900/20 border-green-500/30">
+                    <CardHeader>
+                      <CardTitle className="text-white flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-green-400" />
+                        Evolución de Beneficio
+                      </CardTitle>
+                      <CardDescription className="text-green-200/70">
+                        Beneficio acumulado en % del balance inicial (${initialBalance.toLocaleString()})
+                        <div className="mt-1 text-xs text-yellow-300">
+                          🔶 Puntos amarillos indican días con Withdraws (no afectan el cálculo de beneficio)
+                        </div>
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ResponsiveContainer width="100%" height={250}>
+                        <LineChart data={evolutionData}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                          <XAxis 
+                            dataKey="date" 
+                            stroke="#9CA3AF" 
+                            fontSize={10}
+                            tickFormatter={(value) => {
+                              const date = new Date(value);
+                              return `${date.getDate()}/${date.getMonth() + 1}`;
+                            }}
+                          />
+                          <YAxis 
+                            stroke="#9CA3AF" 
+                            fontSize={10}
+                            tickFormatter={(value) => `${value.toFixed(1)}%`}
+                          />
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: '#1F2937', 
+                              border: '1px solid #374151',
+                              borderRadius: '8px',
+                              color: '#F3F4F6'
+                            }}
+                            formatter={(value, name) => {
+                              if (name === 'profitPercent') {
+                                return [`${value.toFixed(2)}%`, 'Beneficio %'];
+                              }
+                              return [value, name];
+                            }}
+                            labelFormatter={(label) => `Fecha: ${label}`}
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey="profitPercent" 
+                            stroke="#10B981" 
+                            strokeWidth={2}
+                            dot={(props) => {
+                              const { cx, cy, payload } = props;
+                              return (
+                                <circle
+                                  cx={cx}
+                                  cy={cy}
+                                  r={payload.hasWithdrawOnSameDate ? 5 : 3}
+                                  fill={payload.hasWithdrawOnSameDate ? '#F59E0B' : '#10B981'}
+                                  stroke={payload.hasWithdrawOnSameDate ? '#FCD34D' : '#10B981'}
+                                  strokeWidth={payload.hasWithdrawOnSameDate ? 2 : 0}
+                                />
+                              );
+                            }}
+                            name="profitPercent"
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+                  
+                  {/* Evolución de Drawdown en Porcentaje */}
+                  <Card className="bg-gradient-to-br from-red-900/20 via-rose-900/10 to-orange-900/20 border-red-500/30">
+                    <CardHeader>
+                      <CardTitle className="text-white flex items-center gap-2">
+                        <TrendingDown className="w-5 h-5 text-red-400" />
+                        Evolución de Drawdown
+                      </CardTitle>
+                      <CardDescription className="text-red-200/70">
+                        Drawdown en % del balance inicial (${initialBalance.toLocaleString()})
+                        <div className="mt-1 text-xs text-yellow-300">
+                          🔶 Puntos amarillos indican días con Withdraws (no se consideran como drawdown)
+                        </div>
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ResponsiveContainer width="100%" height={250}>
+                        <LineChart data={drawdownData}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                          <XAxis 
+                            dataKey="date" 
+                            stroke="#9CA3AF" 
+                            fontSize={10}
+                            tickFormatter={(value) => {
+                              const date = new Date(value);
+                              return `${date.getDate()}/${date.getMonth() + 1}`;
+                            }}
+                          />
+                          <YAxis 
+                            stroke="#9CA3AF" 
+                            fontSize={10}
+                            tickFormatter={(value) => `${Math.abs(value).toFixed(1)}%`}
+                          />
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: '#1F2937', 
+                              border: '1px solid #374151',
+                              borderRadius: '8px',
+                              color: '#F3F4F6'
+                            }}
+                            formatter={(value, name) => {
+                              if (name === 'drawdownPercent') {
+                                return [`${Math.abs(value).toFixed(2)}%`, 'Drawdown %'];
+                              }
+                              return [Math.abs(value), name];
+                            }}
+                            labelFormatter={(label) => `Fecha: ${label}`}
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey="drawdownPercent" 
+                            stroke="#EF4444" 
+                            strokeWidth={2}
+                            dot={(props) => {
+                              const { cx, cy, payload } = props;
+                              return (
+                                <circle
+                                  cx={cx}
+                                  cy={cy}
+                                  r={payload.hasWithdraws ? 5 : 3}
+                                  fill={payload.hasWithdraws ? '#F59E0B' : '#EF4444'}
+                                  stroke={payload.hasWithdraws ? '#FCD34D' : '#EF4444'}
+                                  strokeWidth={payload.hasWithdraws ? 2 : 0}
+                                />
+                              );
+                            }}
+                            name="drawdownPercent"
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+                </div>
+              );
+            })()}
           </div>
         )
       
