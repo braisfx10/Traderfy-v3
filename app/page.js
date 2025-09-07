@@ -2009,13 +2009,13 @@ export default function TraderfyApp() {
                     </Card>
                     
                     {/* Valoración de Trading Basada en Porcentajes */}
-                    <Card className="bg-gradient-to-br from-cyan-900/20 via-blue-900/10 to-indigo-900/20 border-cyan-500/30">
+                    <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
                       <CardHeader>
                         <CardTitle className="text-white flex items-center gap-2">
-                          <BarChart3 className="w-5 h-5 text-cyan-400" />
+                          <BarChart3 className="w-5 h-5 text-purple-400" />
                           Valoración de Trading
                         </CardTitle>
-                        <CardDescription className="text-cyan-200/70">
+                        <CardDescription className="text-purple-200/70">
                           Puntuación 0-10 basada en % del balance inicial (${initialBalance.toLocaleString()})
                         </CardDescription>
                       </CardHeader>
