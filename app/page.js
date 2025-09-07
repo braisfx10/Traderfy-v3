@@ -1521,6 +1521,7 @@ export default function TraderfyApp() {
   }, [])
 
   if (loading || authLoading) {
+    console.log('Loading states:', { loading, authLoading })
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-white flex items-center gap-2">
