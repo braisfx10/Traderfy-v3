@@ -200,6 +200,9 @@ backend:
         - working: true
         - agent: "testing"
         - comment: "TESTED: API endpoint working correctly. POST /api/parse-html processes HTML content successfully in demo mode. Returns 200 with parsed trades, account info, and summary. Correctly handles error cases (400 for missing HTML content). Demo mode message included in response."
+        - working: true
+        - agent: "testing"
+        - comment: "RE-VERIFIED POST-SUPERVISOR FIX: API endpoint fully functional. POST /api/parse-html returns 200 status with proper response structure. Demo mode operation confirmed: 'Datos procesados correctamente (modo demo)' message present. Account ID assignment working (test-account-123), user_id correctly set to 'demo'. Error handling verified: 400 for missing HTML content, graceful handling of invalid HTML. All response fields present: trades, accountInfo, summary, message."
 
   - task: "Data Structure Consistency"
     implemented: true
