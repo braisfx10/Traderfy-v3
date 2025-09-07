@@ -295,10 +295,10 @@ const AccountManager = ({ user, onAccountsChange }) => {
 
   const getTagColor = (tag) => {
     switch (tag) {
-      case 'Funded': return '#A020F0'
-      case 'Live': return '#00FFFF'
+      case 'Funded': return '#B865D6' // Versión más suave de #A020F0
+      case 'Live': return '#4DD4DD' // Versión más suave de #00FFFF  
       case 'Demo': return '#6B7280'
-      case 'Challenge': return '#6B7280' // Gris como Demo
+      case 'Challenge': return '#6B7280' // Mismo que Demo
       default: return '#8B5CF6'
     }
   }
