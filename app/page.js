@@ -2762,6 +2762,132 @@ export default function TraderfyApp() {
         )
       
       default:
+        // Manejar vistas de etiquetas personalizadas (tag-{etiqueta})
+        if (currentView.startsWith('tag-')) {
+          const tagName = currentView.replace('tag-', '');
+          const tagAccounts = accounts.filter(account => account.customTag === tagName);
+          
+          return (
+            <div className="space-y-6">
+              <MetricsCards 
+                trades={trades.filter(t => tagAccounts.some(acc => acc.id === t.account_id))} 
+                title={`Cuentas con Etiqueta: ${tagName}`} 
+                accounts={tagAccounts} 
+                onAccountSelect={handleAccountSelect} 
+              />
+              
+              {/* Lista de cuentas de esta etiqueta */}
+              <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Wallet className="w-5 h-5 text-purple-400" />
+                    Cuentas en "{tagName}"
+                  </CardTitle>
+                  <CardDescription className="text-purple-200/70">
+                    {tagAccounts.length} cuenta{tagAccounts.length !== 1 ? 's' : ''} en esta etiqueta
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {tagAccounts.map((account) => (
+                      <Card 
+                        key={account.id} 
+                        className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-purple-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300 hover:scale-105 cursor-pointer"
+                        onClick={() => handleAccountSelect(account)}
+                      >
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-white text-lg flex items-center justify-between">
+                            <span>{account.name}</span>
+                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                              account.tag === 'Live' ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-500/30' :
+                              account.tag === 'Demo' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
+                              account.tag === 'Challenge' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
+                              'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                            }`}>
+                              {account.tag}
+                            </span>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">Trades:</span>
+                            <span className="text-white">{trades.filter(t => t.account_id === account.id).length}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">P&L Total:</span>
+                            <span className={trades.filter(t => t.account_id === account.id).reduce((sum, t) => sum + parseFloat(t.pnl), 0) >= 0 ? 'text-green-400' : 'text-red-400'}>
+                              ${trades.filter(t => t.account_id === account.id).reduce((sum, t) => sum + parseFloat(t.pnl), 0).toFixed(2)}
+                            </span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          );
+        }
+        
+        // Manejar vistas de tipos de cuenta (type-{tipo})
+        if (currentView.startsWith('type-')) {
+          const accountType = currentView.replace('type-', '');
+          const typeAccounts = accounts.filter(account => account.tag === accountType);
+          
+          return (
+            <div className="space-y-6">
+              <MetricsCards 
+                trades={trades.filter(t => typeAccounts.some(acc => acc.id === t.account_id))} 
+                title={`Cuentas ${accountType}`} 
+                accounts={typeAccounts} 
+                onAccountSelect={handleAccountSelect} 
+              />
+              
+              {/* Lista de cuentas de este tipo */}
+              <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Wallet className="w-5 h-5 text-purple-400" />
+                    Cuentas {accountType}
+                  </CardTitle>
+                  <CardDescription className="text-purple-200/70">
+                    {typeAccounts.length} cuenta{typeAccounts.length !== 1 ? 's' : ''} de tipo {accountType}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {typeAccounts.map((account) => (
+                      <Card 
+                        key={account.id} 
+                        className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-purple-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300 hover:scale-105 cursor-pointer"
+                        onClick={() => handleAccountSelect(account)}
+                      >
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-white text-lg">
+                            {account.name}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">Trades:</span>
+                            <span className="text-white">{trades.filter(t => t.account_id === account.id).length}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">P&L Total:</span>
+                            <span className={trades.filter(t => t.account_id === account.id).reduce((sum, t) => sum + parseFloat(t.pnl), 0) >= 0 ? 'text-green-400' : 'text-red-400'}>
+                              ${trades.filter(t => t.account_id === account.id).reduce((sum, t) => sum + parseFloat(t.pnl), 0).toFixed(2)}
+                            </span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          );
+        }
+        
         return (
           <div className="text-gray-400">
             Vista no encontrada
