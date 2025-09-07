@@ -352,13 +352,6 @@ const Sidebar = ({
     setCurrentView('panel-summary')
   }
 
-  const handleViewChange = (view) => {
-    setCurrentView(view)
-    if (window.innerWidth < 768) {
-      setIsCollapsed(true)
-    }
-  }
-
   return (
     <div className={`${isCollapsed ? 'w-16' : 'w-80'} gradient-sidebar border-r border-gray-700 transition-all duration-300 flex flex-col relative`}>
       {/* Header con gradiente del logo */}
