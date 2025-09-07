@@ -153,6 +153,21 @@ backend:
         - agent: "main"
         - comment: "Implemented complete authentication system with Supabase Auth including login/register modal, AuthProvider context, and demo mode fallback. System works correctly when Supabase is not configured."
 
+  - task: "Post-Supervisor Fix API Testing"
+    implemented: true
+    working: true
+    file: "/app/app/api/[[...path]]/route.js, /app/lib/htmlParser.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: "NA"
+        - agent: "testing"
+        - comment: "COMPREHENSIVE TESTING: After supervisor configuration fix, need to verify all API endpoints and HTML parsing functionality work correctly with Next.js running properly instead of separate backend/frontend services"
+        - working: true
+        - agent: "testing"
+        - comment: "TESTING COMPLETE: All 6 comprehensive tests passed (6/6). ✅ API Health Check: GET /api/ returns 200 with 'Traderfy API activa' message and 7 endpoints. ✅ HTML Parser: Spanish MetaTrader format extracts 3 trades accurately (EURUSD Buy -71.66, XAUUSD Buy -64.40, XAUUSD Sell +101.50). CTrader format extracts 55 trades correctly. ✅ Data Structure: All required fields present with correct snake_case naming and proper data types. ✅ Demo Mode: Works flawlessly without Supabase, assigns 'demo' user_id and account_id correctly. ✅ Direction Capitalization: Proper 'Buy'/'Sell' format maintained. ✅ Transaction Filtering: Non-trading transactions properly excluded. ✅ Error Handling: 400 for missing HTML, graceful handling of invalid content. Next.js API and HTML parser fully functional after supervisor fix."
+
   - task: "HTML Parser Function Testing"
     implemented: true
     working: true
@@ -167,6 +182,9 @@ backend:
         - working: true
         - agent: "testing"
         - comment: "TESTED: HTML parser working correctly. Successfully extracts trades from Spanish MetaTrader format (test-report.html: 3 trades). Parser correctly ignores English format files (sample_mt4_report.html) as it's designed for Spanish format. All required fields extracted: symbol, direction, close_time, entry_price, close_price, lots, pnl."
+        - working: true
+        - agent: "testing"
+        - comment: "RE-VERIFIED POST-SUPERVISOR FIX: Parser functionality confirmed working perfectly. Spanish MetaTrader format: 3 trades extracted with 100% accuracy (EURUSD, XAUUSD symbols, Buy/Sell directions, correct P&L values -71.66, -64.40, +101.50). CTrader format: 55 trades extracted successfully. Enhanced UnifiedTradingParser with advanced metrics working correctly. Direction capitalization proper (Buy/Sell), all required fields present with correct data types."
 
   - task: "HTML Upload API Endpoint"
     implemented: true
