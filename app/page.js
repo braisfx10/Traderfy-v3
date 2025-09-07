@@ -1352,7 +1352,7 @@ const HTMLUploader = ({ selectedAccount, onSuccess, showToast }) => {
             <>
               <div>
                 <Label htmlFor="html-file" className="text-purple-300">
-                  Seleccionar archivo HTML
+                  Historial CTrader
                 </Label>
                 <Input
                   id="html-file"
