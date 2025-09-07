@@ -1407,6 +1407,16 @@ export default function TraderfyApp() {
     setCurrentView('panel-summary')
   }
 
+  // Debug: forzar loading false si está atascado
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      console.log('Debug: Forzando loading a false después de 5 segundos')
+      setLoading(false)
+    }, 5000)
+    
+    return () => clearTimeout(timer)
+  }, [])
+
   // Solución simple y definitiva para evitar bucles infinitos
   useEffect(() => {
     // Solo ejecutar cuando authLoading haya terminado
