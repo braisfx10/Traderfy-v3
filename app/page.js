@@ -2100,6 +2100,124 @@ export default function TraderfyApp() {
               title={selectedAccount ? `Análisis Completo de ${selectedAccount.name}` : "Análisis General"} 
             />
             
+            {/* Tarjetas de Normas de Trading y Reglas de Propfirm (solo si hay cuenta seleccionada) */}
+            {selectedAccount && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                {/* Tarjeta: Normas de Trading */}
+                <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">
+                      <AlertTriangle className="w-5 h-5 text-purple-400" />
+                      Normas de Trading
+                    </CardTitle>
+                    <CardDescription className="text-purple-200/70">
+                      Reglas configuradas para esta cuenta
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Máx. Trades por Día */}
+                      <div className="bg-gradient-to-br from-purple-900/40 to-indigo-800/30 p-4 rounded-lg border border-purple-500/30 hover:from-purple-800/50 hover:to-indigo-700/40 transition-all duration-300">
+                        <div className="text-sm text-purple-300">Máx. Trades por Día</div>
+                        <div className="text-xl font-bold text-purple-400 glow-text-cyan">
+                          {selectedAccount.rules?.maxTradesPerDay || 'N/A'}
+                        </div>
+                      </div>
+
+                      {/* Pérdida Máx. Diaria */}
+                      <div className="bg-gradient-to-br from-red-900/40 to-pink-800/30 p-4 rounded-lg border border-red-500/30 hover:from-red-800/50 hover:to-pink-700/40 transition-all duration-300">
+                        <div className="text-sm text-red-300">Pérdida Máx. Diaria (%)</div>
+                        <div className="text-xl font-bold text-red-400 glow-text-purple">
+                          {selectedAccount.rules?.maxDailyLoss || 'N/A'}%
+                        </div>
+                      </div>
+
+                      {/* Riesgo Máx. por Operación */}
+                      <div className="bg-gradient-to-br from-cyan-900/40 to-blue-800/30 p-4 rounded-lg border border-cyan-500/30 hover:from-cyan-800/50 hover:to-blue-700/40 transition-all duration-300">
+                        <div className="text-sm text-cyan-300">Riesgo Máx. por Operación (%)</div>
+                        <div className="text-xl font-bold text-cyan-400 glow-text-cyan">
+                          {selectedAccount.rules?.maxRiskPerTrade || 'N/A'}%
+                        </div>
+                      </div>
+
+                      {/* Horario Operativo */}
+                      <div className="bg-gradient-to-br from-indigo-900/40 to-violet-800/30 p-4 rounded-lg border border-indigo-500/30 hover:from-indigo-800/50 hover:to-violet-700/40 transition-all duration-300">
+                        <div className="text-sm text-indigo-300">Horario Operativo</div>
+                        <div className="text-xl font-bold text-indigo-400 glow-text-cyan">
+                          {selectedAccount.rules?.tradingHours?.start && selectedAccount.rules?.tradingHours?.end 
+                            ? `${selectedAccount.rules.tradingHours.start} - ${selectedAccount.rules.tradingHours.end}`
+                            : 'N/A'
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Tarjeta: Reglas de Propfirm */}
+                <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">
+                      <Activity className="w-5 h-5 text-purple-400" />
+                      Reglas de Propfirm
+                    </CardTitle>
+                    <CardDescription className="text-purple-200/70">
+                      Configuración específica de la prop firm
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Max. Drawdown Diario */}
+                      <div className="bg-gradient-to-br from-red-900/40 to-pink-800/30 p-4 rounded-lg border border-red-500/30 hover:from-red-800/50 hover:to-pink-700/40 transition-all duration-300">
+                        <div className="text-sm text-red-300">Max. Drawdown Diario (%)</div>
+                        <div className="text-xl font-bold text-red-400 glow-text-purple">
+                          {selectedAccount.propfirmRules?.maxDailyDrawdown || 'N/A'}%
+                        </div>
+                      </div>
+
+                      {/* Máx. Drawdown Total */}
+                      <div className="bg-gradient-to-br from-cyan-900/40 to-blue-800/30 p-4 rounded-lg border border-cyan-500/30 hover:from-cyan-800/50 hover:to-blue-700/40 transition-all duration-300">
+                        <div className="text-sm text-cyan-300">Máx. Drawdown Total (%)</div>
+                        <div className="text-xl font-bold text-cyan-400 glow-text-cyan">
+                          {selectedAccount.propfirmRules?.maxTotalDrawdown || 'N/A'}%
+                        </div>
+                      </div>
+
+                      {/* Objetivo de Ganancias */}
+                      <div className="bg-gradient-to-br from-purple-900/40 to-indigo-800/30 p-4 rounded-lg border border-purple-500/30 hover:from-purple-800/50 hover:to-indigo-700/40 transition-all duration-300">
+                        <div className="text-sm text-purple-300">Objetivo de Ganancias (%)</div>
+                        <div className="text-xl font-bold text-purple-400 glow-text-cyan">
+                          {selectedAccount.propfirmRules?.profitTarget || 'N/A'}%
+                        </div>
+                      </div>
+
+                      {/* Profit Split calculado */}
+                      <div className="bg-gradient-to-br from-indigo-900/40 to-violet-800/30 p-4 rounded-lg border border-indigo-500/30 hover:from-indigo-800/50 hover:to-violet-700/40 transition-all duration-300">
+                        <div className="text-sm text-indigo-300">Profit Split</div>
+                        <div className="text-xl font-bold text-indigo-400 glow-text-cyan">
+                          {(() => {
+                            const accountTrades = trades.filter(t => t.account_id === selectedAccount.id);
+                            const totalPnL = accountTrades.reduce((sum, trade) => sum + (trade.pnl || 0), 0);
+                            const splitPercentage = parseFloat(selectedAccount.propfirmRules?.profitSplit) || 0;
+                            const profitSplitAmount = (totalPnL * splitPercentage / 100);
+                            
+                            if (splitPercentage > 0 && totalPnL > 0) {
+                              return `$${profitSplitAmount.toFixed(2)} (${splitPercentage}%)`;
+                            } else if (splitPercentage > 0) {
+                              return `${splitPercentage}% (${totalPnL < 0 ? 'Pérdidas' : 'Sin P&L'})`;
+                            } else {
+                              return 'N/A';
+                            }
+                          })()}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+            
             {/* Análisis por símbolo */}
             <Card className="bg-gradient-to-br from-purple-900/20 via-indigo-900/10 to-cyan-900/20 border-purple-500/30">
               <CardHeader>
