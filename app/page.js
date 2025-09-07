@@ -2993,17 +2993,24 @@ export default function TraderfyApp() {
         )
       
       default:
-        // Manejar vistas de etiquetas personalizadas (tag-{etiqueta})
-        if (currentView.startsWith('tag-')) {
-          const tagName = currentView.replace('tag-', '');
-          const tagAccounts = accounts.filter(account => account.customTag === tagName);
+        // Manejar vistas de etiquetas personalizadas (label-{id})
+        if (currentView.startsWith('label-')) {
+          const labelId = currentView.replace('label-', '');
+          const labelAccounts = accounts.filter(account => 
+            account.labels && account.labels.some(l => l.id === labelId)
+          );
+          
+          // Obtener el nombre de la etiqueta
+          const labelName = labelAccounts.length > 0 && labelAccounts[0].labels 
+            ? labelAccounts[0].labels.find(l => l.id === labelId)?.name || 'Etiqueta'
+            : 'Etiqueta';
           
           return (
             <div className="space-y-6">
               <MetricsCards 
-                trades={trades.filter(t => tagAccounts.some(acc => acc.id === t.account_id))} 
-                title={`Cuentas con Etiqueta: ${tagName}`} 
-                accounts={tagAccounts} 
+                trades={trades.filter(t => labelAccounts.some(acc => acc.id === t.account_id))} 
+                title={`Cuentas con Etiqueta: ${labelName}`} 
+                accounts={labelAccounts} 
                 onAccountSelect={handleAccountSelect} 
               />
               
@@ -3012,15 +3019,15 @@ export default function TraderfyApp() {
                 <CardHeader>
                   <CardTitle className="text-white flex items-center gap-2">
                     <Wallet className="w-5 h-5 text-purple-400" />
-                    Cuentas en "{tagName}"
+                    Cuentas en "{labelName}"
                   </CardTitle>
                   <CardDescription className="text-purple-200/70">
-                    {tagAccounts.length} cuenta{tagAccounts.length !== 1 ? 's' : ''} en esta etiqueta
+                    {labelAccounts.length} cuenta{labelAccounts.length !== 1 ? 's' : ''} en esta etiqueta
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {tagAccounts.map((account) => (
+                    {labelAccounts.map((account) => (
                       <Card 
                         key={account.id} 
                         className="bg-gradient-to-br from-slate-800/60 to-slate-700/40 border-purple-500/30 hover:from-slate-700/70 hover:to-slate-600/50 transition-all duration-300 hover:scale-105 cursor-pointer"
