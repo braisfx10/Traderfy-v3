@@ -415,29 +415,69 @@ const Sidebar = ({
                 Resumen Total
               </Button>
               
-              {accounts.map((account) => (
-                <Button
-                  key={account.id}
-                  variant="ghost"
-                  className={`w-full justify-start gap-2 sidebar-item transition-all duration-300 ${
-                    selectedAccount?.id === account.id 
-                      ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border-l-2 border-cyan-400 glow-cyan' 
-                      : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/10 hover:to-purple-500/10'
-                  }`}
-                  onClick={() => handleAccountSelect(account)}
-                >
-                  <div className="flex items-center justify-between w-full">
-                    <span className="font-medium">{account.name}</span>
-                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                      account.tag === 'Live' ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-500/30' :
-                      account.tag === 'Demo' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' : 
-                      'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                    }`}>
-                      {account.tag}
-                    </span>
-                  </div>
-                </Button>
-              ))}
+              {/* Mostrar etiquetas personalizadas si existen, sino mostrar tipos de cuenta */}
+              {(() => {
+                // Obtener etiquetas únicas de las cuentas existentes
+                const customTags = [...new Set(accounts
+                  .map(account => account.customTag)
+                  .filter(tag => tag && tag.trim() !== '')
+                )];
+                
+                // Si hay etiquetas personalizadas, mostrarlas
+                if (customTags.length > 0) {
+                  return customTags.map((tag) => (
+                    <Button
+                      key={tag}
+                      variant="ghost"
+                      className={`w-full justify-start gap-2 sidebar-item transition-all duration-300 ${
+                        currentView === `tag-${tag}` 
+                          ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border-l-2 border-cyan-400 glow-cyan' 
+                          : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/10 hover:to-purple-500/10'
+                      }`}
+                      onClick={() => handleViewChange(`tag-${tag}`)}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <span className="font-medium">{tag}</span>
+                        <span className="text-xs text-gray-400">
+                          {accounts.filter(account => account.customTag === tag).length}
+                        </span>
+                      </div>
+                    </Button>
+                  ));
+                }
+                
+                // Si no hay etiquetas personalizadas, mostrar tipos de cuenta
+                const accountTypes = ['Live', 'Funded', 'Challenge', 'Demo'];
+                return accountTypes.map((type) => {
+                  const typeAccounts = accounts.filter(account => account.tag === type);
+                  if (typeAccounts.length === 0) return null;
+                  
+                  return (
+                    <Button
+                      key={type}
+                      variant="ghost"
+                      className={`w-full justify-start gap-2 sidebar-item transition-all duration-300 ${
+                        currentView === `type-${type}` 
+                          ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border-l-2 border-cyan-400 glow-cyan' 
+                          : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-cyan-500/10 hover:to-purple-500/10'
+                      }`}
+                      onClick={() => handleViewChange(`type-${type}`)}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <span className="font-medium">{type}</span>
+                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                          type === 'Live' ? 'bg-cyan-400/20 text-cyan-400 border border-cyan-500/30' :
+                          type === 'Demo' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
+                          type === 'Challenge' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' :
+                          'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                        }`}>
+                          {typeAccounts.length}
+                        </span>
+                      </div>
+                    </Button>
+                  );
+                }).filter(Boolean);
+              })()}
               
               <Button
                 variant="ghost"
