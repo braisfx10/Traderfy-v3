@@ -280,7 +280,16 @@ const OperationsPanel = ({ trades = [], selectedAccount, selectedTradeForJournal
                       </td>
                       <td className="p-4 text-right">
                         <div className="flex gap-1 justify-end">
-                          <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => {
+                              setEditingTrade(trade)
+                              setShowEditTradeModal(true)
+                            }}
+                            className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10"
+                            title="Editar operación"
+                          >
                             <Edit className="w-4 h-4" />
                           </Button>
                           <Button 
@@ -292,7 +301,16 @@ const OperationsPanel = ({ trades = [], selectedAccount, selectedTradeForJournal
                           >
                             <BookOpen className="w-4 h-4" />
                           </Button>
-                          <Button variant="ghost" size="sm" className="text-red-400 hover:text-red-300 hover:bg-red-500/10">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => {
+                              setDeletingTrade(trade)
+                              setShowDeleteConfirm(true)
+                            }}
+                            className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                            title="Eliminar operación"
+                          >
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
